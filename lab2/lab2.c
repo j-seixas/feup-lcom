@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 		print_usage(argv);
 		return 0;
 	}
-	else return proc_args(argc, argv); /* teste na aula 2*/
+	else return proc_args(argc, argv);
 }
 
 static void print_usage(char **argv)
