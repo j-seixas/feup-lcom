@@ -3,22 +3,57 @@
 #include "i8254.h"
 #include "timer.h"
 
-int timer_set_square(unsigned long timer, unsigned long freq) {
+int counter = 0;
 
-	return 1;
+int timer_set_square(unsigned long timer, unsigned long freq) {
+	if (timer < 0 || timer > 2 || freq < 0)
+		return 1;
+	else {
+		int div = TIMER_FREQ / freq;
+		unsigned char timer_lsb = (char) div;
+		unsigned char timer_msb = (char) div >> 8;
+
+		if (timer == 0) {
+			sys_outb(TIMER_CTRL,
+					TIMER_LSB_MSB | TIMER_SEL0 | TIMER_BIN | TIMER_SQR_WAVE);
+			sys_outb(TIMER_0, timer_lsb);
+			sys_outb(TIMER_0, timer_msb);
+
+		} else if (timer == 1) {
+			sys_outb(TIMER_CTRL,
+					TIMER_LSB_MSB | TIMER_SEL1 | TIMER_BIN | TIMER_SQR_WAVE);
+			sys_outb(TIMER_1, timer_lsb);
+			sys_outb(TIMER_1, timer_msb);
+
+		} else if (timer == 2) {
+			sys_outb(TIMER_CTRL,
+					TIMER_LSB_MSB | TIMER_SEL2 | TIMER_BIN | TIMER_SQR_WAVE);
+			sys_outb(TIMER_2, timer_lsb);
+			sys_outb(TIMER_2, timer_msb);
+
+		} else
+			return 1;
+
+	}
+	return 0;
 }
 
 int timer_subscribe_int(void) {
+	//sys_irqsetpolicy(TIMER0_IRQ,IRQ_REENABLE,);
+	//sys_irqenable();
 
 	return 1;
 }
 
 int timer_unsubscribe_int() {
+	//sys_irqenable(int *hook_id);
+	//sys_irqdisable(int *hook_id);
 
 	return 1;
 }
 
 void timer_int_handler() {
+	counter++;
 
 }
 
@@ -100,8 +135,7 @@ int timer_display_conf(unsigned char conf) {
 }
 
 int timer_test_square(unsigned long freq) {
-
-
+	timer_set_square(0, freq);
 	return 1;
 }
 
