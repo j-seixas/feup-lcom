@@ -1,9 +1,11 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
+#include <minix/com.h>
 #include "i8254.h"
 #include "timer.h"
 
-int counter = 0;
+static unsigned int counter = 0;
+int hook_id;
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
 	if (timer < 0 || timer > 2 || freq < 0)
@@ -39,15 +41,17 @@ int timer_set_square(unsigned long timer, unsigned long freq) {
 }
 
 int timer_subscribe_int(void) {
-	//sys_irqsetpolicy(TIMER0_IRQ,IRQ_REENABLE,);
-	//sys_irqenable();
+	hook_id = 0;
+	sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id);
+	sys_irqenable(&hook_id);
 
-	return 1;
+	return hook_id;
+
 }
 
 int timer_unsubscribe_int() {
-	//sys_irqenable(int *hook_id);
-	//sys_irqdisable(int *hook_id);
+	sys_irqdisable(&hook_id);
+	sys_irqrmpolicy(&hook_id);
 
 	return 1;
 }
@@ -140,7 +144,39 @@ int timer_test_square(unsigned long freq) {
 }
 
 int timer_test_int(unsigned long time) {
+	counter = 0;
+	int r, ipc_status, irq_set;
+	message msg;
+	irq_set = timer_subscribe_int();
+	//unsigned int var1 = counter / 60;
+	printf("ola");
+	while (counter/60 < time) { /*You may want to use a different condition*/
+		printf ("%d \n", counter);
+		/*Get a request message.*/
+		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
+			printf("driver_receive failed with: %d", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { 				/*received notification*/
+			switch (_ENDPOINT_P(msg.m_source)) {
+			case HARDWARE:								 /*hardware interrupt notification*/
+				if (msg.NOTIFY_ARG & irq_set) { 		/*subscribed interrupt*/
+					timer_int_handler();				/*process it*/
+					if (counter % 60 == 0)
+						printf("%d s", counter/60);
+				}
+				break;
+			default:
+				break; /*no other notifications expected: do nothing*/
+			}
+		} else { /*received a standard message, not a notification*/
+			/*
+			 no standard messages expected: do nothing
+			 */
+		}
 
+	}
+	timer_unsubscribe_int();
 	return 1;
 }
 
