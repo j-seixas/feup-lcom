@@ -8,7 +8,7 @@ static unsigned int counter = 0;
 int hook_id;
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
-	if (timer < 0 || timer > 2 || freq < 0)
+	if (timer < 0 || timer > 2 || freq == 0)
 		return 1;
 	else {
 		int div = TIMER_FREQ / freq;
@@ -45,7 +45,7 @@ int timer_subscribe_int(void) {
 	sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id);
 	sys_irqenable(&hook_id);
 
-	return hook_id;
+	return 0;
 
 }
 
@@ -66,17 +66,17 @@ int timer_get_conf(unsigned long timer, unsigned char *st) {
 	case 0:
 		sys_outb(TIMER_CTRL,
 				TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(timer));
-		sys_inb(TIMER_0, st);
+		sys_inb(TIMER_0, (unsigned long *)st);
 		return 0;
 	case 1:
 		sys_outb(TIMER_CTRL,
 				TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(timer));
-		sys_inb(TIMER_1, st);
+		sys_inb(TIMER_1, (unsigned long *)st);
 		return 0;
 	case 2:
 		sys_outb(TIMER_CTRL,
 				TIMER_RB_CMD | TIMER_RB_COUNT_ | TIMER_RB_SEL(timer));
-		sys_inb(TIMER_2, st);
+		sys_inb(TIMER_2, (unsigned long *)st);
 		return 0;
 	default:
 		return 1;
@@ -148,10 +148,9 @@ int timer_test_int(unsigned long time) {
 	int r, ipc_status, irq_set;
 	message msg;
 	irq_set = timer_subscribe_int();
-	//unsigned int var1 = counter / 60;
-	printf("ola");
+	irq_set = BIT(irq_set);
+
 	while (counter/60 < time) { /*You may want to use a different condition*/
-		printf ("%d \n", counter);
 		/*Get a request message.*/
 		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) {
 			printf("driver_receive failed with: %d", r);
@@ -163,7 +162,7 @@ int timer_test_int(unsigned long time) {
 				if (msg.NOTIFY_ARG & irq_set) { 		/*subscribed interrupt*/
 					timer_int_handler();				/*process it*/
 					if (counter % 60 == 0)
-						printf("%d s", counter/60);
+						printf("\n%d seconds", counter/60);
 				}
 				break;
 			default:
