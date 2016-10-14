@@ -56,4 +56,5 @@
 
 /**@}*/
 
+#define TM0_IRQSET		0 // Timer 0 irq_set for bitmask
 #endif /* _LCOM_I8254_H */
