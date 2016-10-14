@@ -8,7 +8,7 @@ static unsigned int counter = 0;
 int hook_id;
 
 int timer_set_square(unsigned long timer, unsigned long freq) {
-	if (timer < 0 || timer > 2 || freq == 0) {
+	if (timer < 0 || timer > 2 || freq <= 0) {
 		printf("Error: timer as to be 0, 1 or 2 OR freq can't be 0\n");
 		return 1;
 	}
