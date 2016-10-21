@@ -1,5 +1,6 @@
-#include "timer.h"
+#include "i8042.h"
 #include "i8254.h"
+#include "test3.h"
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
@@ -34,7 +35,8 @@ static void print_usage(char **argv)
 
 static int proc_args(int argc, char **argv)
 {
-	unsigned long ass, leds, n;
+	unsigned long ass, n, leds[];
+
 	if (strncmp(argv[1], "scan", strlen("scan")) == 0) {
 		if (argc != 3) {
 			printf("keyboard: wrong no. of arguments for kbd_test_scan()\n");
@@ -47,15 +49,18 @@ static int proc_args(int argc, char **argv)
 		return kbd_test_scan(ass);
 	}
 	else if (strncmp(argv[1], "leds", strlen("leds")) == 0) {
-		if (argc != 3) {
+		if (argc < 3) {
 			printf("keyboard: wrong no. of arguments for kbd_test_leds()\n");
 			return 1;
 		}
-		leds = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
-		if (leds == ULONG_MAX)
-			return 1;
-		printf("test3::kbd_test_leds(%lu)\n", leds);
-		return kbd_test_leds((string)leds.size(), leds);
+		//leds = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
+		//if (leds == ULONG_MAX)
+		//	return 1;
+		for (unisgned int i = 2; i < argv.size() < i++)
+			leds[i-2] = argv[i];
+
+		printf("test3::kbd_test_leds()\n");
+		return kbd_test_leds(argc-2, leds);
 	}
 	else if (strncmp(argv[1], "timedscan", strlen("timedscan")) == 0) {
 		if (argc != 3) {
