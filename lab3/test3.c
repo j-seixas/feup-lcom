@@ -28,9 +28,11 @@ int kbd_test_scan(unsigned short ass) {
 				switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /*hardware interrupt notification*/
 					if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
-						kbd_handler(); /*process it*/
-						if (counter % 60 == 0)
-							printf("\n%d seconds", counter / 60);
+						int data = kbd_handler(); /*process it*/
+						if (data == -1)
+							break;
+
+
 					}
 					break;
 				default:
@@ -44,8 +46,8 @@ int kbd_test_scan(unsigned short ass) {
 			counter++;
 
 		}
-		if (timer_unsubscribe_int() != OK) {
-			printf("Error in timer_unsubscribe_int()\n");
+		if (kbd_unsubscribe_int() != OK) {
+			printf("Error in kbd_unsubscribe_int()\n");
 			return 1;
 		}
 		return 0;

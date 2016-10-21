@@ -7,13 +7,13 @@
 
 #define DELAY_US    20000
 
-//tickdelay(micros_to_ticks(DELAY_US);
-int hook_id;
 
+int hook_id;
 
 int kbd_subscribe_int(void) {
 	hook_id = KB_IRQSET;
-	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id) != OK) {
+	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id)
+			!= OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
@@ -41,4 +41,16 @@ int kbd_unsubscribe_int() {
 
 int kbd_handler() {
 
+	while (1) {
+		sys_inb(STAT_REG, &stat); /*assuming it returns OK*/
+		/*loop while 8042 output buffer is empty*/
+		if (stat & OBF) {
+			sys_inb(OUT_BUF, &data); /*	assuming it returns OK	*/
+			if ((stat & (PAR_ERR | TO_ERR)) == 0)
+				return data;
+			else
+				return -1;
+		}
+		tickdelay(micros_to_ticks(DELAY_US);
+	}
 }
