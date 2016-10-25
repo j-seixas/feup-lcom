@@ -1,24 +1,27 @@
 #include "keyboard.h"
+#include "i8042.h"
+
 #define WAITTIME = 5;
 
 int kbd_test_scan(unsigned short ass) {
-	if (asm != 0 || asm != 1) {
+	if (ass != 0 || ass != 1) {
 		return 1;
 	}
-	if (asm == 0) {
+	if (ass == 0) {
 		int r, ipc_status, irq_set, counter = 0;
 		message msg;
 		irq_set = kbd_subscribe_int();
 		if (irq_set == -1) {
-			printf("Error in kbd_subscribe_inta()\n");
+			printf("Error in kbd_subscribe_int()\n");
 			return 1;
 		}
+		unsigned long data, data2;
 		/*if (time < 0) {
-			printf("Error: time can't be negative\n");
-			return 1;
-		}*/
+		 printf("Error: time can't be negative\n");
+		 return 1;
+		 }*/
 
-		while (counter < WAITTIME) {
+		while (data != ESC_BREAK) {
 
 			if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
 				printf("driver_receive failed with: %d", r);
@@ -28,10 +31,24 @@ int kbd_test_scan(unsigned short ass) {
 				switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /*hardware interrupt notification*/
 					if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
-						int data = kbd_handler(); /*process it*/
+						data = kbd_handler(); /*process it*/
 						if (data == -1)
 							break;
+						if (data & TWO_BYTES == data) {
+							data2 = kbd_handler();
+							if (data == -1)
+								break;
+							if (kbd_make_or_break(&data) == 1)
+								printf("Breakcode: 0x%X%X\n", data, data2);
+							else
+								printf("Makecode: 0x%X%X\n", data, data2);
 
+						} else {
+							if (kbd_make_or_break(&data))
+								printf("Breakcode: 0x%X\n", data);
+							else
+								printf("Makecode: 0x%X\n", data);
+						}
 
 					}
 					break;
@@ -43,7 +60,7 @@ int kbd_test_scan(unsigned short ass) {
 				 no standard messages expected: do nothing
 				 */
 			}
-			counter++;
+			//counter++;
 
 		}
 		if (kbd_unsubscribe_int() != OK) {

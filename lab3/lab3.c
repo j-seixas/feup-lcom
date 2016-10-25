@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
+#include "keyboard.h"
 
 static int proc_args(int argc, char **argv);
 static unsigned long parse_ulong(char *str, int base);
@@ -15,7 +16,7 @@ int main(int argc, char **argv)
 	sef_startup();
 
 	/* Enable IO-sensitive operations for ourselves */
-	    sys_enable_iop(SELF);
+	sys_enable_iop(SELF);
 
 	if (argc == 1) {					/* Prints usage of the program if no arguments are passed */
 		print_usage(argv);
@@ -35,7 +36,7 @@ static void print_usage(char **argv)
 
 static int proc_args(int argc, char **argv)
 {
-	unsigned long ass, n, leds[];
+	unsigned long ass, n, leds[7];
 
 	if (strncmp(argv[1], "scan", strlen("scan")) == 0) {
 		if (argc != 3) {
@@ -56,8 +57,8 @@ static int proc_args(int argc, char **argv)
 		//leds = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
 		//if (leds == ULONG_MAX)
 		//	return 1;
-		for (unisgned int i = 2; i < argv.size() < i++)
-			leds[i-2] = argv[i];
+		/*for (unsigned int i = 2; i < argv.size() < i++)
+			leds[i-2] = argv[i]; */
 
 		printf("test3::kbd_test_leds()\n");
 		return kbd_test_leds(argc-2, leds);
