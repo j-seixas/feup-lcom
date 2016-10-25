@@ -22,26 +22,30 @@
 #define INH_KEYBOARD        0x10
 #define KBD_ENA             0xAE
 #define KBD_DIS             0xAD
-
+#define OBF   				BIT(0)
 
 // Keyboard Commands
-#define KB_MENU         EQU     0F1H
-#define KB_ENABLE       EQU     0F4H
-#define KB_MAKEBREAK    EQU     0F7H
-#define KB_ECHO         EQU     0FEH
-#define KB_RESET        EQU     0FFH
-#define KB_LED_CMD      EQU     0EDH
+#define KB_MENU             0xF1
+#define KB_ENABLE           0xF4
+#define KB_MAKEBREAK        0xF7
+#define KB_ECHO             0xFE
+#define KB_RESET            0xFF
+#define KB_LED_CMD          0xED
 
 
 // Keyboard responses
-#define KB_OK           EQU     0AAH
-#define KB_ACK          EQU     0FAH
-#define KB_OVERRUN      EQU     0FFH
-#define KB_RESEND       EQU     0FEH
-#define KB_BREAK        EQU     0F0H
-#define KB_FA           EQU     010H
-#define KB_FE           EQU     020H
-#define KB_PR_LED       EQU     040H
+#define KB_OK               0xAA
+#define KB_ACK              0xFA
+#define KB_OVERRUN          0xFF
+#define KB_RESEND           0xFE
+#define KB_BREAK            0xF0
+#define KB_FA               0x10
+#define KB_FE               0x20
+#define KB_PR_LED           0x40
+
+
+#define ESC_BREAK			0x81
+#define TWO_BYTES			0xE0
 
 
 
