@@ -4,7 +4,7 @@
 #define WAITTIME = 5;
 
 int kbd_test_scan(unsigned short ass) {
-	if (ass != 0 || ass != 1) {
+	if (ass != 0 && ass != 1) {
 		return 1;
 	}
 	if (ass == 0) {
@@ -16,6 +16,7 @@ int kbd_test_scan(unsigned short ass) {
 			return 1;
 		}
 		unsigned long data, data2;
+		unsigned int bool = 0;
 		/*if (time < 0) {
 		 printf("Error: time can't be negative\n");
 		 return 1;
@@ -33,18 +34,25 @@ int kbd_test_scan(unsigned short ass) {
 					if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
 						data = kbd_handler(); /*process it*/
 						if (data == -1)
-							break;
-						if (data & TWO_BYTES == data) {
-							data2 = kbd_handler();
-							if (data == -1)
-								break;
-							if (kbd_make_or_break(&data) == 1)
-								printf("Breakcode: 0x%X%X\n", data, data2);
-							else
-								printf("Makecode: 0x%X%X\n", data, data2);
+							return 1;
+						if (data == TWO_BYTES || bool) {
+							/*data2 = kbd_handler();
+							 if (data2 == -1)
+							 return 1;
+							 data = data<< 8;
+							 data |= data2;*/
+							if (!bool) {
+								bool = 1;
+							} else {
+								if (kbd_make_or_break(data))
+									printf("Breakcode: 0xE0%X\n", data);
+								else
+									printf("Makecode: 0xE0%X\n", data);
+								bool = 0;
+							}
 
 						} else {
-							if (kbd_make_or_break(&data))
+							if (kbd_make_or_break(data))
 								printf("Breakcode: 0x%X\n", data);
 							else
 								printf("Makecode: 0x%X\n", data);

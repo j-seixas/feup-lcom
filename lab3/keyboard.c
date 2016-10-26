@@ -8,17 +8,16 @@
 
 #define DELAY_US    20000
 
-
-int hook_id;
+int hook_id_kbd;
 
 int kbd_subscribe_int(void) {
-	hook_id = KB_IRQ;
-	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id)
+	hook_id_kbd = KB_IRQ;
+	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id_kbd)
 			!= OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
-	if (sys_irqenable(&hook_id) != OK) {
+	if (sys_irqenable(&hook_id_kbd) != OK) {
 		printf("Error in sys_irqenable()\n");
 		return -1;
 	}
@@ -28,11 +27,11 @@ int kbd_subscribe_int(void) {
 }
 
 int kbd_unsubscribe_int() {
-	if (sys_irqdisable(&hook_id) != OK) {
+	if (sys_irqdisable(&hook_id_kbd) != OK) {
 		printf("Error in sys_irqdisable()\n");
 		return 1;
 	}
-	if (sys_irqrmpolicy(&hook_id) != OK) {
+	if (sys_irqrmpolicy(&hook_id_kbd) != OK) {
 		printf("Error in sys_irqrmpolicy()\n");
 		return 1;
 	}
@@ -40,7 +39,7 @@ int kbd_unsubscribe_int() {
 	return 0;
 }
 
-int kbd_make_or_break(unsigned long *data){
+int kbd_make_or_break(unsigned long data) {
 	if ((data & BIT(7)) == BIT(7))
 		return 1;
 	return 0;
@@ -49,7 +48,7 @@ int kbd_make_or_break(unsigned long *data){
 
 unsigned long kbd_handler() {
 	//bool numberBytes2 = false;
-	unsigned long *stat, *data;
+	unsigned long stat, data;
 	int var = 6;
 	while (var > 0) {
 		sys_inb(STATUS_PORT, &stat); /*assuming it returns OK*/
@@ -61,7 +60,7 @@ unsigned long kbd_handler() {
 			else
 				return -1;
 		}
-		tickdelay(micros_to_ticks(DELAY_US);
+		tickdelay(micros_to_ticks(DELAY_US));
 		var--;
 	}
 }
