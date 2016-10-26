@@ -48,6 +48,8 @@
 #define TWO_BYTES			0xE0
 
 
+#define PAR_ERR				BIT(7)
+#define TO_ERR				BIT(6)
 
 #define KB_IRQ   1
 

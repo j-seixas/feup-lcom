@@ -61,7 +61,7 @@ static int proc_args(int argc, char **argv)
 			leds[i-2] = argv[i]; */
 
 		printf("test3::kbd_test_leds()\n");
-		return kbd_test_leds(argc-2, leds);
+		//return kbd_test_leds(argc-2, leds);
 	}
 	else if (strncmp(argv[1], "timedscan", strlen("timedscan")) == 0) {
 		if (argc != 3) {
