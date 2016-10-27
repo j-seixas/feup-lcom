@@ -80,6 +80,7 @@ int kbd_test_leds(unsigned short n, unsigned short *leds) {
 	counter = 0;
 	int r, ipc_status, irq_set;
 	message msg;
+	kbd_subscribe_int();
 	irq_set = timer_subscribe_int();
 	if (irq_set == -1) {
 		printf("Error in timer_subscribe_int()\n");
@@ -101,8 +102,17 @@ int kbd_test_leds(unsigned short n, unsigned short *leds) {
 			case HARDWARE: /*hardware interrupt notification*/
 				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
 					timer_int_handler(); /*process it*/
-					if (counter % 60 == 0)
-						printf("\n%d seconds", counter / 60);
+					printf(".\n");
+					if (counter % 60 == 0) {
+						printf("Entrou\n");
+
+						if (kbd_led_handler(KB_LED_CMD, BIT(leds[counter / n]))
+								!= OK){
+						printf("Merdou\n");
+							//return -1;
+
+						}
+					}
 				}
 				break;
 			default:
@@ -119,10 +129,9 @@ int kbd_test_leds(unsigned short n, unsigned short *leds) {
 		printf("Error in timer_unsubscribe_int()\n");
 		return 1;
 	}
+	kbd_unsubscribe_int();
 	return 0;
 }
-
-
 
 int kbd_test_timed_scan(unsigned short n) {
 	if (n < 0) {
