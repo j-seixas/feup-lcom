@@ -240,7 +240,7 @@ int timer_test_int(unsigned long time) {
 	message msg;
 	irq_set = timer_subscribe_int();
 	if (irq_set == -1) {
-		printf("Error in timer_subscribe_inta()\n");
+		printf("Error in timer_subscribe_int()\n");
 		return 1;
 	}
 	if (time < 0) {

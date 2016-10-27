@@ -2,6 +2,13 @@
 #define __TEST3_H
 
 
+/**
+ * @brief Timer 0 interrupt handler
+ *
+ * Increments counter
+ */
+void timer_int_handler();
+
 /** @defgroup test3 test3
  * @{
  *
