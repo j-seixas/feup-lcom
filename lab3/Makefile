@@ -5,7 +5,7 @@ COMPILER_TYPE= gnu
 CC= gcc
 
 PROG= lab3
-SRCS= lab3.c test3.c keyboard.c timer.c
+SRCS= lab3.c test3.c keyboard.c timer.c assembly.S
 
 CCFLAGS= -Wall
 
@@ -18,3 +18,4 @@ MAN=
 
 .include <bsd.prog.mk>
 .include <bsd.gcc.mk>
+

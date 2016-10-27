@@ -48,22 +48,24 @@ int kbd_make_or_break(unsigned long data) {
 
 unsigned long kbd_handler() {
 	unsigned long stat, data;
-	int var = 6;
-	while (var > 0) {
+	int reps = 6;
+	while (reps > 0) {
 		sys_inb(STATUS_PORT, &stat); /*assuming it returns OK*/
 		/*loop while 8042 output buffer is empty*/
 		if (stat & OBF) {
 			sys_inb(KBD_OUT_BUF, &data); /*	assuming it returns OK	*/
-			if ((stat & (PAR_ERR | TO_ERR)) == 0)
+			if ((stat & (PAR_ERR | TO_ERR)) == OK)
 				return data;
 			else
 				return -1;
 		}
 		tickdelay(micros_to_ticks(DELAY_US));
-		var--;
+		reps--;
 	}
 	return -1;
 }
+
+
 
 int kbd_ACK(unsigned long cmd) {
 	unsigned long data;

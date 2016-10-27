@@ -56,4 +56,6 @@
 
 #define KB_IRQ   1
 
+#define OK  				0
+
 #endif /* _LCOM_I8042_H */
