@@ -1,9 +1,9 @@
 #include <minix/syslib.h>
 #include <minix/drivers.h>
 #include <minix/com.h>
+#include <minix/sysutil.h>
 #include "i8254.h"
 #include "keyboard.h"
-#include <minix/sysutil.h>
 #include "i8042.h"
 
 #define DELAY_US    20000
@@ -47,7 +47,6 @@ int kbd_make_or_break(unsigned long data) {
 }
 
 unsigned long kbd_handler() {
-	//bool numberBytes2 = false;
 	unsigned long stat, data;
 	int var = 6;
 	while (var > 0) {
@@ -63,4 +62,48 @@ unsigned long kbd_handler() {
 		tickdelay(micros_to_ticks(DELAY_US));
 		var--;
 	}
+	return -1;
 }
+
+int kbd_ACK(unsigned long cmd) {
+	unsigned long data;
+	kbd_send_command(cmd1);
+	data = kbd_handler();
+	if (data == -1)
+		return -1;
+	if ((data & KB_ACK) == KB_ACK)
+		return 0;
+	if ((data & KB_RESEND) == KB_RESEND)
+		return 1;
+	if ((data & KB_ERROR) == KB_ERROR)
+		return 2;
+	else
+		return -1;
+
+}
+
+int kbd_led_handler(unsigned long cmd1, unsigned long cmd2) {
+	while (1) {
+		kbd_ACK(cmd1);
+	}
+}
+
+int kbd_send_command(unsigned long cmd) {
+	unsigned long stat, data;
+	int var = 6;
+
+	while (var > 0) {
+		sys_inb(STATUS_PORT, &stat);
+		//assuming it returns OK
+		//loop while 8042 input buffer is not empty
+		if ((stat & IBF) == 0) {
+			sys_outb(KBC_CMD_REG, cmd);
+			//no args command
+			return 0;
+		}
+		tickdelay(micros_to_ticks(DELAY_US));
+
+	}
+	return -1;
+}
+

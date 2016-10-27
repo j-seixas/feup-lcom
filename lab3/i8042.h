@@ -8,6 +8,7 @@
 #define KBD_OUT_BUF         0x60
 #define KBD_INPT_BUF        0x60
 #define KBD_CMD_BUF         0x64
+#define KBC_CMD_REG			0x64
 #define KBD_DATA_BUF        0x60
 #define PORT_A              0x60
 #define PORT_B              0x61
@@ -23,6 +24,7 @@
 #define KBD_ENA             0xAE
 #define KBD_DIS             0xAD
 #define OBF   				BIT(0)
+#define IBF					BIT(1)
 
 // Keyboard Commands
 #define KB_MENU             0xF1
@@ -42,6 +44,7 @@
 #define KB_FA               0x10
 #define KB_FE               0x20
 #define KB_PR_LED           0x40
+#define KB_ERROR			0xFC
 
 
 #define ESC_BREAK			0x81

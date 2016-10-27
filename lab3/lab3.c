@@ -5,6 +5,7 @@
 #include <string.h>
 #include <errno.h>
 #include "keyboard.h"
+#include "timer.h"
 
 static int proc_args(int argc, char **argv);
 static unsigned long parse_ulong(char *str, int base);
@@ -29,14 +30,14 @@ static void print_usage(char **argv)
 {
 	printf("Usage: one of the following:\n"
 			"\t service run %s -args \"scan <decimal no.- ass>\"\n"
-			"\t service run %s -args \"leds <decimal no. - leds>\"\n"
+			"\t service run %s -args \"leds <decimal no. - led>\"\n"
 			"\t service run %s -args \"timedscan <decimal no. - n>\"\n",
 			argv[0], argv[0], argv[0]);
 }
 
 static int proc_args(int argc, char **argv)
 {
-	unsigned long ass, n, leds[7];
+	unsigned short ass, n, *led;
 
 	if (strncmp(argv[1], "scan", strlen("scan")) == 0) {
 		if (argc != 3) {
@@ -54,14 +55,21 @@ static int proc_args(int argc, char **argv)
 			printf("keyboard: wrong no. of arguments for kbd_test_leds()\n");
 			return 1;
 		}
+		led = malloc(sizeof(unsigned short) * (argc-2));
 		//leds = parse_ulong(argv[2], 10);						/* Parses string to unsigned long */
 		//if (leds == ULONG_MAX)
 		//	return 1;
 		/*for (unsigned int i = 2; i < argv.size() < i++)
 			leds[i-2] = argv[i]; */
-
+		unsigned int i = 0;
+		while(i < argc-2){
+			led[i]= parse_ulong(argv[2+i],10);
+			if(led[i]==ULONG_MAX)
+				return 1;
+			i++;
+		}
 		printf("test3::kbd_test_leds()\n");
-		//return kbd_test_leds(argc-2, leds);
+		return kbd_test_leds(argc-2, led);
 	}
 	else if (strncmp(argv[1], "timedscan", strlen("timedscan")) == 0) {
 		if (argc != 3) {
