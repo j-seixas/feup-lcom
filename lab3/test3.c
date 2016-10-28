@@ -98,10 +98,9 @@ int kbd_test_leds(unsigned short n, unsigned short *leds) {
 				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
 					timer_int_handler(); /*process it*/
 					if (counter % 60 == 0) {
-						printf("Entrou\n");
 						if (kbd_led_handler(KB_LED_CMD, BIT(leds[counter / n]))
 								!= OK) {
-							printf("Saiu com erro\n");
+							printf("Erro ao mudar LEDS!!\n");
 							//return -1;
 
 						}
@@ -118,11 +117,11 @@ int kbd_test_leds(unsigned short n, unsigned short *leds) {
 		}
 
 	}
-	if (timer_unsubscribe_int() != OK) {
-		printf("Error in timer_unsubscribe_int()\n");
+	if (timer_unsubscribe_int() != OK || kbd_unsubscribe_int() != OK) {
+		printf("Error in unsubscribe_int()\n");
 		return 1;
 	}
-	kbd_unsubscribe_int();
+
 	return 0;
 }
 

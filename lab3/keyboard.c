@@ -10,6 +10,7 @@
 
 int hook_id_kbd;
 
+
 int kbd_subscribe_int(void) {
 	hook_id_kbd = KB_IRQ;
 	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id_kbd)
@@ -21,8 +22,8 @@ int kbd_subscribe_int(void) {
 		printf("Error in sys_irqenable()\n");
 		return -1;
 	}
-
 	return BIT(KB_IRQ);
+
 
 }
 
@@ -52,9 +53,8 @@ unsigned long kbd_handler() {
 	while (var > 0) {
 		sys_inb(STATUS_PORT, &stat); /*assuming it returns OK*/
 		/*loop while 8042 output buffer is empty*/
-		printf("stat  = 0x%x\n",stat);
+
 		if (stat & OBF) {
-			printf("entrou aqui\n");
 			sys_inb(KBD_OUT_BUF, &data); /*	assuming it returns OK	*/
 			if ((stat & (PAR_ERR | TO_ERR)) == 0)
 				return data;
@@ -65,48 +65,55 @@ unsigned long kbd_handler() {
 		tickdelay(micros_to_ticks(DELAY_US));
 		var--;
 	}
-	printf("Timed out\n");
 	return -1;
 }
 
 int kbd_ACK(unsigned long cmd) {
 	unsigned long data;
-	printf("%d\n", kbd_send_command(cmd));
 	data = kbd_handler();
-	if (data == -1) {
-		printf("-1\n");
-		return -1;
-	}
-	if ((data & KB_ACK) == KB_ACK) {
-		printf("ACK\n");
+
+	if (data == KB_ACK) {
+
 		return 0;
 	}
-	if ((data & KB_RESEND) == KB_RESEND) {
-		printf("1\n");
+	if (data  == KB_RESEND) {
+
 		return 1;
 	}
-	if ((data & KB_ERROR) == KB_ERROR) {
-		printf("2\n");
+	if (data == KB_ERROR) {
+
 		return 2;
-	} else
+	}
+	if (data == -1) {
+
 		return -1;
+	}
+
+	//printf ("%02X\nOutra data\n", data);
+	return -2;
 
 }
+
+
 
 int kbd_led_handler(unsigned long cmd1, unsigned long cmd2) {
 	int breakwhile = 0;
 	while (1) {
+
 		while (breakwhile < 5) {
+			//printf("%d\n", kbd_send_command(cmd1));
+			kbd_send_command(cmd1);
 			switch (kbd_ACK(cmd1)) {
 			case 0:
-				printf("ACK\n");
+				//printf("ACK\n");
 				breakwhile = 10;
 				break;
 			case 1:
 				break;
 			case 2:
 				break;
-				//default:
+			default:
+				break;
 				//	return -1;
 
 			}
@@ -115,7 +122,10 @@ int kbd_led_handler(unsigned long cmd1, unsigned long cmd2) {
 		if (breakwhile != 11)
 			return -1;
 		breakwhile = 0;
+		//printf("%d\n", kbd_send_command(cmd2));
+		kbd_send_command(cmd2);
 		while (breakwhile < 5) {
+
 			switch (kbd_ACK(cmd2)) {
 			case 0:
 				printf("Led %X\n", cmd2);
@@ -125,7 +135,8 @@ int kbd_led_handler(unsigned long cmd1, unsigned long cmd2) {
 			case 2:
 				breakwhile = 5;
 				break;
-				//default:
+			default:
+				break;
 				//return -1;
 			}
 		}
@@ -146,7 +157,7 @@ int kbd_send_command(unsigned long cmd) {
 			return 0;
 		}
 		tickdelay(micros_to_ticks(DELAY_US));
-
+		var--;
 	}
 	return -1;
 }
