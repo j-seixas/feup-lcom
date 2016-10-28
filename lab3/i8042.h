@@ -6,7 +6,7 @@
 
 #define STATUS_PORT         0x64
 #define KBD_OUT_BUF         0x60
-#define KBD_INPT_BUF        0x60
+#define KBD_INPT_BUF        0x64
 #define KBD_CMD_BUF         0x64
 #define KBC_CMD_REG			0x64
 #define KBD_DATA_BUF        0x60
@@ -56,6 +56,6 @@
 
 #define KB_IRQ   1
 
-#define OK  				0
+
 
 #endif /* _LCOM_I8042_H */

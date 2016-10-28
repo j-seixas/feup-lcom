@@ -48,46 +48,47 @@ int kbd_make_or_break(unsigned long data) {
 
 unsigned long kbd_handler() {
 	unsigned long stat, data;
-	int reps = 6;
-	while (reps > 0) {
+	int var = 6;
+	while (var > 0) {
 		sys_inb(STATUS_PORT, &stat); /*assuming it returns OK*/
 		/*loop while 8042 output buffer is empty*/
+		printf("stat  = 0x%x\n",stat);
 		if (stat & OBF) {
+			printf("entrou aqui\n");
 			sys_inb(KBD_OUT_BUF, &data); /*	assuming it returns OK	*/
-			if ((stat & (PAR_ERR | TO_ERR)) == OK)
+			if ((stat & (PAR_ERR | TO_ERR)) == 0)
 				return data;
-			else
+			else {
 				return -1;
+			}
 		}
 		tickdelay(micros_to_ticks(DELAY_US));
-		reps--;
+		var--;
 	}
+	printf("Timed out\n");
 	return -1;
 }
 
-
-
 int kbd_ACK(unsigned long cmd) {
 	unsigned long data;
-	kbd_send_command(cmd);
+	printf("%d\n", kbd_send_command(cmd));
 	data = kbd_handler();
-	if (data == -1){
+	if (data == -1) {
 		printf("-1\n");
 		return -1;
 	}
-	if ((data & KB_ACK) == KB_ACK){
-		printf("0\n");
+	if ((data & KB_ACK) == KB_ACK) {
+		printf("ACK\n");
 		return 0;
 	}
-	if ((data & KB_RESEND) == KB_RESEND){
+	if ((data & KB_RESEND) == KB_RESEND) {
 		printf("1\n");
 		return 1;
 	}
-	if ((data & KB_ERROR) == KB_ERROR){
+	if ((data & KB_ERROR) == KB_ERROR) {
 		printf("2\n");
 		return 2;
-	}
-	else
+	} else
 		return -1;
 
 }
@@ -105,13 +106,13 @@ int kbd_led_handler(unsigned long cmd1, unsigned long cmd2) {
 				break;
 			case 2:
 				break;
-			//default:
-			//	return -1;
+				//default:
+				//	return -1;
 
 			}
-			breakwhile ++;
+			breakwhile++;
 		}
-		if(breakwhile != 11)
+		if (breakwhile != 11)
 			return -1;
 		breakwhile = 0;
 		while (breakwhile < 5) {
@@ -124,7 +125,7 @@ int kbd_led_handler(unsigned long cmd1, unsigned long cmd2) {
 			case 2:
 				breakwhile = 5;
 				break;
-			//default:
+				//default:
 				//return -1;
 			}
 		}
