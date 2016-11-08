@@ -1,5 +1,5 @@
 #include "i8042.h"
-#include "i8254.h"
+//#include "i8254.h"
 #include "test4.h"
 #include <limits.h>
 #include <string.h>
@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
 	sef_startup();
 
 	/* Enable IO-sensitive operations for ourselves */
-	sys_enable_iop(SELF);
+	//sys_enable_iop(SELF);
 
 	if (argc == 1) { /* Prints usage of the program if no arguments are passed */
 		print_usage(argv);
@@ -58,8 +58,7 @@ static int proc_args(int argc, char **argv) {
 		return test_async(idle_time);
 	} else if (strncmp(argv[1], "config", strlen("config")) == 0) {
 		if (argc != 2) {
-			printf(
-					"mouse: wrong no of arguments for test_config()\n");
+			printf("mouse: wrong no of arguments for test_config()\n");
 			return 1;
 		}
 		printf("test3::test_config()\n");
@@ -69,13 +68,13 @@ static int proc_args(int argc, char **argv) {
 				printf("mouse: wrong no. of arguments for test_gesture()\n");
 				return 1;
 			}
-			idle_time = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
-			if (idle_time == ULONG_MAX)
+			length = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
+			if (length == ULONG_MAX)
 				return 1;
-			printf("mouse::test_gesture()\n");
+			printf("mouse::test_gesture(%lu)\n", length);
 			return test_gesture(length);
 	} else {
-		printf("timer: %s - no valid function!\n", argv[1]);
+		printf("mouse: %s - no valid function!\n", argv[1]);
 		return 1;
 	}
 }
@@ -94,7 +93,7 @@ static unsigned long parse_ulong(char *str, int base) {
 	}
 
 	if (endptr == str) {
-		printf("keyboard: parse_ulong: no digits were found in %s\n", str);
+		printf("mouse: parse_ulong: no digits were found in %s\n", str);
 		return ULONG_MAX;
 	}
 
