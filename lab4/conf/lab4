@@ -1,9 +1,8 @@
-service lab3
+service lab4
 {
         system
                 DEVIO
                 IRQCTL
-                IOPENABLE
                 ;
         ipc
                 SYSTEM
@@ -20,6 +19,7 @@ service lab3
         irq
                 0         # TIMER 0 IRQ
                 1         # KBD IRQ 
+                12        # AUX/MOUSE IRQ
                 ;       
         uid     0               
                 ;

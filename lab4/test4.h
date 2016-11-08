@@ -1,6 +1,19 @@
 #ifndef __TEST4_H
 #define __TEST4_H
 
+#include <minix/syslib.h>
+#include <minix/drivers.h>
+#include <minix/com.h>
+#include <minix/sysutil.h>
+#include "i8042.h"
+
+int mouse_subscribe_int(void);
+int mouse_unsubscribe_int();
+unsigned long kbd_read();
+int kbd_send_command(unsigned long cmd);
+int kbd_send(unsigned long cmd) ;
+int mouse_send(unsigned long cmd);
+
 /** @defgroup test4 test4
  * @{
  *
