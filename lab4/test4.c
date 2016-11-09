@@ -1,4 +1,3 @@
-
 #include "test4.h"
 
 #define DELAY_US    20000
@@ -100,25 +99,24 @@ int mouse_send(unsigned long cmd) {
 			printf("Entrou na 1\n");
 			data1 = kbd_read();
 			printf("data1: %X\n", data1);
-			if (data1 == KB_ACK) {
-				printf("Entrou na 2\n");
-				if (kbd_send(cmd) == 0) {
-					printf("Entrou na 3\n");
-					data2 = kbd_read();
-					if (data2 == KB_ACK)
-						break;
-					//else
-					//return 1;
-				}
-				//return -1;
+
+			printf("Entrou na 2\n");
+			if (kbd_send(cmd) == 0) {
+				printf("Entrou na 3\n");
+				data2 = kbd_read();
+				if (data2 == KB_ACK)
+					return 0;
+				//else
+				//return 1;
 			}
+			//return -1;
+
 			//return 1;
 		}
 		//return -1;
 		count--;
 	}
-	if (count > 0)
-		return 0;
+
 	return 1;
 
 }
@@ -140,6 +138,7 @@ int test_packet(unsigned short cnt) {
 		return 1;
 	}
 
+	printf("Vai entrar no loop\n");
 	unsigned long data;
 	unsigned int loop = 0;
 
@@ -154,9 +153,11 @@ int test_packet(unsigned short cnt) {
 				switch (_ENDPOINT_P(msg.m_source)) {
 				case HARDWARE: /*hardware interrupt notification*/
 					if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+						//printf("1 interrupt\n");
 						data = kbd_read(); /*process it*/
 						if (data == -1) {
-							return 1;
+							//printf("erro\n");
+							break;
 						}
 						if (loop == 0) {
 							if ((data & BIT(3)) == OK) {
@@ -166,6 +167,7 @@ int test_packet(unsigned short cnt) {
 
 						}
 						packet[loop] = data;
+						loop++;
 						break;
 					}
 				default:
@@ -176,37 +178,37 @@ int test_packet(unsigned short cnt) {
 				/*
 				 no standard messages expected: do nothing
 				 */}
-			loop++;
+
 		}
 		if (loop != 6) {
 			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
-			if (packet[0] & BIT(0) != 0)
+			if ((packet[0] & BIT(0)) != 0)
 				printf("LB=1 ");
 			else
 				printf("LB=0 ");
-			if (packet[0] & BIT(1) != 0)
+			if ((packet[0] & BIT(1)) != 0)
 				printf("MB=1 ");
 			else
 				printf("MB=0 ");
-			if (packet[0] & BIT(2) != 0)
+			if ((packet[0] & BIT(2)) != 0)
 				printf("RB=1 ");
 			else
 				printf("RB=0 ");
-			if (packet[0] & BIT(6) != 0)
+			if ((packet[0] & BIT(6)) != 0)
 				printf("XOV=1 ");
 			else
 				printf("XOV=0 ");
-			if (packet[0] & BIT(7) != 0)
+			if ((packet[0] & BIT(7)) != 0)
 				printf("YOV=1 ");
 			else
 				printf("YOV=0 ");
-			if (packet[0] & BIT(4) != 0) {
+			if ((packet[0] & BIT(4)) != 0) {
 				packet[1] ^= 0xFF;
 				packet[1]++;
 				printf("X=%d ", packet[1]);
 			} else
 				printf("X=%d ", packet[1]);
-			if (packet[0] & BIT(5) != 0) {
+			if ((packet[0] & BIT(5)) != 0) {
 				packet[2] ^= 0xFF;
 				packet[2]++;
 				printf("Y=%d \n", packet[2]);
