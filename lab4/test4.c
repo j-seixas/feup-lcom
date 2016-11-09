@@ -1,7 +1,36 @@
 #include "test4.h"
 
 #define DELAY_US    20000
-int hook_id_mouse;
+int hook_id_mouse, hook_id_timer;
+static unsigned int three = 0;
+
+int timer_subscribe_int(void) {
+	hook_id_timer = TM0_IRQSET;
+	if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id_timer) != OK) {
+		printf("Error in sys_irqsetpolicy()\n");
+		return -1;
+	}
+	if (sys_irqenable(&hook_id_timer) != OK) {
+		printf("Error in sys_irqenable()\n");
+		return -1;
+	}
+
+	return BIT(TM0_IRQSET);
+
+}
+
+int timer_unsubscribe_int() {
+	if (sys_irqdisable(&hook_id_timer) != OK) {
+		printf("Error in sys_irqdisable()\n");
+		return 1;
+	}
+	if (sys_irqrmpolicy(&hook_id_timer) != OK) {
+		printf("Error in sys_irqrmpolicy()\n");
+		return 1;
+	}
+
+	return 0;
+}
 
 int mouse_subscribe_int(void) {
 	hook_id_mouse = MOUSE_IRQ;
@@ -106,14 +135,8 @@ int mouse_send(unsigned long cmd) {
 				data2 = kbd_read();
 				if (data2 == KB_ACK)
 					return 0;
-				//else
-				//return 1;
 			}
-			//return -1;
-
-			//return 1;
 		}
-		//return -1;
 		count--;
 	}
 
@@ -123,7 +146,7 @@ int mouse_send(unsigned long cmd) {
 
 int test_packet(unsigned short cnt) {
 
-	int r, ipc_status, irq_set, counter = 0;
+	int r, ipc_status, irq_set;
 	message msg;
 	unsigned long packet[3];
 
@@ -138,59 +161,51 @@ int test_packet(unsigned short cnt) {
 		return 1;
 	}
 
-	printf("Vai entrar no loop\n");
+	//printf("Vai entrar no loop\n");
 	unsigned long data;
-	unsigned int loop = 0;
 
 	while (cnt > 0) {
-		loop = 0;
-		while (loop < 3) {
-			if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
-				printf("driver_receive failed with: %d", r);
-				continue;
-			}
-			if (is_ipc_notify(ipc_status)) { /*received notification*/
-				switch (_ENDPOINT_P(msg.m_source)) {
-				case HARDWARE: /*hardware interrupt notification*/
-					if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
-						//printf("1 interrupt\n");
-						data = kbd_read(); /*process it*/
-						if (data == -1) {
-							//printf("erro\n");
-							break;
-						}
-						if (loop == 0) {
-							if ((data & BIT(3)) == OK) {
-								loop = 5;
-								break;
-							}
-
-						}
-						packet[loop] = data;
-						loop++;
+		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
+			printf("driver_receive failed with: %d", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /*received notification*/
+			switch (_ENDPOINT_P(msg.m_source)) {
+			case HARDWARE: /*hardware interrupt notification*/
+				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+					data = kbd_read(); /*process it*/
+					if (data == -1) {
 						break;
 					}
-				default:
+					if (three == 0) {
+						if ((data & BIT(3)) == OK) {
+							break;
+						}
+					}
+					packet[three] = data;
+					three++;
 					break;
-				}/*no other notifications expected: do nothing*/
+				}
+			default:
+				break;
+			}/*no other notifications expected: do nothing*/
 
-			} else { /*received a    standard message, not a notification*/
-				/*
-				 no standard messages expected: do nothing
-				 */}
+		} else { /*received a    standard message, not a notification*/
+			/*
+			 no standard messages expected: do nothing
+			 */}
 
-		}
-		if (loop != 6) {
+		if (three == 3) {
 			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
 			if ((packet[0] & BIT(0)) != 0)
 				printf("LB=1 ");
 			else
 				printf("LB=0 ");
-			if ((packet[0] & BIT(1)) != 0)
+			if ((packet[0] & BIT(2)) != 0)
 				printf("MB=1 ");
 			else
 				printf("MB=0 ");
-			if ((packet[0] & BIT(2)) != 0)
+			if ((packet[0] & BIT(1)) != 0)
 				printf("RB=1 ");
 			else
 				printf("RB=0 ");
@@ -205,15 +220,17 @@ int test_packet(unsigned short cnt) {
 			if ((packet[0] & BIT(4)) != 0) {
 				packet[1] ^= 0xFF;
 				packet[1]++;
-				printf("X=%d ", packet[1]);
+				printf("X=-%d ", packet[1]);
 			} else
 				printf("X=%d ", packet[1]);
 			if ((packet[0] & BIT(5)) != 0) {
 				packet[2] ^= 0xFF;
 				packet[2]++;
-				printf("Y=%d \n", packet[2]);
+				printf("Y=-%d \n", packet[2]);
 			} else
 				printf("Y=%d \n", packet[2]);
+
+			three = 0;
 			cnt--;
 		}
 	}
@@ -221,19 +238,230 @@ int test_packet(unsigned short cnt) {
 		printf("Error in mouse_unsubscribe_int()\n");
 		return 1;
 	}
-
 	return 0;
 
 }
 
 int test_async(unsigned short idle_time) {
-	/* To be completed ... */
+	int r, ipc_status, irq_set, irq_set_timer;
+	message msg;
+	unsigned long packet[3];
+	unsigned int counter = 0;
+	irq_set = mouse_subscribe_int();
+	irq_set_timer = timer_subscribe_int();
+
+	if (irq_set == -1) {
+		printf("Error in mouse_subscribe_int()\n");
+		return 1;
+	}
+	if (irq_set_timer == -1) {
+		printf("Error in timer_subscribe_int()\n");
+		return 1;
+	}
+	kbd_read();
+	if (mouse_send(MOUSE_ENB) != 0) {
+		printf("Error in mouse sending command\n");
+		return 1;
+	}
+
+	unsigned long data;
+
+	while (counter / 60 < idle_time) {
+		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) /*Get a request message.*/
+		{
+			printf("driver_receive failed with: %d", r);
+			continue;
+		}
+
+		if (is_ipc_notify(ipc_status)) { /*received notification*/
+			switch (_ENDPOINT_P(msg.m_source)) {
+			case HARDWARE: /*hardware interrupt notification*/
+				if (msg.NOTIFY_ARG & irq_set_timer) /*subscribed interrupt*/
+					counter++;
+
+				if (is_ipc_notify(ipc_status)) { /*received notification*/
+					switch (_ENDPOINT_P(msg.m_source)) {
+					case HARDWARE: /*hardware interrupt notification*/
+						if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+							data = kbd_read(); /*process it*/
+							if (data == -1) {
+								break;
+							}
+							counter = 0;
+							if (three == 0) {
+								if ((data & BIT(3)) == OK) {
+									break;
+								}
+
+							}
+							packet[three] = data;
+							three++;
+							break;
+						}
+					default:
+						break;
+					}/*no other notifications expected: do nothing*/
+
+				} else { /*received a    standard message, not a notification*/
+					/*
+					 no standard messages expected: do nothing
+					 */}
+
+			}
+		}
+		if (three == 3) {
+			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
+			if ((packet[0] & BIT(0)) != 0)
+				printf("LB=1 ");
+			else
+				printf("LB=0 ");
+			if ((packet[0] & BIT(2)) != 0)
+				printf("MB=1 ");
+			else
+				printf("MB=0 ");
+			if ((packet[0] & BIT(1)) != 0)
+				printf("RB=1 ");
+			else
+				printf("RB=0 ");
+			if ((packet[0] & BIT(6)) != 0)
+				printf("XOV=1 ");
+			else
+				printf("XOV=0 ");
+			if ((packet[0] & BIT(7)) != 0)
+				printf("YOV=1 ");
+			else
+				printf("YOV=0 ");
+			if ((packet[0] & BIT(4)) != 0) {
+				packet[1] ^= 0xFF;
+				packet[1]++;
+				printf("X=-%d ", packet[1]);
+			} else
+				printf("X=%d ", packet[1]);
+			if ((packet[0] & BIT(5)) != 0) {
+				packet[2] ^= 0xFF;
+				packet[2]++;
+				printf("Y=-%d \n", packet[2]);
+			} else
+				printf("Y=%d \n", packet[2]);
+			three = 0;
+		}
+	}
+	if (timer_unsubscribe_int() != OK) {
+		printf("Error in mouse_unsubscribe_int()\n");
+		return 1;
+	}
+	if (mouse_unsubscribe_int() != OK) {
+		printf("Error in mouse_unsubscribe_int()\n");
+		return 1;
+	}
+	return 0;
+
 }
 
 int test_config(void) {
 	/* To be completed ... */
 }
 
+
 int test_gesture(short length) {
-	/* To be completed ... */
+	int r, ipc_status, irq_set;
+	message msg;
+	unsigned long packet[3],test;
+
+
+	irq_set = mouse_subscribe_int();
+	if (irq_set == -1) {
+		printf("Error in mouse_subscribe_int()\n");
+		return 1;
+	}
+	kbd_read();
+	if (mouse_send(MOUSE_ENB) != 0) {
+		printf("Error in mouse sending command\n");
+		return 1;
+	}
+
+	//printf("Vai entrar no loop\n");
+	unsigned long data;
+
+	while (1) {
+		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
+			printf("driver_receive failed with: %d", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /*received notification*/
+			switch (_ENDPOINT_P(msg.m_source)) {
+			case HARDWARE: /*hardware interrupt notification*/
+				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+					data = kbd_read(); /*process it*/
+					if (data == -1) {
+						break;
+					}
+					if (three == 0) {
+						if ((data & BIT(3)) == OK) {
+							break;
+						}
+					}
+					packet[three] = data;
+					three++;
+					break;
+				}
+			default:
+				break;
+			}/*no other notifications expected: do nothing*/
+
+		} else { /*received a    standard message, not a notification*/
+			/*
+			 no standard messages expected: do nothing
+			 */ }
+
+		if (three == 3) {
+			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
+			if ((packet[0] & BIT(0)) != 0)
+				printf("LB=1 ");
+			else
+				printf("LB=0 ");
+			if ((packet[0] & BIT(2)) != 0)
+				printf("MB=1 ");
+			else
+				printf("MB=0 ");
+			if ((packet[0] & BIT(1)) != 0)
+				printf("RB=1 ");
+			else
+				printf("RB=0 ");
+			if ((packet[0] & BIT(6)) != 0)
+				printf("XOV=1 ");
+			else
+				printf("XOV=0 ");
+			if ((packet[0] & BIT(7)) != 0)
+				printf("YOV=1 ");
+			else
+				printf("YOV=0 ");
+			if ((packet[0] & BIT(4)) != 0) {
+				packet[1] ^= 0xFF;
+				packet[1]++;
+				printf("X=-%d ", packet[1]);
+			} else
+				printf("X=%d ", packet[1]);
+			if ((packet[0] & BIT(5)) != 0) {
+				packet[2] ^= 0xFF;
+				packet[2]++;
+				test = 0 - packet[2];
+				printf("Y=-%d  test=%d\n", packet[2], test);
+			} else {
+				printf("Y=%d \n", packet[2]);
+				test = packet[2];
+				if (((packet[0] & BIT(1)) != 0) && (test == length))
+					return 0;
+				three = 0;
+			}
+
+		}
+
+	}
+	if (mouse_unsubscribe_int() != OK) {
+		printf("Error in mouse_unsubscribe_int()\n");
+		return 1;
+	}
+	return 0;
+
 }

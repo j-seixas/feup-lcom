@@ -6,6 +6,7 @@
 #include <minix/com.h>
 #include <minix/sysutil.h>
 #include "i8042.h"
+#include "i8254.h"
 
 int mouse_subscribe_int(void);
 int mouse_unsubscribe_int();
