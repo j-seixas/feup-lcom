@@ -92,7 +92,6 @@ int kbd_send_command(unsigned long cmd) {
 		//loop while 8042 input buffer is not empty
 		if ((stat & IBF) == 0) {
 			sys_outb(KBC_CMD_REG, cmd);
-			//no args command
 			return 0;
 		}
 		tickdelay(micros_to_ticks(DELAY_US));
@@ -111,7 +110,6 @@ int kbd_send(unsigned long cmd) {
 		//loop while 8042 input buffer is not empty
 		if ((stat & IBF) == 0) {
 			sys_outb(KBD_DATA_BUF, cmd);
-			//no args command
 			return 0;
 		}
 		tickdelay(micros_to_ticks(DELAY_US));
@@ -125,13 +123,8 @@ int mouse_send(unsigned long cmd) {
 	while (count > 0) {
 		unsigned long data1, data2;
 		if (kbd_send_command(MOUSE_SEND) == 0) {
-			printf("Entrou na 1\n");
 			data1 = kbd_read();
-			printf("data1: %X\n", data1);
-
-			printf("Entrou na 2\n");
 			if (kbd_send(cmd) == 0) {
-				printf("Entrou na 3\n");
 				data2 = kbd_read();
 				if (data2 == KB_ACK)
 					return 0;
@@ -161,7 +154,6 @@ int test_packet(unsigned short cnt) {
 		return 1;
 	}
 
-	//printf("Vai entrar no loop\n");
 	unsigned long data;
 
 	while (cnt > 0) {
@@ -362,12 +354,10 @@ int test_config(void) {
 	/* To be completed ... */
 }
 
-
 int test_gesture(short length) {
 	int r, ipc_status, irq_set;
 	message msg;
-	unsigned long packet[3],test;
-
+	unsigned long packet[3], test;
 
 	irq_set = mouse_subscribe_int();
 	if (irq_set == -1) {
@@ -380,7 +370,6 @@ int test_gesture(short length) {
 		return 1;
 	}
 
-	//printf("Vai entrar no loop\n");
 	unsigned long data;
 
 	while (1) {
@@ -412,7 +401,7 @@ int test_gesture(short length) {
 		} else { /*received a    standard message, not a notification*/
 			/*
 			 no standard messages expected: do nothing
-			 */ }
+			 */}
 
 		if (three == 3) {
 			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
@@ -445,15 +434,18 @@ int test_gesture(short length) {
 			if ((packet[0] & BIT(5)) != 0) {
 				packet[2] ^= 0xFF;
 				packet[2]++;
-				test = 0 - packet[2];
+				test = -packet[2];
 				printf("Y=-%d  test=%d\n", packet[2], test);
+				if (((packet[0] & BIT(1)) != 0) && (test <= length))
+					return 0;
 			} else {
 				printf("Y=%d \n", packet[2]);
 				test = packet[2];
-				if (((packet[0] & BIT(1)) != 0) && (test == length))
+				if (((packet[0] & BIT(1)) != 0) && (test >= length))
 					return 0;
-				three = 0;
 			}
+
+			three = 0;
 
 		}
 
