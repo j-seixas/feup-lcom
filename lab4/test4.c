@@ -188,7 +188,8 @@ int test_packet(unsigned short cnt) {
 			 */}
 
 		if (three == 3) {
-			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
+			printf("B1=0x%02X B2=0x%02X B3=0x%02X ", packet[0], packet[1],
+					packet[2]);
 			if ((packet[0] & BIT(0)) != 0)
 				printf("LB=1 ");
 			else
@@ -302,7 +303,8 @@ int test_async(unsigned short idle_time) {
 			}
 		}
 		if (three == 3) {
-			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
+			printf("B1=0x%02X B2=0x%02X B3=0x%02X ", packet[0], packet[1],
+					packet[2]);
 			if ((packet[0] & BIT(0)) != 0)
 				printf("LB=1 ");
 			else
@@ -351,7 +353,88 @@ int test_async(unsigned short idle_time) {
 }
 
 int test_config(void) {
-	/* To be completed ... */
+	int irq_set;
+	unsigned long packet[3], data;
+	irq_set = mouse_subscribe_int();
+	if (irq_set == -1) {
+		printf("Error in mouse_subscribe_int()\n");
+		return 1;
+	}
+	kbd_read();
+	if (mouse_send(MOUSE_CONF) != 0) {
+		printf("Error in mouse sending command\n");
+		return 1;
+	}
+	three = 0;
+	while (three != 3) {
+		data = kbd_read(); /*process it*/
+		if (data == -1) {
+			printf("Error in packets received in test_config()\n");
+			return 1;
+		}
+		if (three == 0) {
+			if (((data & BIT(3)) != OK) || ((data & BIT(7)) != OK)) {
+				printf("Error in packet 1 received in test_config()\n");
+				return 1;
+			}
+
+		} else if (three == 1) {
+			if (((data & BIT(2)) != OK) || ((data & BIT(3)) != OK)
+					|| ((data & BIT(4)) != OK) || ((data & BIT(5)) != OK)
+					|| ((data & BIT(6)) != OK) || ((data & BIT(7)) != OK)) {
+				printf("Error in packet 2 received in test_config()\n");
+				return 1;
+			}
+		}
+		packet[three] = data;
+		three++;
+	}
+	if (three == 3) {
+		if ((packet[0] & BIT(6)) != 0)
+			printf("Remote (polled) Mode\n");
+		else
+			printf("Stream Mode\n");
+		if ((packet[0] & BIT(5)) != 0)
+			printf("Data Reporting: Enabled\n");
+		else
+			printf("Data Reporting: Disabled\n");
+		if ((packet[0] & BIT(4)) != 0)
+			printf("Scaling: 2:1\n");
+		else
+			printf("Scaling: 1:1\n");
+		if ((packet[0] & BIT(0)) != 0)
+			printf("Left button: Currently Pressed\n");
+		else
+			printf("Left button: Currently Released\n");
+		if ((packet[0] & BIT(2)) != 0)
+			printf("Middle button: Currently Pressed\n");
+		else
+			printf("Middle button: Currently Released\n");
+		if ((packet[0] & BIT(1)) != 0)
+			printf("Right button: Currently Pressed\n");
+		else
+			printf("Right button: Currently Released\n");
+
+		if ((packet[1] & BIT(0)) != 0)
+			printf("Resolution: 2 counts per mm\n");
+		else if ((packet[1] & BIT(1)) != 0)
+			printf("Resolution: 4 counts per mm\n");
+		else if ((packet[1] & (BIT(0) | BIT(1))) == 0)
+			printf("Resolution: 1 counts per mm\n");
+		else
+			printf("Resolution: 8 counts per mm\n");
+		printf("Sample Rate: %d\n", packet[2]);
+		three = 0;
+		if (mouse_unsubscribe_int() != OK) {
+			printf("Error in mouse_unsubscribe_int()\n");
+			return 1;
+		}
+		return 0;
+	}
+	if (mouse_unsubscribe_int() != OK)
+		printf("Error in mouse_unsubscribe_int()\n");
+	return 1;
+
 }
 
 int test_gesture(short length) {
@@ -404,7 +487,8 @@ int test_gesture(short length) {
 			 */}
 
 		if (three == 3) {
-			printf("B1=0x%X B2=0x%X B3=0x%X ", packet[0], packet[1], packet[2]);
+			printf("B1=0x%02X B2=0x%02X B3=0x%02X ", packet[0], packet[1],
+					packet[2]);
 			if ((packet[0] & BIT(0)) != 0)
 				printf("LB=1 ");
 			else
@@ -435,14 +519,27 @@ int test_gesture(short length) {
 				packet[2] ^= 0xFF;
 				packet[2]++;
 				test = -packet[2];
-				printf("Y=-%d  test=%d\n", packet[2], test);
-				if (((packet[0] & BIT(1)) != 0) && (test <= length))
+				printf("Y=-%d\n", packet[2], test);
+				if (((packet[0] & BIT(1)) != 0) && (test <= length)) {
+					if (mouse_unsubscribe_int() != OK) {
+						printf("Error in mouse_unsubscribe_int()\n");
+						return 1;
+					}
 					return 0;
+
+				}
 			} else {
 				printf("Y=%d \n", packet[2]);
 				test = packet[2];
-				if (((packet[0] & BIT(1)) != 0) && (test >= length))
+				if (((packet[0] & BIT(1)) != 0) && (test >= length)) {
+					if (mouse_unsubscribe_int() != OK) {
+						printf("Error in mouse_unsubscribe_int()\n");
+						return 1;
+					}
 					return 0;
+
+				}
+
 			}
 
 			three = 0;
