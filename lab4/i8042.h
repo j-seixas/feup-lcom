@@ -58,6 +58,7 @@
 //MOUSE COMMANDS
 #define MOUSE_SEND			0xD4
 #define MOUSE_ENB			0xF4
+#define MOUSE_CONF			0xE9
 
 
 #define KB_IRQ 			 	1

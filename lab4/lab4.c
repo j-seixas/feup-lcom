@@ -1,5 +1,5 @@
 #include "i8042.h"
-//#include "i8254.h"
+#include "i8254.h"
 #include "test4.h"
 #include <limits.h>
 #include <string.h>
@@ -44,7 +44,7 @@ static int proc_args(int argc, char **argv) {
 		cnt = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
 		if (cnt == ULONG_MAX)
 			return 1;
-		printf("mouse::test_packet(%lu)\n", cnt);
+		printf("test4::test_packet(%lu)\n", cnt);
 		return test_packet(cnt);
 	} else if (strncmp(argv[1], "async", strlen("async")) == 0) {
 		if (argc != 3) {
@@ -54,14 +54,14 @@ static int proc_args(int argc, char **argv) {
 		idle_time = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
 		if (idle_time == ULONG_MAX)
 			return 1;
-		printf("mouse::test_async()\n");
+		printf("test4::test_async()\n");
 		return test_async(idle_time);
 	} else if (strncmp(argv[1], "config", strlen("config")) == 0) {
 		if (argc != 2) {
 			printf("mouse: wrong no of arguments for test_config()\n");
 			return 1;
 		}
-		printf("test3::test_config()\n");
+		printf("test4::test_config()\n");
 		return test_config();
 	} else if (strncmp(argv[1], "gesture", strlen("gesture")) == 0) {
 			if (argc != 3) {
@@ -71,7 +71,7 @@ static int proc_args(int argc, char **argv) {
 			length = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
 			if (length == ULONG_MAX)
 				return 1;
-			printf("mouse::test_gesture(%lu)\n", length);
+			printf("test4::test_gesture(%lu)\n", length);
 			return test_gesture(length);
 	} else {
 		printf("mouse: %s - no valid function!\n", argv[1]);

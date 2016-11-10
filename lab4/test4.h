@@ -8,6 +8,8 @@
 #include "i8042.h"
 #include "i8254.h"
 
+int timer_subscribe_int(void);
+int timer_unsubscribe_int();
 int mouse_subscribe_int(void);
 int mouse_unsubscribe_int();
 unsigned long kbd_read();
