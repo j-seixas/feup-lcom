@@ -437,10 +437,22 @@ int test_config(void) {
 
 }
 
+
+
 int test_gesture(short length) {
+	event_t evt;
+	evt.type = RUP;
+	evt.state = INIT;
+	unsigned int negative;
+	if (length < 0)
+		negative = 1;
+	else
+		negative = 0;
+
 	int r, ipc_status, irq_set;
 	message msg;
-	unsigned long packet[3], test;
+	unsigned long packet[3];
+	long test, testx;
 
 	irq_set = mouse_subscribe_int();
 	if (irq_set == -1) {
@@ -455,7 +467,7 @@ int test_gesture(short length) {
 
 	unsigned long data;
 
-	while (1) {
+	while (evt.state != COMP) {
 		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
 			printf("driver_receive failed with: %d", r);
 			continue;
@@ -497,10 +509,17 @@ int test_gesture(short length) {
 				printf("MB=1 ");
 			else
 				printf("MB=0 ");
-			if ((packet[0] & BIT(1)) != 0)
+			if ((packet[0] & BIT(1)) != 0) {
 				printf("RB=1 ");
-			else
+				if (evt.state == INIT)
+					evt.type = RDOWN;
+				else
+					evt.type = MOVE;
+			} else {
 				printf("RB=0 ");
+				evt.state = INIT;
+				evt.type = RUP;
+			}
 			if ((packet[0] & BIT(6)) != 0)
 				printf("XOV=1 ");
 			else
@@ -513,37 +532,25 @@ int test_gesture(short length) {
 				packet[1] ^= 0xFF;
 				packet[1]++;
 				printf("X=-%d ", packet[1]);
-			} else
+				testx = -packet[1];
+			} else {
 				printf("X=%d ", packet[1]);
+				testx = packet[1];
+
+			}
 			if ((packet[0] & BIT(5)) != 0) {
 				packet[2] ^= 0xFF;
 				packet[2]++;
 				test = -packet[2];
-				printf("Y=-%d\n", packet[2], test);
-				if (((packet[0] & BIT(1)) != 0) && (test <= length)) {
-					if (mouse_unsubscribe_int() != OK) {
-						printf("Error in mouse_unsubscribe_int()\n");
-						return 1;
-					}
-					return 0;
+				printf("Y=-%d\n", packet[2]);
 
-				}
 			} else {
 				printf("Y=%d \n", packet[2]);
 				test = packet[2];
-				if (((packet[0] & BIT(1)) != 0) && (test >= length)) {
-					if (mouse_unsubscribe_int() != OK) {
-						printf("Error in mouse_unsubscribe_int()\n");
-						return 1;
-					}
-					return 0;
-
-				}
 
 			}
-
+			check_state(&evt, negative, testx, test, length);
 			three = 0;
-
 		}
 
 	}
@@ -552,5 +559,27 @@ int test_gesture(short length) {
 		return 1;
 	}
 	return 0;
+}
+
+void check_state(event_t *evt, unsigned int negative, long deltax, long deltay, short length) {
+	switch (evt->state) {
+	case INIT:
+		if (evt->type == RDOWN)
+			evt->state = DRAW;
+		break;
+	case DRAW:
+		if (evt->type == MOVE) {
+			if (negative == 1 && deltay <= length && deltax < 0)
+				evt->state = COMP;
+			else if (negative == 0 && deltay >= length && deltax > 0)
+				evt->state = COMP;
+
+		} else if (evt->type == RUP)
+			evt->state = INIT;
+		break;
+	default:
+		break;
+	}
 
 }
+
