@@ -8,6 +8,8 @@
 #include "i8042.h"
 #include "i8254.h"
 
+
+
 int timer_subscribe_int(void);
 int timer_unsubscribe_int();
 int mouse_subscribe_int(void);
@@ -73,7 +75,19 @@ int test_config(void);
  * @return Return 0 upon success and non-zero otherwise
  */
 
+typedef enum {
+	INIT, DRAW, COMP
+} state_t;
+typedef enum {
+	RDOWN, RUP, MOVE
+} ev_type_t;
+
+typedef struct {
+	state_t state;
+	ev_type_t type;
+} event_t;
 
 int test_gesture(short length);
+void check_state(event_t *evt, unsigned int negative, long deltax, long deltay, short length);
 
 #endif /* __TEST_4.H */
