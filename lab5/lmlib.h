@@ -1,6 +1,8 @@
 #ifndef __LMLIB_H
 #define __LMLIB_H
 
+#include <minix/type.h>
+
 /** @defgroup lmlib lmlib
  * @{
  *

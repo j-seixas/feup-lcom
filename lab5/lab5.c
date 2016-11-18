@@ -2,6 +2,8 @@
 #include "vbe.h"
 #include "video_gr.h"
 #include "test5.h"
+#include "timer.h"
+#include "i8254.h"
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
@@ -73,7 +75,7 @@ static int proc_args(int argc, char **argv) {
 		if (color == ULONG_MAX)
 			return 1;
 		printf("test5::test_square(%lu, %lu, %lu, %lu)\n", x, y, size, color);
-		return test_packet(x, y, size, color);
+		return test_square(x, y, size, color);
 
 	} else if (strncmp(argv[1], "tline", strlen("tline")) == 0) {
 		if (argc != 7) {
@@ -111,10 +113,16 @@ static int proc_args(int argc, char **argv) {
 			return 1;
 		xpm = malloc(sizeof(char) * (argc - 2));
 		unsigned int i = 0;
+		/*while (i < argc - 2) {
+		 xpm[i] = parse_ulong(argv[2 + i], 10);
+		 if (xpm[i] == ULONG_MAX)
+		 return 1;
+		 i++;
+		 }
+		 printf("test5::test_xpm()\n");
+		 return test_xpm(x, y, xpm);*/
 		while (i < argc - 2) {
-			xpm[i] = parse_ulong(argv[2 + i], 10);
-			if (xpm[i] == ULONG_MAX)
-				return 1;
+			xpm[i] = argv[2 + i];
 			i++;
 		}
 		printf("test5::test_xpm()\n");
