@@ -3,7 +3,7 @@
 #include <machine/int86.h>
 #include <sys/mman.h>
 #include <sys/types.h>
-
+#include "video_gr.h"
 #include "vbe.h"
 
 /* Constants for VBE 0x105 mode */
@@ -22,11 +22,7 @@
 
 /* Private global variables */
 
-static char *video_mem; /* Process address to which VRAM is mapped */
 
-static unsigned h_res; /* Horizontal screen resolution in pixels */
-static unsigned v_res; /* Vertical screen resolution in pixels */
-static unsigned bits_per_pixel; /* Number of VRAM bits per pixel */
 
 void *vg_init(unsigned short mode) {
 	struct reg86u r;
@@ -35,7 +31,7 @@ void *vg_init(unsigned short mode) {
 	r.u.b.intno = 0x10;
 	if (sys_int86(&r) != 0) {
 		printf("set_vbe_mode: sys_int86() failed \n");
-		return 1;
+		return NULL;
 
 	}
 
@@ -43,14 +39,14 @@ void *vg_init(unsigned short mode) {
 	struct mem_range mr;
 
 	unsigned int vram_base = VRAM_PHYS_ADDR;/*VRAM’s physical addresss*/
-	unsigned int vram_size = V_RES*H_RES*BITS_PER_PIXEL; /*VRAM’s size, but you can use the frame-buffer size, instead*/
-	void*video_mem; /*frame-buffer VM address*/
+	unsigned int vram_size = V_RES * H_RES * BITS_PER_PIXEL / 8; /*VRAM’s size, but you can use the frame-buffer size, instead*/
+	//void* video_mem_ptr; /*frame-buffer VM address*/
 	/*Allow memory mapping*/
 	mr.mr_base = (phys_bytes) vram_base;
 	mr.mr_limit = mr.mr_base + vram_size;
 	if (OK != (ans = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr)))
 		panic("sys_privctl (ADD_MEM) failed: %d\n", ans);
-
+	h_res = H_RES;
 	/*Map memory*/
 
 	video_mem = vm_map_phys(SELF, (void *) mr.mr_base, vram_size);
@@ -73,4 +69,11 @@ int vg_exit() {
 		return 1;
 	} else
 		return 0;
+}
+
+void paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
+	char * add_it = video_mem;
+	add_it += x + h_res * y;
+	*add_it = color;
+
 }

@@ -2,8 +2,10 @@
 #include "vbe.h"
 #include "video_gr.h"
 #include "test5.h"
-#include "timer.h"
+#include "otherlabs.h"
 #include "i8254.h"
+#include "i8042.h"
+#include "pixmap.h"
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
@@ -40,7 +42,7 @@ static void print_usage(char **argv) {
 static int proc_args(int argc, char **argv) {
 	unsigned short mode, delay, x, y, size, yf, xf, hor, time;
 	unsigned long color;
-	char *xpm;
+	char **xpm;
 	short delta;
 
 	if (strncmp(argv[1], "tinit", strlen("tinit")) == 0) {
@@ -48,14 +50,16 @@ static int proc_args(int argc, char **argv) {
 			printf("graphics: wrong no. of arguments for test_init()\n");
 			return 1;
 		}
-		mode = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
+		mode = parse_ulong(argv[2], 16); /* Parses string to unsigned long */
 		if (mode == ULONG_MAX)
 			return 1;
 		delay = parse_ulong(argv[3], 10); /* Parses string to unsigned long */
 		if (delay == ULONG_MAX)
 			return 1;
 		printf("test5::test_init(%lu, %lu)\n", mode, delay);
-		return test_init(mode, delay);
+		if (test_init(mode, delay) == NULL)
+			return 1;
+		return 0;
 
 	} else if (strncmp(argv[1], "tsquare", strlen("tsquare")) == 0) {
 		if (argc != 6) {
@@ -71,10 +75,10 @@ static int proc_args(int argc, char **argv) {
 		size = parse_ulong(argv[4], 10); /* Parses string to unsigned long */
 		if (size == ULONG_MAX)
 			return 1;
-		color = parse_ulong(argv[5], 10); /* Parses string to unsigned long */
+		color = parse_ulong(argv[5], 16); /* Parses string to unsigned long */
 		if (color == ULONG_MAX)
 			return 1;
-		printf("test5::test_square(%lu, %lu, %lu, %lu)\n", x, y, size, color);
+		printf("test5::test_square(%lu, %lu, %lu)\n", x, y, size);
 		return test_square(x, y, size, color);
 
 	} else if (strncmp(argv[1], "tline", strlen("tline")) == 0) {
@@ -94,7 +98,7 @@ static int proc_args(int argc, char **argv) {
 		yf = parse_ulong(argv[5], 10); /* Parses string to unsigned long */
 		if (yf == ULONG_MAX)
 			return 1;
-		color = parse_ulong(argv[6], 10); /* Parses string to unsigned long */
+		color = parse_ulong(argv[6], 16); /* Parses string to unsigned long */
 		if (color == ULONG_MAX)
 			return 1;
 		printf("test5::test_line()\n");
@@ -111,19 +115,19 @@ static int proc_args(int argc, char **argv) {
 		y = parse_ulong(argv[3], 10); /* Parses string to unsigned long */
 		if (y == ULONG_MAX)
 			return 1;
-		xpm = malloc(sizeof(char) * (argc - 2));
-		unsigned int i = 0;
-		/*while (i < argc - 2) {
-		 xpm[i] = parse_ulong(argv[2 + i], 10);
-		 if (xpm[i] == ULONG_MAX)
-		 return 1;
-		 i++;
-		 }
-		 printf("test5::test_xpm()\n");
-		 return test_xpm(x, y, xpm);*/
-		while (i < argc - 2) {
-			xpm[i] = argv[2 + i];
-			i++;
+		if (strncmp(argv[4], "pic1", strlen("pic1")) == 0)
+			xpm = pic1;
+		else if (strncmp(argv[4], "pic2", strlen("pic2")) == 0)
+			xpm = pic2;
+		else if (strncmp(argv[4], "pic3", strlen("pic3")) == 0)
+			xpm = pic3;
+		else if (strncmp(argv[4], "cross", strlen("cross")) == 0)
+			xpm = cross;
+		else if (strncmp(argv[4], "penguin", strlen("penguin")) == 0)
+			xpm = penguin;
+		else {
+			printf("No valid image\n");
+			return 1;
 		}
 		printf("test5::test_xpm()\n");
 		return test_xpm(x, y, xpm);
@@ -139,13 +143,19 @@ static int proc_args(int argc, char **argv) {
 		y = parse_ulong(argv[3], 10); /* Parses string to unsigned long */
 		if (y == ULONG_MAX)
 			return 1;
-		xpm = malloc(sizeof(char) * (argc - 4));
-		unsigned int i = 0;
-		while (i < argc - 4) {
-			xpm[i] = parse_ulong(argv[2 + i], 10);
-			if (xpm[i] == ULONG_MAX)
-				return 1;
-			i++;
+		if (strncmp(argv[4], "pic1", strlen("pic1")) == 0)
+			xpm = pic1;
+		else if (strncmp(argv[4], "pic2", strlen("pic2")) == 0)
+			xpm = pic2;
+		else if (strncmp(argv[4], "pic3", strlen("pic3")) == 0)
+			xpm = pic3;
+		else if (strncmp(argv[4], "cross", strlen("cross")) == 0)
+			xpm = cross;
+		else if (strncmp(argv[4], "penguin", strlen("penguin")) == 0)
+			xpm = penguin;
+		else {
+			printf("No valid image\n");
+			return 1;
 		}
 		hor = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
 		if (x == ULONG_MAX)
