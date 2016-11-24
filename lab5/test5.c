@@ -10,7 +10,7 @@
 #include "read_xpm.h"
 #include <math.h>
 
-#define absol(a) ((a) >= 0 ? (a) : -(a))
+#define absol(a) ( (a >= 0) ? (a) : -(a))
 
 void *test_init(unsigned short mode, unsigned short delay) {
 
@@ -51,22 +51,29 @@ int test_square(unsigned short x, unsigned short y, unsigned short size,
 
 int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 		unsigned short yf, unsigned long color) {
+	vg_init(0x105);
 	if (xi < 0 || xf < 0 || yi < 0 || yf < 0) {
 		printf("Invalid parameters\n");
+		vg_exit();
+		return 1;
+	}
+	if ((int)xi >= 1024 || (int)xf >= 1024 || (int)yi >= 768 || (int)yf >= 768) {
+		printf("Invalid parameters\n");
+		vg_exit();
 		return 1;
 	}
 
-	vg_init(0x105);
+
 	int steps, v = 0, x, y;
 	double dx, dy;
 	int bool;
 	if (xf >= xi && yf >= yi) {
 		bool = 1;
-	} else if (xi >= xf && yi >= yf) {
+	} else if (xi > xf && yi > yf) {
 		bool = 0;
-	} else if (xi >= xf && yi <= yf) {
+	} else if (xi > xf && yi < yf) {
 		bool = 2;
-	} else
+	} else if (xf > xi && yi > yf)
 		bool = 3;
 
 	dx = absol(xf - xi);
@@ -89,7 +96,7 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 		} else if (bool == 2) {
 			xi = xi - Xincrement;
 			yi = yi + Yincrement;
-		} else {
+		} else if (bool == 3) {
 			xi = xi + Xincrement;
 			yi = yi - Yincrement;
 		}
@@ -104,21 +111,24 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 
 int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
-	int width, height;
+	int wd, ht;
 
 	vg_init(0x105);
-	char * xpm_sprt = read_xpm(xpm, &width, &height);
+	char * xpm_sprt = read_xpm(xpm, &wd, &ht);
 
 	unsigned short xline, yline;
-	for (xline = xi; xline < width + xi; xline++) {
-		for (yline = yi; yline < height + yi; yline++) {
+	for (yline = 0; yline < ht; yline++) {
+		for (xline = 0; xline < wd; xline++) {
 			//color = xpm_sprt + width*yline + xline;
-			paint_pixel(xline, yline, *(xpm_sprt + width*yline + xline));
+			paint_pixel(xline + xi, yline + yi,
+					*(xpm_sprt + wd * yline + xline));
+			printf("Devia imprimir e acabar\n");
 		}
 
 	}
-
-	kbd_test_scan();
+	printf("cheogu aqui\n");
+	timer_test_int(3);
+	//kbd_test_scan();
 	vg_exit();
 	printf("\n");
 	return 0;

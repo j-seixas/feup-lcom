@@ -47,6 +47,7 @@ void *vg_init(unsigned short mode) {
 	if (OK != (ans = sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr)))
 		panic("sys_privctl (ADD_MEM) failed: %d\n", ans);
 	h_res = H_RES;
+	v_res=V_RES;
 	/*Map memory*/
 
 	video_mem = vm_map_phys(SELF, (void *) mr.mr_base, vram_size);
