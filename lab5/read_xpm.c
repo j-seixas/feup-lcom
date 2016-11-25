@@ -7,6 +7,9 @@
 #include <string.h>
 #include "video_gr.h"
 
+#define HRES	1024
+#define VRES	768
+
 char *read_xpm(char *map[], int *wd, int *ht)
 {
   int width, height, colors;
@@ -24,7 +27,7 @@ char *read_xpm(char *map[], int *wd, int *ht)
 #ifdef DEBUG
   printf("%d %d %d\n", width, height, colors);
 #endif
-  if (width > h_res || height > v_res || colors > 256) {
+  if (width > HRES || height > VRES || colors > 256) {
     printf("read_xpm: incorrect width, height, colors\n");
     return NULL;
   }
