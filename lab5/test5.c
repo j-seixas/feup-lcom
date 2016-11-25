@@ -111,7 +111,7 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 
 int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
-	int wd, ht;
+	int width, height;
 
 	vg_init(0x105);
 	char * xpm_sprt = read_xpm(xpm, &width, &height), *color;
