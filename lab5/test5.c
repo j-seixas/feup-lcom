@@ -58,15 +58,15 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 		vg_exit();
 		return 1;
 	}
-	if ((int) xi >= 1024 || (int) xf >= 1024 || (int) yi >= 768
+	/*if ((int) xi >= 1024 || (int) xf >= 1024 || (int) yi >= 768
 			|| (int) yf >= 768) {
 		printf("Invalid parameters\n");
 		vg_exit();
 		return 1;
-	}
+	}*/
 
-	int steps, v, x, y, dx, dy;
-	int bool;
+	/*int steps, v, x, y, dx, dy;
+	 int bool;*/
 	/*if (xf >= xi && yf >= yi) {
 	 bool = 1;
 	 } else if (xi > xf && yi > yf) {
@@ -76,33 +76,51 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 	 } else if (xf > xi && yi > yf)
 	 bool = 3;*/
 
-	dx = xf - xi;
-	dy = yf - yi;
-	if (absol(dx) > absol(dy))
-		steps = dx;
-	else
-		steps = dy;
+	/*dx = xf - xi;
+	 dy = yf - yi;
+	 if (absol(dx) > absol(dy))
+	 steps = dx;
+	 else
+	 steps = dy;
 
-	double Xincrement = (double) dx / (double) steps;
-	double Yincrement = (double) dy / (double) steps;
-	steps = absol(steps);
-	for (v = 0; v < steps; v++) {
-		/*if (bool == 1) {
-		 xi = xi + Xincrement;
-		 yi = yi + Yincrement;
-		 } else if (bool == 0) {
-		 xi = xi - Xincrement;
-		 yi = yi - Yincrement;
-		 /*} else if (bool == 2) {
-		 xi = xi - Xincrement;
-		 yi = yi + Yincrement;
-		 } else if (bool == 3) {
-		 xi = xi + Xincrement;
-		 yi = yi - Yincrement;*/
-		//}
-		xi = xi + Xincrement;
-		yi = yi + Yincrement;
-		paint_pixel((int) (xi + 0.5), (int) (yi + 0.5), color);
+	 double Xincrement = (double) dx / (double) steps;
+	 double Yincrement = (double) dy / (double) steps;
+	 steps = absol(steps);
+	 for (v = 0; v < steps; v++) {*/
+	/*if (bool == 1) {
+	 xi = xi + Xincrement;
+	 yi = yi + Yincrement;
+	 } else if (bool == 0) {
+	 xi = xi - Xincrement;
+	 yi = yi - Yincrement;
+	 /*} else if (bool == 2) {
+	 xi = xi - Xincrement;
+	 yi = yi + Yincrement;
+	 } else if (bool == 3) {
+	 xi = xi + Xincrement;
+	 yi = yi - Yincrement;*/
+	//}
+	/*xi = xi + Xincrement;
+	 yi = yi + Yincrement;
+	 paint_pixel((int) (xi + 0.5), (int) (yi + 0.5), color);
+	 }*/
+	int dx = absol(xf - xi), sx = xi < xf ? 1 : -1;
+	int dy = absol(yf - yi), sy = yi < yf ? 1 : -1;
+	int err = (dx > dy ? dx : -dy) / 2, e2;
+
+	for (;;) {
+		paint_pixel(xi, yi, color);
+		if (xi == xf && yi == yf)
+			break;
+		e2 = err;
+		if (e2 > -dx) {
+			err -= dy;
+			xi += sx;
+		}
+		if (e2 < dy) {
+			err += dx;
+			yi += sy;
+		}
 	}
 
 	kbd_test_scan();
@@ -143,7 +161,9 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 
 	vg_init(0x105);
 	printf("HERE, %d, %d\n", delta, (int) time);
-	double timedelta = time/60 / delta;
+	//double timedelta = time / 60 / delta;
+	double timedelta = delta / (time * 60);
+	float tmp = 0;
 	printf("DELTAT = %d", (int) timedelta);
 	unsigned int counter = 0;
 	unsigned short x = xi, y = yi;
@@ -162,7 +182,8 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 	}
 	unsigned long data;
 	printf("RIGHT BEFORE\n");
-	while (counter / 60 < time && data != ESC_BREAK) {
+	vg_test_xpm(x, y, xpm);
+	while (data != ESC_BREAK) {
 		printf("NOT HERE\n");
 		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
 			printf("driver_receive failed with: %d", r);
@@ -172,39 +193,48 @@ int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /*hardware interrupt notification*/
 				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
-					if (hor == 1) {
-						if (delta < 0) {
-							vg_test_xpm(xi, yi, xpm);
-							x = x + (int) (timedelta + 0.5);
-							if (x < xi + delta) {
-								counter = time * 60;
+					if (counter / 60 < time) {
+						//if (tmp >= 1.0) {
+						if (hor == 1) {
+							if (delta < 0) {
+								x = x + (int) (timedelta - 0.5);
+								vg_test_xpm(x, y, xpm);
+								if (x < xi + delta) {
+									counter = time * 60;
+								}
+							} else {
+								x = x + (int) (timedelta + 0.5);
+								vg_test_xpm(x, y, xpm);
+								if (x > xi + delta) {
+									counter = time * 60;
+								}
 							}
 						} else {
-							vg_test_xpm(x, y, xpm);
-							x = x + (int) (timedelta + 0.5);
-							if (x > xi + delta) {
-								counter = time * 60;
+							if (delta < 0) {
+								y = y + (int) (timedelta - 0.5);
+								vg_test_xpm(x, y, xpm);
+								if (y < yi + delta) {
+									counter = time * 60;
+								}
+							} else {
+								y = y + (int) (timedelta + 0.5);
+								vg_test_xpm(x, y, xpm);
+								if (y > yi + delta) {
+									counter = time * 60;
+								}
 							}
-						}
-					} else {
-						if (delta < 0) {
-							vg_test_xpm(x, y, xpm);
-							y = y + (int) (timedelta + 0.5);
-							if (y < yi + delta) {
-								counter = time * 60;
-							}
-						} else {
-							vg_test_xpm(x, y, xpm);
-							y = y + (int) (timedelta + 0.5);
-							if (y > yi + delta) {
-								counter = time * 60;
-							}
-						}
 
+						}
+						//tmp = tmp - 1;
+						//printf("!!!!!!!!!");
+						/*} else {
+						 //tmp += timedelta;
+						 //printf("---------");
+						 }*/
+						counter++;
+						printf("x=%d,y=%d", xi, yi);
+						break;
 					}
-					counter++;
-					printf("x=%d,y=%d", xi, yi);
-					break;
 				}
 				if (msg.NOTIFY_ARG & irq_set_kbd) { /*subscribed interrupt*/
 					data = kbd_handler(); /*process it*/
