@@ -114,14 +114,13 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	int wd, ht;
 
 	vg_init(0x105);
-	char * xpm_sprt = read_xpm(xpm, &wd, &ht);
+	char * xpm_sprt = read_xpm(xpm, &width, &height), *color;
 
 	unsigned short xline, yline;
-	for (yline = 0; yline < ht; yline++) {
-		for (xline = 0; xline < wd; xline++) {
-			//color = xpm_sprt + width*yline + xline;
-			paint_pixel(xline + xi, yline + yi,
-					*(xpm_sprt + wd * yline + xline));
+	for (yline = 0; yline < height; yline++) {
+		for (xline = 0; xline < width; xline++) {
+			color = xpm_sprt + width*yline + xline;
+			paint_pixel(xline + xi, yline + yi, *color);
 			printf("Devia imprimir e acabar\n");
 		}
 
