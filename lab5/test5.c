@@ -8,7 +8,8 @@
 #include "otherlabs.h"
 #include "pixmap.h"
 #include "read_xpm.h"
-#include <math.h>
+#include "i8042.h"
+#include "i8254.h"
 
 #define absol(a) ( (a >= 0) ? (a) : -(a))
 
@@ -57,49 +58,50 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 		vg_exit();
 		return 1;
 	}
-	if ((int)xi >= 1024 || (int)xf >= 1024 || (int)yi >= 768 || (int)yf >= 768) {
+	if ((int) xi >= 1024 || (int) xf >= 1024 || (int) yi >= 768
+			|| (int) yf >= 768) {
 		printf("Invalid parameters\n");
 		vg_exit();
 		return 1;
 	}
 
-
-	int steps, v = 0, x, y;
-	double dx, dy;
+	int steps, v, x, y, dx, dy;
 	int bool;
-	if (xf >= xi && yf >= yi) {
-		bool = 1;
-	} else if (xi > xf && yi > yf) {
-		bool = 0;
-	} else if (xi > xf && yi < yf) {
-		bool = 2;
-	} else if (xf > xi && yi > yf)
-		bool = 3;
+	/*if (xf >= xi && yf >= yi) {
+	 bool = 1;
+	 } else if (xi > xf && yi > yf) {
+	 bool = 0;
+	 } else if (xi > xf && yi < yf) {
+	 bool = 2;
+	 } else if (xf > xi && yi > yf)
+	 bool = 3;*/
 
-	dx = absol(xf - xi);
-	dy = absol(yf - yi);
-	if (dx > dy)
+	dx = xf - xi;
+	dy = yf - yi;
+	if (absol(dx) > absol(dy))
 		steps = dx;
 	else
 		steps = dy;
 
-	double Xincrement = dx / (double) steps;
-	double Yincrement = dy / (double) steps;
-
-	for (; v < steps; v++) {
-		if (bool == 1) {
-			xi = xi + Xincrement;
-			yi = yi + Yincrement;
-		} else if (bool == 0) {
-			xi = xi - Xincrement;
-			yi = yi - Yincrement;
-		} else if (bool == 2) {
-			xi = xi - Xincrement;
-			yi = yi + Yincrement;
-		} else if (bool == 3) {
-			xi = xi + Xincrement;
-			yi = yi - Yincrement;
-		}
+	double Xincrement = (double) dx / (double) steps;
+	double Yincrement = (double) dy / (double) steps;
+	steps = absol(steps);
+	for (v = 0; v < steps; v++) {
+		/*if (bool == 1) {
+		 xi = xi + Xincrement;
+		 yi = yi + Yincrement;
+		 } else if (bool == 0) {
+		 xi = xi - Xincrement;
+		 yi = yi - Yincrement;
+		 /*} else if (bool == 2) {
+		 xi = xi - Xincrement;
+		 yi = yi + Yincrement;
+		 } else if (bool == 3) {
+		 xi = xi + Xincrement;
+		 yi = yi - Yincrement;*/
+		//}
+		xi = xi + Xincrement;
+		yi = yi + Yincrement;
 		paint_pixel((int) (xi + 0.5), (int) (yi + 0.5), color);
 	}
 
@@ -111,23 +113,9 @@ int test_line(unsigned short xi, unsigned short yi, unsigned short xf,
 
 int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
-	int width, height;
-
 	vg_init(0x105);
-	char * xpm_sprt = read_xpm(xpm, &width, &height), *color;
-
-	unsigned short xline, yline;
-	for (yline = 0; yline < height; yline++) {
-		for (xline = 0; xline < width; xline++) {
-			color = xpm_sprt + width*yline + xline;
-			paint_pixel(xline + xi, yline + yi, *color);
-			printf("Devia imprimir e acabar\n");
-		}
-
-	}
-	printf("cheogu aqui\n");
-	timer_test_int(3);
-	//kbd_test_scan();
+	vg_test_xpm(xi, yi, xpm);
+	kbd_test_scan();
 	vg_exit();
 	printf("\n");
 	return 0;
@@ -137,7 +125,114 @@ int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 int test_move(unsigned short xi, unsigned short yi, char *xpm[],
 		unsigned short hor, short delta, unsigned short time) {
 
-	/* To be completed */
+	if (xi < 0 || yi < 0 || xi >= 1024 || yi >= 768) {
+		printf("Invalid parameters\n");
+		return 1;
+	}
+	if ((delta < 0 && hor == 1 && xi + delta < 0)
+			|| (delta >= 0 && hor == 1 && xi + delta >= 1024)
+			|| (delta < 0 && hor != 1 && yi + delta < 0)
+			|| (delta >= 0 && hor != 1 && yi + delta >= 768)) {
+		printf("Invalid parameters\n");
+		return 1;
+	}
+	if (time == 0) {
+		printf("Invalid parameters\n");
+		return 1;
+	}
+
+	vg_init(0x105);
+	printf("HERE, %d, %d\n", delta, (int) time);
+	double timedelta = time/60 / delta;
+	printf("DELTAT = %d", (int) timedelta);
+	unsigned int counter = 0;
+	unsigned short x = xi, y = yi;
+	int r, ipc_status, irq_set, irq_set_kbd;
+	message msg;
+	irq_set = timer_subscribe_int();
+	if (irq_set == -1) {
+		printf("Error in timer_subscribe_int()\n");
+		return 1;
+	}
+
+	irq_set_kbd = kbd_subscribe_int();
+	if (irq_set_kbd == -1) {
+		printf("Error in kbd_subscribe_int()\n");
+		return 1;
+	}
+	unsigned long data;
+	printf("RIGHT BEFORE\n");
+	while (counter / 60 < time && data != ESC_BREAK) {
+		printf("NOT HERE\n");
+		if ((r = driver_receive(ANY, &msg, &ipc_status)) != 0) { /*Get a request message.*/
+			printf("driver_receive failed with: %d", r);
+			continue;
+		}
+		if (is_ipc_notify(ipc_status)) { /*received notification*/
+			switch (_ENDPOINT_P(msg.m_source)) {
+			case HARDWARE: /*hardware interrupt notification*/
+				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+					if (hor == 1) {
+						if (delta < 0) {
+							vg_test_xpm(xi, yi, xpm);
+							x = x + (int) (timedelta + 0.5);
+							if (x < xi + delta) {
+								counter = time * 60;
+							}
+						} else {
+							vg_test_xpm(x, y, xpm);
+							x = x + (int) (timedelta + 0.5);
+							if (x > xi + delta) {
+								counter = time * 60;
+							}
+						}
+					} else {
+						if (delta < 0) {
+							vg_test_xpm(x, y, xpm);
+							y = y + (int) (timedelta + 0.5);
+							if (y < yi + delta) {
+								counter = time * 60;
+							}
+						} else {
+							vg_test_xpm(x, y, xpm);
+							y = y + (int) (timedelta + 0.5);
+							if (y > yi + delta) {
+								counter = time * 60;
+							}
+						}
+
+					}
+					counter++;
+					printf("x=%d,y=%d", xi, yi);
+					break;
+				}
+				if (msg.NOTIFY_ARG & irq_set_kbd) { /*subscribed interrupt*/
+					data = kbd_handler(); /*process it*/
+					break;
+				}
+			default:
+				break; /*no other notifications expected: do nothing*/
+			}
+		} else { /*received a standard message, not a notification*/
+			/*
+			 no standard messages expected: do nothing
+			 */
+		}
+
+	}
+	if (timer_unsubscribe_int() != OK) {
+		printf("Error in timer_unsubscribe_int()\n");
+		return 1;
+	}
+	if (kbd_unsubscribe_int() != OK) {
+		printf("Error in kbd_unsubscribe_int()\n");
+		return 1;
+	}
+	//
+	printf("EXIT\n");
+	vg_exit();
+	printf("\n");
+	return 0;
 
 }
 

@@ -28,5 +28,8 @@ void *vg_init(unsigned short mode);
 int vg_exit(void);
 
  /** @} end of video_gr */
+
+void paint_pixel(unsigned short x, unsigned short y, unsigned long color);
+int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) ;
  
 #endif /* __VIDEO_GR_H */
