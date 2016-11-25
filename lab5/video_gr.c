@@ -7,7 +7,7 @@
 #include "vbe.h"
 #include "read_xpm.h"
 
-/* Constants for VBE 0x105 mode */
+/* Constants for VBE 0x105 mode */ 
 
 /* The physical address may vary from VM to VM.
  * At one time it was 0xD0000000
