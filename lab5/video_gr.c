@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include "video_gr.h"
 #include "vbe.h"
+#include "read_xpm.h"
 
 /* Constants for VBE 0x105 mode */
 
@@ -81,5 +82,26 @@ void paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
 	char * add_it = video_mem;
 	add_it += x + h_res * y;
 	*add_it = color;
+
+}
+int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
+
+	int width, height;
+
+	//vg_init(0x105);
+	char * xpm_sprt = read_xpm(xpm, &width, &height), *color;
+
+	unsigned short xline, yline;
+	for (yline = 0; yline < height; yline++) {
+		for (xline = 0; xline < width; xline++) {
+			color = xpm_sprt + width * yline + xline;
+			paint_pixel(xline + xi, yline + yi, *color);
+		}
+
+	}
+	//kbd_test_scan();
+	//vg_exit();
+	//printf("\n");
+	return 0;
 
 }

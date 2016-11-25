@@ -157,11 +157,14 @@ static int proc_args(int argc, char **argv) {
 			printf("No valid image\n");
 			return 1;
 		}
-		hor = parse_ulong(argv[2], 10); /* Parses string to unsigned long */
-		if (x == ULONG_MAX)
+		hor = parse_ulong(argv[5], 10); /* Parses string to unsigned long */
+		if (hor == ULONG_MAX)
 			return 1;
-		time = parse_ulong(argv[3], 10); /* Parses string to unsigned long */
-		if (y == ULONG_MAX)
+		delta = parse_ulong(argv[6], 10); /* Parses string to unsigned long */
+		if (delta == ULONG_MAX)
+			return 1;
+		time = parse_ulong(argv[7], 10); /* Parses string to unsigned long */
+		if (time == ULONG_MAX)
 			return 1;
 		printf("test5::test_move()\n");
 		return test_move(x, y, xpm, hor, delta, time);
