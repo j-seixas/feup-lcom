@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "video_gr.h" 
 
 #define HRES	1024
 #define VRES	768
