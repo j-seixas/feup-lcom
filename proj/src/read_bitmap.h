@@ -36,6 +36,10 @@ typedef struct {
     unsigned char* bitmapData;
 } Bitmap;
 
+
+const char* getImagePath(const char *image);
+
+
 /**
  * @brief Loads a bmp image
  *

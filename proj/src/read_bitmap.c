@@ -8,6 +8,16 @@
 #define HRES 1280
 #define VRES 1024
 
+const char* getImagePath(const char *image){
+	char num[256];
+	sprintf(num, "home/lcom/lcom1617-t4g12/proj/src/%s.bmp", image);
+
+	char* str = (char*) malloc(256);
+	strcpy(str,num);
+
+	return str;
+}
+
 Bitmap* loadBitmap(const char* filename) {
     // allocating necessary size
     Bitmap* bmp = (Bitmap*) malloc(sizeof(Bitmap));
