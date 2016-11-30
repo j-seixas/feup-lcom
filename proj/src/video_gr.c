@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include "video_gr.h"
 #include "vbe.h"
-#include "read_xpm.h"
+#include "read_bitmap.h"
 #include "i8254.h"
 
 #define BLACK 0
@@ -19,11 +19,12 @@
  * Better run my version of lab5 as follows:
  *     service run `pwd`/lab5 -args "mode 0x105"
  */
+/*
 #define VRAM_PHYS_ADDR	0xE0000000
 #define H_RES             1024
 #define V_RES		  768
 #define BITS_PER_PIXEL	  8
-
+*/
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
@@ -94,6 +95,7 @@ void paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
 		*add_it = color;
 
 }
+/*
 int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
 	int width, height, out = 0;
@@ -116,8 +118,8 @@ int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 	return out;
 
 }
-
-int vg_clean_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
+*/
+/*int vg_clean_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
 	int width, height, out = 0;
 
@@ -136,7 +138,7 @@ int vg_clean_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
 
 	return out;
 
-}
+}*/
 
 int vg_controller_handler() {
 	VbeInfoBlock vib_p;
@@ -164,4 +166,8 @@ int vg_controller_handler() {
 	printf("Total Memory Size : %u KB\n", vib_p.TotalMemory * 64);
 	return 0;
 
+}
+
+void* vg_vd_get_vmem(){
+	return video_mem;
 }

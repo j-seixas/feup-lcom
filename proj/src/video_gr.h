@@ -30,8 +30,9 @@ int vg_exit(void);
  /** @} end of video_gr */
 
 void paint_pixel(unsigned short x, unsigned short y, unsigned long color);
-int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) ;
-int vg_clean_xpm(unsigned short xi, unsigned short yi, char *xpm[]) ;
+//int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) ;
+//int vg_clean_xpm(unsigned short xi, unsigned short yi, char *xpm[]) ;
 int vg_controller_handler();
+void* vg_vd_get_vmem();
  
 #endif /* __VIDEO_GR_H */

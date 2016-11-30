@@ -1,8 +1,12 @@
-#include "Bitmap.h"
-
+#include "read_bitmap.h"
+//#include "lmlib.h"
 #include "stdio.h"
-#include "Graphics.h"
-#include "Utilities.h"
+#include "video_gr.h"
+//#include "seixas.bmp"
+//#include "Utilities.h"
+
+#define HRES 1280
+#define VRES 1024
 
 Bitmap* loadBitmap(const char* filename) {
     // allocating necessary size
@@ -83,13 +87,14 @@ void drawBitmap(Bitmap* bmp, int x, int y, Alignment alignment) {
     int drawWidth = width;
     int height = bmp->bitmapInfoHeader.height;
 
+
     if (alignment == ALIGN_CENTER)
         x -= width / 2;
     else if (alignment == ALIGN_RIGHT)
         x -= width;
 
-    if (x + width < 0 || x > getHorResolution() || y + height < 0
-            || y > getVerResolution())
+    if (x + width < 0 || x > HRES || y + height < 0
+            || y > VRES)
         return;
 
     int xCorrection = 0;
@@ -98,10 +103,10 @@ void drawBitmap(Bitmap* bmp, int x, int y, Alignment alignment) {
         drawWidth -= xCorrection;
         x = 0;
 
-        if (drawWidth > getHorResolution())
-            drawWidth = getHorResolution();
-    } else if (x + drawWidth >= getHorResolution()) {
-        drawWidth = getHorResolution() - x;
+        if (drawWidth > HRES)
+            drawWidth = HRES;
+    } else if (x + drawWidth >= HRES) {
+        drawWidth = HRES - x;
     }
 
     char* bufferStartPos;
@@ -111,11 +116,11 @@ void drawBitmap(Bitmap* bmp, int x, int y, Alignment alignment) {
     for (i = 0; i < height; i++) {
         int pos = y + height - 1 - i;
 
-        if (pos < 0 || pos >= getVerResolution())
+        if (pos < 0 || pos >= VRES)
             continue;
 
-        bufferStartPos = getGraphicsBuffer();
-        bufferStartPos += x * 2 + pos * getHorResolution() * 2;
+        bufferStartPos = vg_vd_get_vmem();
+        bufferStartPos += x * 2 + pos * HRES * 2;
 
         imgStartPos = bmp->bitmapData + xCorrection * 2 + i * width * 2;
 
@@ -130,3 +135,4 @@ void deleteBitmap(Bitmap* bmp) {
     free(bmp->bitmapData);
     free(bmp);
 }
+
