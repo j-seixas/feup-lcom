@@ -11,6 +11,7 @@
 #include <string.h>
 #include <errno.h>
 
+#define GR_MODE 0x11A
 
 int main(int argc, char *argv[]) {
 
@@ -20,8 +21,14 @@ int main(int argc, char *argv[]) {
 	 */
 	//vg_init(0x107);
 	//vg_(exit);
-	Bitmap* tron = loadBitmap("seixas.bmp");
-	test_bmp(0, 0, &tron);
+	vg_init(GR_MODE);
+	Bitmap* tron = loadBitmap("home/lcom/lcom1617-t4g12/proj/src/Tronboard.bmp");
+	drawBitmap(tron, 0, 0, ALIGN_LEFT);
+	kbd_test_scan();
+	vg_exit();
+	printf("\n");
+
+	//test_bmp(0, 0, tron);
 	return 0;
 }
 
