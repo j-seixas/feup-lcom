@@ -6,20 +6,21 @@
 #include "game.h"
 #include "video_gr.h"
 #include "otherlabs.h"
-#include "tron_arcade_lightcycles.xpm"
-#include "read_xpm.h"
+#include "read_bitmap.h"
 #include "i8042.h"
 #include "i8254.h"
+//#include "seixas.bmp"
 
 
 #define HRES_1024	1280
 #define VRES_768	1024
-#define GR_MODE		0x107
+#define GR_MODE		0x11A
 
-int test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
+int test_bmp(unsigned short xi, unsigned short yi, char *bmp[]) {
 
 	vg_init(GR_MODE);
-	vg_test_xpm(xi, yi, xpm);
+
+	drawBitmap(bmp, xi, yi, ALIGN_LEFT);
 	kbd_test_scan();
 	vg_exit();
 	printf("\n");

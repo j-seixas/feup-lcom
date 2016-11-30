@@ -5,7 +5,8 @@
 #include "otherlabs.h"
 #include "i8254.h"
 #include "i8042.h"
-#include "tron_arcade_lightcycles.xpm"
+#include "read_bitmap.h"
+//#include "seixas.bmp"
 #include <limits.h>
 #include <string.h>
 #include <errno.h>
@@ -19,7 +20,8 @@ int main(int argc, char *argv[]) {
 	 */
 	//vg_init(0x107);
 	//vg_(exit);
-	test_xpm(0, 0, tron_arcade_lightcycles);
+	Bitmap* tron = loadBitmap("seixas.bmp");
+	test_bmp(0, 0, &tron);
 	return 0;
 }
 
