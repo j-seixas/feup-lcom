@@ -5,7 +5,7 @@ COMPILER_TYPE= gnu
 CC= gcc
 
 PROG= Tron
-SRCS= Tron.c game.c vbe.c video_gr.c otherlabs.c read_bitmap.c 
+SRCS= Tron.c game.c vbe.c video_gr.c otherlabs.c read_bitmap.c tools.c
 
 CCFLAGS= -Wall
 

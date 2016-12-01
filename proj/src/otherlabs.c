@@ -2,8 +2,7 @@
 #include <minix/drivers.h>
 #include <minix/com.h>
 #include <minix/sysutil.h>
-#include "i8254.h"
-#include "i8042.h"
+#include "tools.h"
 #include "otherlabs.h"
 
 #define DELAY_US    20000

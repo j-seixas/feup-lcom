@@ -1,16 +1,11 @@
 #include "read_bitmap.h"
-//#include "lmlib.h"
 #include "stdio.h"
 #include "video_gr.h"
-//#include "seixas.bmp"
-//#include "Utilities.h"
-
-#define HRES 1280
-#define VRES 1024
+#include "tools.h"
 
 const char* getImagePath(const char *image){
 	char num[256];
-	sprintf(num, "home/lcom/lcom1617-t4g12/proj/src/%s.bmp", image);
+	sprintf(num, "home/lcom/lcom1617-t4g12/proj/src/imgs/%s.bmp", image);
 
 	char* str = (char*) malloc(256);
 	strcpy(str,num);
@@ -89,7 +84,7 @@ Bitmap* loadBitmap(const char* filename) {
     return bmp;
 }
 
-void drawBitmap(Bitmap* bmp, int x, int y, Alignment alignment) {
+void drawBitmap(Bitmap* bmp, int x, int y) {
     if (bmp == NULL)
         return;
 
@@ -97,11 +92,11 @@ void drawBitmap(Bitmap* bmp, int x, int y, Alignment alignment) {
     int drawWidth = width;
     int height = bmp->bitmapInfoHeader.height;
 
-
+/*
     if (alignment == ALIGN_CENTER)
         x -= width / 2;
     else if (alignment == ALIGN_RIGHT)
-        x -= width;
+        x -= width;*/
 
     if (x + width < 0 || x > HRES || y + height < 0
             || y > VRES)

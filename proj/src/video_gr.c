@@ -6,25 +6,10 @@
 #include "video_gr.h"
 #include "vbe.h"
 #include "read_bitmap.h"
-#include "i8254.h"
+#include "tools.h"
 
 #define BLACK 0
 
-/* Constants for VBE 0x105 mode */
-
-/* The physical address may vary from VM to VM.
- * At one time it was 0xD0000000
- *  #define VRAM_PHYS_ADDR    0xD0000000 
- * Currently on lab B107 is 0xF0000000
- * Better run my version of lab5 as follows:
- *     service run `pwd`/lab5 -args "mode 0x105"
- */
-/*
-#define VRAM_PHYS_ADDR	0xE0000000
-#define H_RES             1024
-#define V_RES		  768
-#define BITS_PER_PIXEL	  8
-*/
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
@@ -56,7 +41,7 @@ void *vg_init(unsigned short mode) {
 	struct mem_range mr;
 
 	unsigned int vram_base = vmi_p.PhysBasePtr; /*VRAM’s physical addresss*/
-	unsigned int vram_size = v_res * h_res * bits_per_pixel * 8; /*VRAM’s size, but you can use the frame-buffer size, instead*/
+	unsigned int vram_size = v_res * h_res * bits_per_pixel; /*VRAM’s size, but you can use the frame-buffer size, instead*/
 
 	/*Allow memory mapping*/
 	mr.mr_base = (phys_bytes) vram_base;
@@ -69,7 +54,6 @@ void *vg_init(unsigned short mode) {
 	video_mem = vm_map_phys(SELF, (void *) mr.mr_base, vram_size);
 	if (video_mem == MAP_FAILED)
 		panic("couldn’t map video memory");
-
 	return video_mem;
 }
 
@@ -90,10 +74,12 @@ int vg_exit() {
 
 void paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
 	char * add_it = video_mem;
-	add_it += x + h_res * y;
-	if (x < h_res && y < v_res && x >= 0 && y >= 0)
+	add_it += (x + h_res * y)*bits_per_pixel/8;
+	if (x < h_res && y < v_res && x >= 0 && y >= 0){
 		*add_it = color;
-
+		add_it++;
+		*add_it = color>>8;
+	}
 }
 /*
 int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
