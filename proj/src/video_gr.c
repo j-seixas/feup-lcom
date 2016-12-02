@@ -8,7 +8,6 @@
 #include "read_bitmap.h"
 #include "tools.h"
 
-
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
@@ -71,88 +70,28 @@ int vg_exit() {
 		return 0;
 }
 
-void paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
+int paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
+	unsigned long white = WHITE;
 	char * add_it = video_mem;
-	add_it += (x + h_res * y)*bits_per_pixel/8;
-	if (x < h_res && y < v_res && x >= 0 && y >= 0){
+	add_it += (x + h_res * y) * bits_per_pixel / 8;
+	if (x < h_res && y < v_res && x >= 0 && y >= 0) {
+		if (white == *add_it) {
+			printf("HERE\n");
+			return 1;
+		}
 		*add_it = color;
 		add_it++;
-		*add_it = color>>8;
-	}
-}
-/*
-int vg_test_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
-
-	int width, height, out = 0;
-
-	char * xpm_sprt = read_xpm(xpm, &width, &height), *color;
-
-	unsigned short xline, yline;
-	for (yline = 0; yline < height; yline++) {
-		for (xline = 0; xline < width; xline++) {
-			if (xline + xi > h_res || yline + yi > v_res) {
-				out = 1;
-			} else {
-				color = xpm_sprt + width * yline + xline;
-				paint_pixel(xline + xi, yline + yi, *color);
-			}
+		white = white >> 8;
+		if (white == *add_it) {
+			printf("THERE\n");
+			return 1;
 		}
-
+		*add_it = color >> 8;
+		return 0;
 	}
-
-	return out;
-
-}
-*/
-/*int vg_clean_xpm(unsigned short xi, unsigned short yi, char *xpm[]) {
-
-	int width, height, out = 0;
-
-	char * xpm_sprt = read_xpm(xpm, &width, &height);
-
-	unsigned short xline, yline;
-	for (yline = 0; yline < height; yline++) {
-		for (xline = 0; xline < width; xline++) {
-			if (xline + xi > h_res || yline + yi > v_res) {
-				out = 1;
-			} else
-				paint_pixel(xline + xi, yline + yi, BLACK);
-		}
-
-	}
-
-	return out;
-
-}*/
-
-int vg_controller_handler() {
-	VbeInfoBlock vib_p;
-	if (vbe_get_controller_info(&vib_p) == 1) {
-		printf("set_vbe_get_mode_info: set_vbe_mode: sys_int86() failed \n");
-		return 1;
-	}
-
-	printf("\n  VBE INFO:\n\n");
-	printf("Capabilities : \n");
-	if (*(vib_p.Capabilities) & BIT(0))
-		printf("\tDAC width is switchable to 8 bits per primary color\n");
-	else
-		printf("\tDAC is fixed width, with 6 bits per primary color\n");
-
-	if (*(vib_p.Capabilities) & BIT(1))
-		printf("\tController is not VGA compatible\n");
-	else
-		printf("\tController is VGA compatible\n");
-	if (*(vib_p.Capabilities) & BIT(2))
-		printf(
-				"\tWhen programming large blocks of information to the RAMDAC, use the blank bit in Function 09h\n");
-	else
-		printf("\tNormal RAMDAC operation\n");
-	printf("Total Memory Size : %u KB\n", vib_p.TotalMemory * 64);
-	return 0;
-
+	return -1;
 }
 
-void* vg_vd_get_vmem(){
+void* vg_vd_get_vmem() {
 	return video_mem;
 }
