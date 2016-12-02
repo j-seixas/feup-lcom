@@ -47,8 +47,6 @@ int init_players(unsigned int num_players) {
 		game1.player1.color1 = BLUE1;
 		game1.player1.color2 = BLUE2;
 		game1.player1.color3 = WHITE;
-		game1.player1.Rkey = PRESSED;
-		game1.player1.begin = 1;
 		return 0;
 	}
 	default:
@@ -58,197 +56,207 @@ int init_players(unsigned int num_players) {
 	return 1;
 }
 
-void draw_player(unsigned int n, state st) {
+int draw_player(unsigned int n, state st) {
 	if (n == 1) {
 		if (st == UP || st == DOWN) {
-			paint_pixel(game1.player1.x, game1.player1.y, game1.player1.color1);
-			paint_pixel(game1.player1.x + 1, game1.player1.y,
-					game1.player1.color1);
-			paint_pixel(game1.player1.x - 1, game1.player1.y,
-					game1.player1.color2);
-			paint_pixel(game1.player1.x - 2, game1.player1.y,
-					game1.player1.color3);
-			paint_pixel(game1.player1.x + 2, game1.player1.y,
-					game1.player1.color3);
+			if (paint_pixel(game1.player1.x, game1.player1.y,
+					game1.player1.color1) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x + 1, game1.player1.y,
+					game1.player1.color1) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x - 1, game1.player1.y,
+					game1.player1.color2) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x - 2, game1.player1.y,
+					game1.player1.color3) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x + 2, game1.player1.y,
+					game1.player1.color3) == 1)
+				return 1;
 		} else if (st == RIGHT || st == LEFT) {
-			paint_pixel(game1.player1.x, game1.player1.y, game1.player1.color1);
-			paint_pixel(game1.player1.x, game1.player1.y + 1,
-					game1.player1.color1);
-			paint_pixel(game1.player1.x, game1.player1.y - 1,
-					game1.player1.color2);
-			paint_pixel(game1.player1.x, game1.player1.y - 2,
-					game1.player1.color3);
-			paint_pixel(game1.player1.x, game1.player1.y + 2,
-					game1.player1.color3);
+			if (paint_pixel(game1.player1.x, game1.player1.y,
+					game1.player1.color1) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x, game1.player1.y + 1,
+					game1.player1.color1) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x, game1.player1.y - 1,
+					game1.player1.color2) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x, game1.player1.y - 2,
+					game1.player1.color3) == 1)
+				return 1;
+			if (paint_pixel(game1.player1.x, game1.player1.y + 2,
+					game1.player1.color3) == 1)
+				return 1;
 		}
 	} else if (n == 2) {
 		if (st == UP || st == DOWN) {
-			paint_pixel(game1.player2.x, game1.player2.y, game1.player2.color1);
-			paint_pixel(game1.player2.x + 1, game1.player2.y,
-					game1.player2.color1);
-			paint_pixel(game1.player2.x - 1, game1.player2.y,
-					game1.player2.color2);
-			paint_pixel(game1.player2.x - 2, game1.player2.y,
-					game1.player2.color3);
-			paint_pixel(game1.player2.x + 2, game1.player2.y,
-					game1.player2.color3);
+			if (paint_pixel(game1.player2.x, game1.player2.y,
+					game1.player2.color1) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x + 1, game1.player2.y,
+					game1.player2.color1) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x - 1, game1.player2.y,
+					game1.player2.color2) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x - 2, game1.player2.y,
+					game1.player2.color3) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x + 2, game1.player2.y,
+					game1.player2.color3) == 1)
+				return 2;
 		} else if (st == RIGHT || st == LEFT) {
-			paint_pixel(game1.player2.x, game1.player2.y, game1.player2.color1);
-			paint_pixel(game1.player2.x, game1.player2.y + 1,
-					game1.player2.color1);
-			paint_pixel(game1.player2.x, game1.player2.y - 1,
-					game1.player2.color2);
-			paint_pixel(game1.player2.x, game1.player2.y - 2,
-					game1.player2.color3);
-			paint_pixel(game1.player2.x, game1.player2.y + 2,
-					game1.player2.color3);
+			if (paint_pixel(game1.player2.x, game1.player2.y,
+					game1.player2.color1) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x, game1.player2.y + 1,
+					game1.player2.color1) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x, game1.player2.y - 1,
+					game1.player2.color2) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x, game1.player2.y - 2,
+					game1.player2.color3) == 1)
+				return 2;
+			if (paint_pixel(game1.player2.x, game1.player2.y + 2,
+					game1.player2.color3) == 1)
+				return 2;
 		}
 	}
 }
 
 void change_player_state(unsigned int i, unsigned long data) {
 	if (i == 0) {
-		if(game1.player1.begin){
-			game1.player1.begin = 0;
-			game1.player1.Rkey = RELEASED;
-		}
-		if (data == W_MAKE) {
-			if (game1.player1.st != DOWN) {
+		if (data == D_MAKE) {
+			switch (game1.player1.st) {
+			case UP:
+				game1.player1.st = RIGHT;
+				break;
+			case RIGHT:
+				game1.player1.st = DOWN;
+				break;
+			case DOWN:
+				game1.player1.st = LEFT;
+				break;
+			case LEFT:
 				game1.player1.st = UP;
-				game1.player1.Ukey = PRESSED;
+				break;
+			default:
+				break;
 			}
 		} else if (data == A_MAKE) {
-			if (game1.player1.st != RIGHT) {
+			switch (game1.player1.st) {
+			case UP:
 				game1.player1.st = LEFT;
-				game1.player1.Lkey = PRESSED;
-			}
-		} else if (data == S_MAKE) {
-			if (game1.player1.st != UP) {
-				game1.player1.st = DOWN;
-				game1.player1.Dkey = PRESSED;
-			}
-		} else if (data == D_MAKE) {
-			if (game1.player1.st != LEFT) {
-				game1.player1.st = RIGHT;
-				game1.player1.Rkey = PRESSED;
-			}
-		} else if (data == A_BREAK) {
-			if (game1.player1.Ukey == PRESSED)
+				break;
+			case RIGHT:
 				game1.player1.st = UP;
-			else if (game1.player1.Dkey == PRESSED)
-				game1.player1.st = DOWN;
-			else
-				game1.player1.st = LEFT;
-			game1.player1.Lkey = RELEASED;
-
-		} else if (data == S_BREAK) {
-			if (game1.player1.Rkey == PRESSED)
+				break;
+			case DOWN:
 				game1.player1.st = RIGHT;
-			else if (game1.player1.Lkey == PRESSED)
-				game1.player1.st = LEFT;
-			else
+				break;
+			case LEFT:
 				game1.player1.st = DOWN;
-
-			game1.player1.Dkey = RELEASED;
-
-		} else if (data == D_BREAK) {
-			if (game1.player1.Ukey == PRESSED)
-				game1.player1.st = UP;
-			else if (game1.player1.Dkey == PRESSED)
-				game1.player1.st = DOWN;
-			else
-				game1.player1.st = RIGHT;
-			game1.player1.Rkey = RELEASED;
-
-		} else if (data == W_BREAK) {
-			if (game1.player1.Rkey == PRESSED)
-				game1.player1.st = RIGHT;
-			else if (game1.player1.Lkey == PRESSED)
-				game1.player1.st = LEFT;
-			else
-				game1.player1.st = UP;
-
-			game1.player1.Ukey = RELEASED;
-
+				break;
+			default:
+				break;
+			}
 		}
-
 	} else if (i == 1) {
-		if (data == UARROW_MAKE) {
-			if (game1.player2.st != DOWN) {
+		if (data == RARROW_MAKE) {
+			switch (game1.player2.st) {
+			case UP:
+				game1.player2.st = RIGHT;
+				break;
+			case RIGHT:
+				game1.player2.st = DOWN;
+				break;
+			case DOWN:
+				game1.player2.st = LEFT;
+				break;
+			case LEFT:
 				game1.player2.st = UP;
-				game1.player2.Ukey = PRESSED;
+				break;
+			default:
+				break;
 			}
 		} else if (data == LARROW_MAKE) {
-			if (game1.player2.st != RIGHT) {
+			switch (game1.player2.st) {
+			case UP:
 				game1.player2.st = LEFT;
-				game1.player2.Lkey = PRESSED;
-			}
-		} else if (data == DARROW_MAKE) {
-			if (game1.player2.st != UP) {
-				game1.player2.st = DOWN;
-				game1.player2.Dkey = PRESSED;
-			}
-		} else if (data == RARROW_MAKE) {
-			if (game1.player2.st != LEFT) {
-				game1.player2.st = RIGHT;
-				game1.player2.Rkey = PRESSED;
-			}
-		} else if (data == LARROW_BREAK) {
-			if (game1.player2.Ukey == PRESSED)
+				break;
+			case RIGHT:
 				game1.player2.st = UP;
-			else if (game1.player2.Dkey == PRESSED)
-				game1.player2.st = DOWN;
-			game1.player2.Lkey = RELEASED;
-			game1.player2.st = LEFT;
-		} else if (data == DARROW_BREAK) {
-			if (game1.player2.Rkey == PRESSED)
+				break;
+			case DOWN:
 				game1.player2.st = RIGHT;
-			else if (game1.player2.Lkey == PRESSED)
-				game1.player2.st = LEFT;
-			game1.player2.Dkey = RELEASED;
-			game1.player2.st = DOWN;
-		} else if (data == RARROW_BREAK) {
-			if (game1.player2.Ukey == PRESSED)
-				game1.player2.st = UP;
-			else if (game1.player2.Dkey == PRESSED)
+				break;
+			case LEFT:
 				game1.player2.st = DOWN;
-			game1.player2.Rkey = RELEASED;
-			game1.player2.st = RIGHT;
-		} else if (data == UARROW_BREAK) {
-			if (game1.player2.Rkey == PRESSED)
-				game1.player2.st = RIGHT;
-			else if (game1.player2.Lkey == PRESSED)
-				game1.player2.st = LEFT;
-			game1.player2.Ukey = RELEASED;
-			game1.player2.st = UP;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
 
-void update_player() {
-	if (game1.player1.st == LEFT)
-		game1.player1.x--;
-	else if (game1.player1.st == RIGHT)
-		game1.player1.x++;
-	else if (game1.player1.st == UP)
-		game1.player1.y--;
-	else if (game1.player1.st == DOWN)
-		game1.player1.y++;
+void update_player(unsigned int num_players) {
+	switch (num_players) {
+	case 4:
+	case 3:
+	case 2:
+		if (game1.player2.st == LEFT)
+			game1.player2.x--;
+		else if (game1.player2.st == RIGHT)
+			game1.player2.x++;
+		else if (game1.player2.st == UP)
+			game1.player2.y--;
+		else if (game1.player2.st == DOWN)
+			game1.player2.y++;
+	case 1:
+		if (game1.player1.st == LEFT)
+			game1.player1.x--;
+		else if (game1.player1.st == RIGHT)
+			game1.player1.x++;
+		else if (game1.player1.st == UP)
+			game1.player1.y--;
+		else if (game1.player1.st == DOWN)
+			game1.player1.y++;
+	default:
+		break;
+	}
 
-	if (game1.player2.st == LEFT)
-		game1.player2.x--;
-	else if (game1.player2.st == RIGHT)
-		game1.player2.x++;
-	else if (game1.player2.st == UP)
-		game1.player2.y--;
-	else if (game1.player2.st == DOWN)
-		game1.player2.y++;
+}
+
+int draw_handler(unsigned int num_players) {
+	unsigned int loop = 3;
+	while (loop) {
+		update_player(num_players);
+		switch (num_players) {
+		case 4:
+		case 3:
+		case 2:
+			if(draw_player(2, game1.player2.st) == 2)
+				return 2;
+		case 1:
+			if(draw_player(1, game1.player1.st) == 1)
+				return 1;
+		default:
+			break;
+		}
+		loop--;
+	}
+	return 0;
 }
 
 int playgame(unsigned int num_players) {
 	int r, ipc_status;
 	message msg;
-	unsigned int twobyteslong = 0;
+	unsigned int win, twobyteslong = 0;
 	unsigned long data;
 	while (data != ESC_BREAK) {
 
@@ -263,12 +271,11 @@ int playgame(unsigned int num_players) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /*hardware interrupt notification*/
 				if (msg.NOTIFY_ARG & game1.irq_set_timer) {
-					update_player();
-					draw_player(1, game1.player1.st);
-					draw_player(2, game1.player2.st);
-					update_player();
-					draw_player(1, game1.player1.st);
-					draw_player(2, game1.player2.st);
+					win = draw_handler(num_players);
+					if(win == 1 || win == 2){
+						data = ESC_BREAK;
+						continue;
+					}
 				}
 				if (msg.NOTIFY_ARG & game1.irq_set_kbd) { /*subscribed interrupt*/
 					data |= kbd_handler();
@@ -302,12 +309,27 @@ int start_multigame(unsigned int num_players) {
 		printf("Error in num of players\n");
 		return 1;
 	}
+	unsigned long color = WHITE;
+	unsigned int x, y = YULIMIT;
+	for (x = XLLIMIT; x < XRLIMIT; x++) {
+		paint_pixel(x, y, color);
+	}
+	y = YDLIMIT;
+	for (x = XLLIMIT; x < XRLIMIT; x++) {
+		paint_pixel(x, y, color);
+	}
+	x = XLLIMIT;
+	for (y = YULIMIT; y < YDLIMIT; y++) {
+		paint_pixel(x, y, color);
+	}
+	x = XRLIMIT;
+	for (y = YULIMIT; y < YDLIMIT; y++) {
+		paint_pixel(x, y, color);
+	}
+
 	playgame(num_players);
 
-}
 
-int test_bmp(unsigned short xi, unsigned short yi, char *bmp) {
-	return 0;
 }
 
 int test_square(unsigned short x, unsigned short y, unsigned short size,
