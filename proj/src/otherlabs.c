@@ -9,13 +9,13 @@
 static int hook_id, hook_id_kbd;
 
 int kbd_subscribe_int(void) {
-	hook_id_kbd = KB_IRQ;
-	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id_kbd)
+	game1.hook_id_kbd = KB_IRQ;
+	if (sys_irqsetpolicy(KB_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &game1.hook_id_kbd)
 			!= OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
-	if (sys_irqenable(&hook_id_kbd) != OK) {
+	if (sys_irqenable(&game1.hook_id_kbd) != OK) {
 		printf("Error in sys_irqenable()\n");
 		return -1;
 	}
@@ -24,11 +24,11 @@ int kbd_subscribe_int(void) {
 }
 
 int kbd_unsubscribe_int() {
-	if (sys_irqdisable(&hook_id_kbd) != OK) {
+	if (sys_irqdisable(&game1.hook_id_kbd) != OK) {
 		printf("Error in sys_irqdisable()\n");
 		return 1;
 	}
-	if (sys_irqrmpolicy(&hook_id_kbd) != OK) {
+	if (sys_irqrmpolicy(&game1.hook_id_kbd) != OK) {
 		printf("Error in sys_irqrmpolicy()\n");
 		return 1;
 	}
@@ -37,12 +37,12 @@ int kbd_unsubscribe_int() {
 }
 
 int timer_subscribe_int(void) {
-	hook_id = TM0_IRQSET;
-	if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id) != OK) {
+	game1.hook_id_timer = TM0_IRQSET;
+	if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &game1.hook_id_timer) != OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
-	if (sys_irqenable(&hook_id) != OK) {
+	if (sys_irqenable(&game1.hook_id_timer) != OK) {
 		printf("Error in sys_irqenable()\n");
 		return -1;
 	}
@@ -52,11 +52,11 @@ int timer_subscribe_int(void) {
 }
 
 int timer_unsubscribe_int() {
-	if (sys_irqdisable(&hook_id) != OK) {
+	if (sys_irqdisable(&game1.hook_id_timer) != OK) {
 		printf("Error in sys_irqdisable()\n");
 		return 1;
 	}
-	if (sys_irqrmpolicy(&hook_id) != OK) {
+	if (sys_irqrmpolicy(&game1.hook_id_timer) != OK) {
 		printf("Error in sys_irqrmpolicy()\n");
 		return 1;
 	}
