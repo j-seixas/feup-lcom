@@ -110,7 +110,7 @@ typedef enum {
 typedef struct{
 	unsigned int x, y;
 	state st;
-	unsigned int wins;
+	unsigned int wins, begin;
 	keys Lkey, Rkey, Ukey, Dkey;
 	unsigned long color1, color2, color3;
 

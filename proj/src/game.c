@@ -47,6 +47,8 @@ int init_players(unsigned int num_players) {
 		game1.player1.color1 = BLUE1;
 		game1.player1.color2 = BLUE2;
 		game1.player1.color3 = WHITE;
+		game1.player1.Rkey = PRESSED;
+		game1.player1.begin = 1;
 		return 0;
 	}
 	default:
@@ -106,6 +108,10 @@ void draw_player(unsigned int n, state st) {
 
 void change_player_state(unsigned int i, unsigned long data) {
 	if (i == 0) {
+		if(game1.player1.begin){
+			game1.player1.begin = 0;
+			game1.player1.Rkey = RELEASED;
+		}
 		if (data == W_MAKE) {
 			if (game1.player1.st != DOWN) {
 				game1.player1.st = UP;
@@ -131,25 +137,39 @@ void change_player_state(unsigned int i, unsigned long data) {
 				game1.player1.st = UP;
 			else if (game1.player1.Dkey == PRESSED)
 				game1.player1.st = DOWN;
+			else
+				game1.player1.st = LEFT;
 			game1.player1.Lkey = RELEASED;
+
 		} else if (data == S_BREAK) {
 			if (game1.player1.Rkey == PRESSED)
 				game1.player1.st = RIGHT;
 			else if (game1.player1.Lkey == PRESSED)
 				game1.player1.st = LEFT;
+			else
+				game1.player1.st = DOWN;
+
 			game1.player1.Dkey = RELEASED;
+
 		} else if (data == D_BREAK) {
 			if (game1.player1.Ukey == PRESSED)
 				game1.player1.st = UP;
 			else if (game1.player1.Dkey == PRESSED)
 				game1.player1.st = DOWN;
+			else
+				game1.player1.st = RIGHT;
 			game1.player1.Rkey = RELEASED;
+
 		} else if (data == W_BREAK) {
 			if (game1.player1.Rkey == PRESSED)
 				game1.player1.st = RIGHT;
 			else if (game1.player1.Lkey == PRESSED)
 				game1.player1.st = LEFT;
+			else
+				game1.player1.st = UP;
+
 			game1.player1.Ukey = RELEASED;
+
 		}
 
 	} else if (i == 1) {
@@ -179,24 +199,28 @@ void change_player_state(unsigned int i, unsigned long data) {
 			else if (game1.player2.Dkey == PRESSED)
 				game1.player2.st = DOWN;
 			game1.player2.Lkey = RELEASED;
+			game1.player2.st = LEFT;
 		} else if (data == DARROW_BREAK) {
 			if (game1.player2.Rkey == PRESSED)
 				game1.player2.st = RIGHT;
 			else if (game1.player2.Lkey == PRESSED)
 				game1.player2.st = LEFT;
 			game1.player2.Dkey = RELEASED;
+			game1.player2.st = DOWN;
 		} else if (data == RARROW_BREAK) {
 			if (game1.player2.Ukey == PRESSED)
 				game1.player2.st = UP;
 			else if (game1.player2.Dkey == PRESSED)
 				game1.player2.st = DOWN;
 			game1.player2.Rkey = RELEASED;
+			game1.player2.st = RIGHT;
 		} else if (data == UARROW_BREAK) {
 			if (game1.player2.Rkey == PRESSED)
 				game1.player2.st = RIGHT;
 			else if (game1.player2.Lkey == PRESSED)
 				game1.player2.st = LEFT;
 			game1.player2.Ukey = RELEASED;
+			game1.player2.st = UP;
 		}
 	}
 }
@@ -239,6 +263,9 @@ int playgame(unsigned int num_players) {
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /*hardware interrupt notification*/
 				if (msg.NOTIFY_ARG & game1.irq_set_timer) {
+					update_player();
+					draw_player(1, game1.player1.st);
+					draw_player(2, game1.player2.st);
 					update_player();
 					draw_player(1, game1.player1.st);
 					draw_player(2, game1.player2.st);
