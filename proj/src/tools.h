@@ -36,8 +36,6 @@
 #define OBF   				BIT(0)
 #define IBF					BIT(1)
 
-#define ESC_BREAK			0x81
-#define ESC_MAKE			0x01
 #define TWO_BYTES			0xE0
 
 
@@ -65,6 +63,69 @@
 #define YDLIMIT		1000
 
 
+/*!
+ * Colors
+ */
 int rgb(unsigned char r, unsigned char g, unsigned char b);
+#define ORANGE1		rgb(223,116,12);
+#define ORANGE2		rgb(255,230,77);
+#define BLUE1		rgb(111,195,223);
+#define BLUE2		rgb(230,255,255);
+#define WHITE		rgb(255,255,255);
+#define BLACK		rgb(0,0,0);
+
+
+#define ESC_BREAK			0x81
+#define ESC_MAKE			0x01
+#define A_MAKE				0x1E
+#define A_BREAK				0x9E
+#define W_MAKE				0x11
+#define W_BREAK				0x91
+#define S_MAKE				0x1F
+#define S_BREAK				0x9F
+#define D_MAKE				0x20
+#define D_BREAK				0xA0
+#define UARROW_MAKE			0xE048
+#define UARROW_BREAK		0xE0C8
+#define LARROW_MAKE			0xE04B
+#define LARROW_BREAK		0xE0CB
+#define DARROW_MAKE			0xE050
+#define DARROW_BREAK		0xE0D0
+#define RARROW_MAKE			0xE04D
+#define RARROW_BREAK		0xE0CD
+
+typedef enum {
+	LEFT, RIGHT, UP, DOWN, STOP
+} state;
+
+typedef enum {
+	MENU, PLAYING, FINISHED
+} game_state;
+
+typedef enum {
+	PRESSED, RELEASED
+} keys;
+
+
+typedef struct{
+	unsigned int x, y;
+	state st;
+	unsigned int wins;
+	keys Lkey, Rkey, Ukey, Dkey;
+	unsigned long color1, color2, color3;
+
+} player;
+
+
+typedef struct {
+	game_state gamest;
+	player player1, player2;
+	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd;
+
+}game;
+
+static game game1;
+
+
 
 #endif /* TOOLS_H */

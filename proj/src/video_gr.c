@@ -8,7 +8,6 @@
 #include "read_bitmap.h"
 #include "tools.h"
 
-#define BLACK 0
 
 /* Private global variables */
 

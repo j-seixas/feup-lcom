@@ -13,3 +13,6 @@ int rgb(unsigned char r, unsigned char g, unsigned char b) {
 
 	return (red << (5 + 6)) | (green << 5) | blue;
 }
+
+
+
