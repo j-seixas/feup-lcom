@@ -134,15 +134,23 @@ void change_player_state(unsigned int i, unsigned long data) {
 			switch (game1.player1.st) {
 			case UP:
 				game1.player1.st = RIGHT;
+				game1.player1.x += 2;
+				game1.player1.y += 2;
 				break;
 			case RIGHT:
 				game1.player1.st = DOWN;
+				game1.player1.y += 2;
+				game1.player1.x -= 2;
 				break;
 			case DOWN:
 				game1.player1.st = LEFT;
+				game1.player1.x -= 2;
+				game1.player1.y -= 2;
 				break;
 			case LEFT:
 				game1.player1.st = UP;
+				game1.player1.y -= 2;
+				game1.player1.x += 2;
 				break;
 			default:
 				break;
@@ -151,15 +159,23 @@ void change_player_state(unsigned int i, unsigned long data) {
 			switch (game1.player1.st) {
 			case UP:
 				game1.player1.st = LEFT;
+				game1.player1.x -= 2;
+				game1.player1.y += 2;
 				break;
 			case RIGHT:
 				game1.player1.st = UP;
+				game1.player1.y -= 2;
+				game1.player1.x -= 2;
 				break;
 			case DOWN:
 				game1.player1.st = RIGHT;
+				game1.player1.x += 2;
+				game1.player1.y -= 2;
 				break;
 			case LEFT:
 				game1.player1.st = DOWN;
+				game1.player1.y += 2;
+				game1.player1.x += 2;
 				break;
 			default:
 				break;
@@ -170,15 +186,23 @@ void change_player_state(unsigned int i, unsigned long data) {
 			switch (game1.player2.st) {
 			case UP:
 				game1.player2.st = RIGHT;
+				game1.player2.x += 2;
+				game1.player2.y += 2;
 				break;
 			case RIGHT:
 				game1.player2.st = DOWN;
+				game1.player2.y += 2;
+				game1.player2.x -= 2;
 				break;
 			case DOWN:
 				game1.player2.st = LEFT;
+				game1.player2.x -= 2;
+				game1.player2.y -= 2;
 				break;
 			case LEFT:
 				game1.player2.st = UP;
+				game1.player2.y -= 2;
+				game1.player2.x += 2;
 				break;
 			default:
 				break;
@@ -187,15 +211,23 @@ void change_player_state(unsigned int i, unsigned long data) {
 			switch (game1.player2.st) {
 			case UP:
 				game1.player2.st = LEFT;
+				game1.player2.x -= 2;
+				game1.player2.y += 2;
 				break;
 			case RIGHT:
 				game1.player2.st = UP;
+				game1.player2.y -= 2;
+				game1.player2.x -= 2;
 				break;
 			case DOWN:
 				game1.player2.st = RIGHT;
+				game1.player2.x += 2;
+				game1.player2.y -= 2;
 				break;
 			case LEFT:
 				game1.player2.st = DOWN;
+				game1.player2.y += 2;
+				game1.player2.x += 2;
 				break;
 			default:
 				break;
@@ -240,10 +272,10 @@ int draw_handler(unsigned int num_players) {
 		case 4:
 		case 3:
 		case 2:
-			if(draw_player(2, game1.player2.st) == 2)
+			if (draw_player(2, game1.player2.st) == 2)
 				return 2;
 		case 1:
-			if(draw_player(1, game1.player1.st) == 1)
+			if (draw_player(1, game1.player1.st) == 1)
 				return 1;
 		default:
 			break;
@@ -272,8 +304,9 @@ int playgame(unsigned int num_players) {
 			case HARDWARE: /*hardware interrupt notification*/
 				if (msg.NOTIFY_ARG & game1.irq_set_timer) {
 					win = draw_handler(num_players);
-					if(win == 1 || win == 2){
+					if (win == 1 || win == 2) {
 						data = ESC_BREAK;
+						//vg_exit();
 						continue;
 					}
 				}
@@ -328,7 +361,6 @@ int start_multigame(unsigned int num_players) {
 	}
 
 	playgame(num_players);
-
 
 }
 

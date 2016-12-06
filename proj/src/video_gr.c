@@ -71,19 +71,17 @@ int vg_exit() {
 }
 
 int paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
-	unsigned long white = WHITE;
+	char white = WHITE;
 	char * add_it = video_mem;
 	add_it += (x + h_res * y) * bits_per_pixel / 8;
 	if (x < h_res && y < v_res && x >= 0 && y >= 0) {
 		if (white == *add_it) {
-			printf("HERE\n");
 			return 1;
 		}
 		*add_it = color;
 		add_it++;
 		white = white >> 8;
 		if (white == *add_it) {
-			printf("THERE\n");
 			return 1;
 		}
 		*add_it = color >> 8;
