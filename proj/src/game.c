@@ -14,8 +14,12 @@
 #define GR_MODE		0x11A
 
 int draw_board() {
-	Bitmap* tron = loadBitmap(getImagePath("Tronboard"));
-	drawBitmap(tron, 0, 0);
+	Bitmap* tron2p = loadBitmap(getImagePath("Game2p"));
+	drawBitmap(tron2p, 0, 0);
+
+	Bitmap* start = loadBitmap(getImagePath("Start"));
+	drawBitmap(start, 255, 460);
+
 	game1.irq_set_kbd = kbd_subscribe_int();
 	if (game1.irq_set_kbd == -1) {
 		printf("Error in kbd_subscribe_int()\n");
@@ -24,6 +28,23 @@ int draw_board() {
 	game1.irq_set_timer = timer_subscribe_int();
 	if (game1.irq_set_timer == -1) {
 		printf("Error in timer_subscribe_int()\n");
+		return 1;
+	}
+
+	kbd_test_scan();
+	drawBitmap(tron2p, 0, 0);
+	return 0;
+
+}
+int unsub_game() {
+	game1.irq_set_kbd = kbd_unsubscribe_int();
+	if (game1.irq_set_kbd == -1) {
+		printf("Error in kbd_unsubscribe_int()\n");
+		return 1;
+	}
+	game1.irq_set_timer = timer_unsubscribe_int();
+	if (game1.irq_set_timer == -1) {
+		printf("Error in timer_unsubscribe_int()\n");
 		return 1;
 	}
 	return 0;

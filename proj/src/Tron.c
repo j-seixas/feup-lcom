@@ -21,6 +21,8 @@ int main(int argc, char *argv[]) {
 
 
 	kbd_test_scan();
+
+	unsub_game();
 	vg_exit();
 	printf("\n");
 
