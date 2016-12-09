@@ -6,7 +6,7 @@
 #include "otherlabs.h"
 
 #define DELAY_US    20000
-static int hook_id, hook_id_kbd;
+//static int hook_id, hook_id_kbd;
 
 int kbd_subscribe_int(void) {
 	game1.hook_id_kbd = KB_IRQ;
@@ -86,16 +86,15 @@ unsigned long kbd_handler() {
 }
 
 int kbd_test_scan() {
-	int r, ipc_status, irq_set, counter = 0;
+	int r, ipc_status, counter = 0;
 	message msg;
-
+/*
 	irq_set = kbd_subscribe_int();
 	if (irq_set == -1) {
 		printf("Error in kbd_subscribe_int()\n");
 		return 1;
-	}
+	}*/
 	unsigned long data;
-	//unsigned int bool = 0;
 
 	while (data != ESC_BREAK /*&& data != ESC_MAKE*/) {
 
@@ -106,7 +105,7 @@ int kbd_test_scan() {
 		if (is_ipc_notify(ipc_status)) { /*received notification*/
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /*hardware interrupt notification*/
-				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+				if (msg.NOTIFY_ARG & game1.irq_set_kbd) { /*subscribed interrupt*/
 					data = kbd_handler(); /*process it*/
 					break;
 				}
@@ -118,22 +117,23 @@ int kbd_test_scan() {
 
 		}
 	}
+	/*
 	if (kbd_unsubscribe_int() != OK) {
 		printf("Error in kbd_unsubscribe_int()\n");
 		return 1;
-	}
+	}*/
 	return 0;
 }
 
 int timer_test_int(unsigned long time) {
 	unsigned int counter = 0;
-	int r, ipc_status, irq_set;
+	int r, ipc_status;
 	message msg;
-	irq_set = timer_subscribe_int();
+	/*irq_set = timer_subscribe_int();
 	if (irq_set == -1) {
 		printf("Error in timer_subscribe_int()\n");
 		return 1;
-	}
+	}*/
 	if (time < 0) {
 		printf("Error: time can't be negative\n");
 		return 1;
@@ -148,7 +148,7 @@ int timer_test_int(unsigned long time) {
 		if (is_ipc_notify(ipc_status)) { /*received notification*/
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /*hardware interrupt notification*/
-				if (msg.NOTIFY_ARG & irq_set) { /*subscribed interrupt*/
+				if (msg.NOTIFY_ARG & game1.irq_set_timer) { /*subscribed interrupt*/
 					counter++; /*process it*/
 				}
 				break;
@@ -162,10 +162,11 @@ int timer_test_int(unsigned long time) {
 		}
 
 	}
+	/*
 	if (timer_unsubscribe_int() != OK) {
 		printf("Error in timer_unsubscribe_int()\n");
 		return 1;
-	}
+	}*/
 	return 0;
 
 }
