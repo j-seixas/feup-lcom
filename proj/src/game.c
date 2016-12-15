@@ -14,40 +14,40 @@
 #define GR_MODE		0x11A
 
 int draw_board() {
-	Bitmap* tron2p = loadBitmap(getImagePath("Game2p"));
-	drawBitmap(tron2p, 0, 0);
 
-	Bitmap* start = loadBitmap(getImagePath("Start"));
-	drawBitmap(start, 255, 460);
+	game1.board = loadBitmap(getImagePath("Game2p"));
+	drawBitmap(game1.board, 0, 0);
 
-	game1.irq_set_kbd = kbd_subscribe_int();
-	if (game1.irq_set_kbd == -1) {
-		printf("Error in kbd_subscribe_int()\n");
-		return 1;
-	}
-	game1.irq_set_timer = timer_subscribe_int();
-	if (game1.irq_set_timer == -1) {
-		printf("Error in timer_subscribe_int()\n");
-		return 1;
-	}
+	game1.start = loadBitmap(getImagePath("Start"));
+	drawBitmap(game1.start, 255, 460);
 
-	kbd_test_scan();
-	drawBitmap(tron2p, 0, 0);
+	//kbd_test_scan();
+	//unsub_game();
+	//sub_game();
+	printf(".........\n");
+	//drawBitmap(tron2p, 0, 0);
 	return 0;
 
 }
-int unsub_game() {
-	game1.irq_set_kbd = kbd_unsubscribe_int();
-	if (game1.irq_set_kbd == -1) {
-		printf("Error in kbd_unsubscribe_int()\n");
-		return 1;
+
+void draw_borders() {
+	unsigned long color = WHITE;
+	unsigned int x, y = YULIMIT;
+	for (x = XLLIMIT; x < XRLIMIT; x++) {
+		paint_pixel(x, y, color);
 	}
-	game1.irq_set_timer = timer_unsubscribe_int();
-	if (game1.irq_set_timer == -1) {
-		printf("Error in timer_unsubscribe_int()\n");
-		return 1;
+	y = YDLIMIT;
+	for (x = XLLIMIT; x < XRLIMIT; x++) {
+		paint_pixel(x, y, color);
 	}
-	return 0;
+	x = XLLIMIT;
+	for (y = YULIMIT; y < YDLIMIT; y++) {
+		paint_pixel(x, y, color);
+	}
+	x = XRLIMIT;
+	for (y = YULIMIT; y < YDLIMIT; y++) {
+		paint_pixel(x, y, color);
+	}
 }
 
 int init_players(unsigned int num_players) {
@@ -80,69 +80,69 @@ int init_players(unsigned int num_players) {
 int draw_player(unsigned int n, state st) {
 	if (n == 1) {
 		if (st == UP || st == DOWN) {
-			if (paint_pixel(game1.player1.x, game1.player1.y,
+			if (paint_pixelver(game1.player1.x, game1.player1.y,
 					game1.player1.color1) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x + 1, game1.player1.y,
+			if (paint_pixelver(game1.player1.x + 1, game1.player1.y,
 					game1.player1.color1) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x - 1, game1.player1.y,
+			if (paint_pixelver(game1.player1.x - 1, game1.player1.y,
 					game1.player1.color2) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x - 2, game1.player1.y,
+			if (paint_pixelver(game1.player1.x - 2, game1.player1.y,
 					game1.player1.color3) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x + 2, game1.player1.y,
+			if (paint_pixelver(game1.player1.x + 2, game1.player1.y,
 					game1.player1.color3) == 1)
 				return 1;
 		} else if (st == RIGHT || st == LEFT) {
-			if (paint_pixel(game1.player1.x, game1.player1.y,
+			if (paint_pixelver(game1.player1.x, game1.player1.y,
 					game1.player1.color1) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x, game1.player1.y + 1,
+			if (paint_pixelver(game1.player1.x, game1.player1.y + 1,
 					game1.player1.color1) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x, game1.player1.y - 1,
+			if (paint_pixelver(game1.player1.x, game1.player1.y - 1,
 					game1.player1.color2) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x, game1.player1.y - 2,
+			if (paint_pixelver(game1.player1.x, game1.player1.y - 2,
 					game1.player1.color3) == 1)
 				return 1;
-			if (paint_pixel(game1.player1.x, game1.player1.y + 2,
+			if (paint_pixelver(game1.player1.x, game1.player1.y + 2,
 					game1.player1.color3) == 1)
 				return 1;
 		}
 	} else if (n == 2) {
 		if (st == UP || st == DOWN) {
-			if (paint_pixel(game1.player2.x, game1.player2.y,
+			if (paint_pixelver(game1.player2.x, game1.player2.y,
 					game1.player2.color1) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x + 1, game1.player2.y,
+			if (paint_pixelver(game1.player2.x + 1, game1.player2.y,
 					game1.player2.color1) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x - 1, game1.player2.y,
+			if (paint_pixelver(game1.player2.x - 1, game1.player2.y,
 					game1.player2.color2) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x - 2, game1.player2.y,
+			if (paint_pixelver(game1.player2.x - 2, game1.player2.y,
 					game1.player2.color3) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x + 2, game1.player2.y,
+			if (paint_pixelver(game1.player2.x + 2, game1.player2.y,
 					game1.player2.color3) == 1)
 				return 2;
 		} else if (st == RIGHT || st == LEFT) {
-			if (paint_pixel(game1.player2.x, game1.player2.y,
+			if (paint_pixelver(game1.player2.x, game1.player2.y,
 					game1.player2.color1) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x, game1.player2.y + 1,
+			if (paint_pixelver(game1.player2.x, game1.player2.y + 1,
 					game1.player2.color1) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x, game1.player2.y - 1,
+			if (paint_pixelver(game1.player2.x, game1.player2.y - 1,
 					game1.player2.color2) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x, game1.player2.y - 2,
+			if (paint_pixelver(game1.player2.x, game1.player2.y - 2,
 					game1.player2.color3) == 1)
 				return 2;
-			if (paint_pixel(game1.player2.x, game1.player2.y + 2,
+			if (paint_pixelver(game1.player2.x, game1.player2.y + 2,
 					game1.player2.color3) == 1)
 				return 2;
 		}
@@ -306,13 +306,68 @@ int draw_handler(unsigned int num_players) {
 	return 0;
 }
 
+void state_handler(unsigned long data) {
+	if (data == ESC_BREAK) {
+		//printf(",,,,,,,,,,,\n");
+		switch (game1.gamest) {
+		case PLAYING:
+			//printf("Playing -> PAUSE\n");
+			game1.gamest = PAUSE;
+			break;
+		case PAUSE:
+		case FINISHED:
+			//printf("QUIT\n");
+			game1.gamest = QUIT;
+			break;
+		case INIT:
+			//printf("Init -> Playing\n");
+			drawBitmap(game1.board, 0, 0);
+			game1.gamest = PLAYING;
+			break;
+		default:
+			break;
+		}
+	} else if (data == SPACE_BREAK) {
+		//printf("-----\n");
+		switch (game1.gamest) {
+		case PLAYING:
+			//printf("Playing -> Pause\n");
+			game1.gamest = PAUSE;
+			break;
+		case INIT:
+			//printf("Init -> Playing\n");
+			drawBitmap(game1.board, 0, 0);
+			game1.gamest = PLAYING;
+			break;
+		case PAUSE:
+			//printf("Pause -> Playing\n");
+			game1.gamest = PLAYING;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 int playgame(unsigned int num_players) {
 	int r, ipc_status;
 	message msg;
 	unsigned int win, twobyteslong = 0;
 	unsigned long data;
-	while (data != ESC_BREAK) {
-
+	//printf("THERE\n");
+	game1.irq_set_timer = timer_subscribe_int();
+	if (game1.irq_set_timer == -1) {
+		printf("Error in timer_subscribe_int()\n");
+		return 1;
+	}
+	game1.irq_set_kbd = kbd_subscribe_int();
+	if (game1.irq_set_kbd == -1) {
+		printf("Error in kbd_subscribe_int()\n");
+		return 1;
+	}
+	kbd_handler();
+	while (game1.gamest != QUIT) {
+		//printf("22222222\n");
 		if (twobyteslong == 0) {
 			data = 0;
 		}
@@ -321,17 +376,21 @@ int playgame(unsigned int num_players) {
 			continue;
 		}
 		if (is_ipc_notify(ipc_status)) { /*received notification*/
+			//printf("AAAAAAAAAAAAA\n");
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE: /*hardware interrupt notification*/
 				if (msg.NOTIFY_ARG & game1.irq_set_timer) {
-					win = draw_handler(num_players);
-					if (win == 1 || win == 2) {
-						data = ESC_BREAK;
-						//vg_exit();
-						continue;
+					//printf("9999999999\n");
+					if (game1.gamest == PLAYING) {
+						win = draw_handler(num_players);
+						if (win == 1 || win == 2) {
+							game1.gamest = FINISHED;
+							continue;
+						}
 					}
 				}
-				if (msg.NOTIFY_ARG & game1.irq_set_kbd) { /*subscribed interrupt*/
+				if (msg.NOTIFY_ARG & game1.irq_set_kbd) {
+					//printf("11111111\n");
 					data |= kbd_handler();
 					if (data == TWO_BYTES) {
 						data = data << 8;
@@ -340,11 +399,16 @@ int playgame(unsigned int num_players) {
 					} else {
 						twobyteslong = 0;
 						int i;
-						for (i = 0; i < num_players; i++)
-							change_player_state(i, data);
+
+						if (game1.gamest == PLAYING) {
+							for (i = 0; i < num_players; i++)
+								change_player_state(i, data);
+						}
+						state_handler(data);
 					}
-					break;
+
 				}
+				break;
 			default:
 				break;
 			}
@@ -354,32 +418,18 @@ int playgame(unsigned int num_players) {
 		}
 
 	}
+	//printf("33333333333333\n");
 	return 0;
 }
 
 int start_multigame(unsigned int num_players) {
+	game1.gamest = INIT;
 	draw_board();
 	if (init_players(num_players) != OK) {
 		printf("Error in num of players\n");
 		return 1;
 	}
-	unsigned long color = WHITE;
-	unsigned int x, y = YULIMIT;
-	for (x = XLLIMIT; x < XRLIMIT; x++) {
-		paint_pixel(x, y, color);
-	}
-	y = YDLIMIT;
-	for (x = XLLIMIT; x < XRLIMIT; x++) {
-		paint_pixel(x, y, color);
-	}
-	x = XLLIMIT;
-	for (y = YULIMIT; y < YDLIMIT; y++) {
-		paint_pixel(x, y, color);
-	}
-	x = XRLIMIT;
-	for (y = YULIMIT; y < YDLIMIT; y++) {
-		paint_pixel(x, y, color);
-	}
+	draw_borders();
 
 	playgame(num_players);
 
