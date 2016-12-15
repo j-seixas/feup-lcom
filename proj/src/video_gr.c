@@ -75,6 +75,19 @@ int paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
 	char * add_it = video_mem;
 	add_it += (x + h_res * y) * bits_per_pixel / 8;
 	if (x < h_res && y < v_res && x >= 0 && y >= 0) {
+		*add_it = color;
+		add_it++;
+		*add_it = color >> 8;
+		return 0;
+	}
+	return -1;
+}
+
+int paint_pixelver(unsigned short x, unsigned short y, unsigned long color) {
+	char white = WHITE;
+	char * add_it = video_mem;
+	add_it += (x + h_res * y) * bits_per_pixel / 8;
+	if (x < h_res && y < v_res && x >= 0 && y >= 0) {
 		if (white == *add_it) {
 			return 1;
 		}

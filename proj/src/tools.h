@@ -1,6 +1,8 @@
 #ifndef __TOOLS_H
 #define __TOOLS_H
 
+#include "read_bitmap.h"
+
 #define BIT(n) (0x01<<(n))
 
 
@@ -50,6 +52,7 @@
 
 
 #define KB_IRQ 			 	1
+#define KEYBOARD_IRQ 	 	1
 #define MOUSE_IRQ 		  	12
 
 #define GR_MODE		0x11A
@@ -77,6 +80,7 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 
 #define ESC_BREAK			0x81
 #define ESC_MAKE			0x01
+#define SPACE_BREAK			0xB9
 #define A_MAKE				0x1E
 #define A_BREAK				0x9E
 #define W_MAKE				0x11
@@ -99,7 +103,7 @@ typedef enum {
 } state;
 
 typedef enum {
-	MENU, PLAYING, FINISHED
+	MENU, INIT, PLAYING, PAUSED, FINISHED, QUIT
 } game_state;
 
 typedef enum {
@@ -120,6 +124,7 @@ typedef struct {
 	game_state gamest;
 	player player1, player2;
 	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd;
+	Bitmap* start, * board;
 
 }game;
 

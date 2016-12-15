@@ -4,7 +4,7 @@
 #include "tools.h"
 
 int draw_board();
-int unsub_game();
+//int unsub_game();
 int init_players(unsigned int num_players);
 int draw_player(unsigned int n, state st);
 void change_player_state(unsigned int i, unsigned long data);
