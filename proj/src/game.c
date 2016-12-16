@@ -15,12 +15,12 @@
 
 int draw_board() {
 
-	game1.board = loadBitmap(getImagePath("Game2p"));
+	game1.board = loadBitmap(getImagePath("Game4p"));
 	drawBitmap(game1.board, 0, 0);
 
 	game1.start = loadBitmap(getImagePath("Start"));
 	drawBitmap(game1.start, 255, 460);
-
+	//paint_buff();
 	//kbd_test_scan();
 	//unsub_game();
 	//sub_game();
@@ -52,7 +52,26 @@ void draw_borders() {
 
 int init_players(unsigned int num_players) {
 	switch (num_players) {
-	case 3:
+	case 4: {
+		game1.player4.x = (XRLIMIT - XLLIMIT)/2;
+		game1.player4.y = YULIMIT - 100;
+		game1.player4.st = UP;
+		game1.player4.color1 = PINK1;
+		game1.player4.color2 = PINK1;
+		game1.player4.color3 = WHITE;
+		game1.player4.left = I_MAKE;
+		game1.player4.right = P_MAKE;
+	}
+	case 3: {
+		game1.player3.x = (XRLIMIT - XLLIMIT)/2;
+		game1.player3.y = YDLIMIT + 100;
+		game1.player3.st = DOWN;
+		game1.player3.color1 = GREEN1;
+		game1.player3.color2 = GREEN1;
+		game1.player3.color3 = WHITE;
+		game1.player3.left = V_MAKE;
+		game1.player3.right = N_MAKE;
+	}
 	case 2: {
 		game1.player2.x = XRLIMIT - 100;
 		game1.player2.y = YULIMIT + 400;
@@ -60,6 +79,8 @@ int init_players(unsigned int num_players) {
 		game1.player2.color1 = ORANGE1;
 		game1.player2.color2 = ORANGE2;
 		game1.player2.color3 = WHITE;
+		game1.player2.left = LARROW_MAKE;
+		game1.player2.right = RARROW_MAKE;
 	}
 	case 1: {
 		game1.player1.x = XLLIMIT + 100;
@@ -68,6 +89,8 @@ int init_players(unsigned int num_players) {
 		game1.player1.color1 = BLUE1;
 		game1.player1.color2 = BLUE2;
 		game1.player1.color3 = WHITE;
+		game1.player1.left = A_MAKE;
+		game1.player1.right = D_MAKE;
 		return 0;
 	}
 	default:
@@ -337,6 +360,7 @@ void state_handler(unsigned long data) {
 		case INIT:
 			//printf("Init -> Playing\n");
 			drawBitmap(game1.board, 0, 0);
+			//paint_buff();
 			game1.gamest = PLAYING;
 			break;
 		case PAUSE:
@@ -365,6 +389,7 @@ int playgame(unsigned int num_players) {
 		printf("Error in kbd_subscribe_int()\n");
 		return 1;
 	}
+	//sub_game();
 	kbd_handler();
 	while (game1.gamest != QUIT) {
 		//printf("22222222\n");

@@ -11,6 +11,7 @@
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
+static char *video_dbuff;
 
 static unsigned h_res; /* Horizontal screen resolution in pixels */
 static unsigned v_res; /* Vertical screen resolution in pixels */
@@ -52,7 +53,13 @@ void *vg_init(unsigned short mode) {
 	video_mem = vm_map_phys(SELF, (void *) mr.mr_base, vram_size);
 	if (video_mem == MAP_FAILED)
 		panic("couldn’t map video memory");
+
+	video_dbuff = (unsigned char *) malloc(vram_size);
 	return video_mem;
+}
+
+void paint_buff(){
+	 memcpy(video_mem, video_dbuff, v_res * h_res * bits_per_pixel);
 }
 
 int vg_exit() {
@@ -105,4 +112,8 @@ int paint_pixelver(unsigned short x, unsigned short y, unsigned long color) {
 
 void* vg_vd_get_vmem() {
 	return video_mem;
+}
+
+void* vg_vd_get_vbuff() {
+	return video_dbuff;
 }

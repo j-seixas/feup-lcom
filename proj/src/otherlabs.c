@@ -66,14 +66,14 @@ int timer_unsubscribe_int() {
 
 
 int sub_game() {
-	game1.irq_set_kbd = kbd_subscribe_int();
-	if (game1.irq_set_kbd == -1) {
-		printf("Error in kbd_subscribe_int()\n");
-		return 1;
-	}
 	game1.irq_set_timer = timer_subscribe_int();
 	if (game1.irq_set_timer == -1) {
 		printf("Error in timer_subscribe_int()\n");
+		return 1;
+	}
+	game1.irq_set_kbd = kbd_subscribe_int();
+	if (game1.irq_set_kbd == -1) {
+		printf("Error in kbd_subscribe_int()\n");
 		return 1;
 	}
 	return 0;

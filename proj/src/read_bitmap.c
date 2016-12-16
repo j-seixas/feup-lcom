@@ -130,12 +130,15 @@ void drawBitmap(Bitmap* bmp, int x, int y) {
             continue;
 
         bufferStartPos = vg_vd_get_vmem();
+        //bufferStartPos = vg_vd_get_vbuff();
         bufferStartPos += x * 2 + pos * HRES * 2;
 
         imgStartPos = bmp->bitmapData + xCorrection * 2 + i * width * 2;
 
         memcpy(bufferStartPos, imgStartPos, drawWidth * 2);
+
     }
+
 }
 
 void deleteBitmap(Bitmap* bmp) {
