@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	 */
 	vg_init(GR_MODE);
 
-	start_multigame(2);
+	start_multigame(3);
 
 
 	//kbd_test_scan();
