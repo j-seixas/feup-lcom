@@ -53,9 +53,10 @@ void draw_borders() {
 int init_players(unsigned int num_players) {
 	switch (num_players) {
 	case 4: {
-		game1.player4.x = (XRLIMIT - XLLIMIT)/2;
-		game1.player4.y = YULIMIT - 100;
-		game1.player4.st = UP;
+		game1.player4.x = 650; //(XRLIMIT - XLLIMIT) / 2;
+		//printf("%d\n", game1.player4.x);
+		game1.player4.y = YULIMIT + 100;
+		game1.player4.st = DOWN;
 		game1.player4.color1 = PINK1;
 		game1.player4.color2 = PINK1;
 		game1.player4.color3 = WHITE;
@@ -63,9 +64,10 @@ int init_players(unsigned int num_players) {
 		game1.player4.right = P_MAKE;
 	}
 	case 3: {
-		game1.player3.x = (XRLIMIT - XLLIMIT)/2;
-		game1.player3.y = YDLIMIT + 100;
-		game1.player3.st = DOWN;
+		game1.player3.x = 650; // (XRLIMIT - XLLIMIT) / 2;
+		//printf("%d\n", game1.player3.x);
+		game1.player3.y = YDLIMIT - 100;
+		game1.player3.st = UP;
 		game1.player3.color1 = GREEN1;
 		game1.player3.color2 = GREEN1;
 		game1.player3.color3 = WHITE;
@@ -100,190 +102,123 @@ int init_players(unsigned int num_players) {
 	return 1;
 }
 
-int draw_player(unsigned int n, state st) {
-	if (n == 1) {
-		if (st == UP || st == DOWN) {
-			if (paint_pixelver(game1.player1.x, game1.player1.y,
-					game1.player1.color1) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x + 1, game1.player1.y,
-					game1.player1.color1) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x - 1, game1.player1.y,
-					game1.player1.color2) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x - 2, game1.player1.y,
-					game1.player1.color3) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x + 2, game1.player1.y,
-					game1.player1.color3) == 1)
-				return 1;
-		} else if (st == RIGHT || st == LEFT) {
-			if (paint_pixelver(game1.player1.x, game1.player1.y,
-					game1.player1.color1) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x, game1.player1.y + 1,
-					game1.player1.color1) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x, game1.player1.y - 1,
-					game1.player1.color2) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x, game1.player1.y - 2,
-					game1.player1.color3) == 1)
-				return 1;
-			if (paint_pixelver(game1.player1.x, game1.player1.y + 2,
-					game1.player1.color3) == 1)
-				return 1;
-		}
-	} else if (n == 2) {
-		if (st == UP || st == DOWN) {
-			if (paint_pixelver(game1.player2.x, game1.player2.y,
-					game1.player2.color1) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x + 1, game1.player2.y,
-					game1.player2.color1) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x - 1, game1.player2.y,
-					game1.player2.color2) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x - 2, game1.player2.y,
-					game1.player2.color3) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x + 2, game1.player2.y,
-					game1.player2.color3) == 1)
-				return 2;
-		} else if (st == RIGHT || st == LEFT) {
-			if (paint_pixelver(game1.player2.x, game1.player2.y,
-					game1.player2.color1) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x, game1.player2.y + 1,
-					game1.player2.color1) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x, game1.player2.y - 1,
-					game1.player2.color2) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x, game1.player2.y - 2,
-					game1.player2.color3) == 1)
-				return 2;
-			if (paint_pixelver(game1.player2.x, game1.player2.y + 2,
-					game1.player2.color3) == 1)
-				return 2;
-		}
+int draw_player(player *p, state st) {
+	if (st == UP || st == DOWN) {
+		if (paint_pixelver(p->x, p->y, p->color1) == 1)
+			return 1;
+		if (paint_pixelver(p->x + 1, p->y, p->color1) == 1)
+			return 1;
+		if (paint_pixelver(p->x - 1, p->y, p->color2) == 1)
+			return 1;
+		if (paint_pixelver(p->x - 2, p->y, p->color3) == 1)
+			return 1;
+		if (paint_pixelver(p->x + 2, p->y, p->color3) == 1)
+			return 1;
+	} else if (st == RIGHT || st == LEFT) {
+		if (paint_pixelver(p->x, p->y, p->color1) == 1)
+			return 1;
+		if (paint_pixelver(p->x, p->y + 1, p->color1) == 1)
+			return 1;
+		if (paint_pixelver(p->x, p->y - 1, p->color2) == 1)
+			return 1;
+		if (paint_pixelver(p->x, p->y - 2, p->color3) == 1)
+			return 1;
+		if (paint_pixelver(p->x, p->y + 2, p->color3) == 1)
+			return 1;
 	}
 }
 
-void change_player_state(unsigned int i, unsigned long data) {
-	if (i == 0) {
-		if (data == D_MAKE) {
-			switch (game1.player1.st) {
-			case UP:
-				game1.player1.st = RIGHT;
-				game1.player1.x += 2;
-				game1.player1.y += 2;
-				break;
-			case RIGHT:
-				game1.player1.st = DOWN;
-				game1.player1.y += 2;
-				game1.player1.x -= 2;
-				break;
-			case DOWN:
-				game1.player1.st = LEFT;
-				game1.player1.x -= 2;
-				game1.player1.y -= 2;
-				break;
-			case LEFT:
-				game1.player1.st = UP;
-				game1.player1.y -= 2;
-				game1.player1.x += 2;
-				break;
-			default:
-				break;
-			}
-		} else if (data == A_MAKE) {
-			switch (game1.player1.st) {
-			case UP:
-				game1.player1.st = LEFT;
-				game1.player1.x -= 2;
-				game1.player1.y += 2;
-				break;
-			case RIGHT:
-				game1.player1.st = UP;
-				game1.player1.y -= 2;
-				game1.player1.x -= 2;
-				break;
-			case DOWN:
-				game1.player1.st = RIGHT;
-				game1.player1.x += 2;
-				game1.player1.y -= 2;
-				break;
-			case LEFT:
-				game1.player1.st = DOWN;
-				game1.player1.y += 2;
-				game1.player1.x += 2;
-				break;
-			default:
-				break;
-			}
+
+void change_plst_handler(unsigned int num_players, unsigned long data) {
+	switch (num_players) {
+	case 4:
+		change_player_state(&game1.player4, data);
+	case 3:
+		change_player_state(&game1.player3, data);
+	case 2:
+		change_player_state(&game1.player2, data);
+	case 1:
+		change_player_state(&game1.player1, data);
+	default:
+		break;
+	}
+}
+
+void change_player_state(player *p, unsigned long data) {
+	if (data == p->right) {
+		switch (p->st) {
+		case UP:
+			p->st = RIGHT;
+			p->x += 2;
+			p->y += 2;
+			break;
+		case RIGHT:
+			p->st = DOWN;
+			p->y += 2;
+			p->x -= 2;
+			break;
+		case DOWN:
+			p->st = LEFT;
+			p->x -= 2;
+			p->y -= 2;
+			break;
+		case LEFT:
+			p->st = UP;
+			p->y -= 2;
+			p->x += 2;
+			break;
+		default:
+			break;
 		}
-	} else if (i == 1) {
-		if (data == RARROW_MAKE) {
-			switch (game1.player2.st) {
-			case UP:
-				game1.player2.st = RIGHT;
-				game1.player2.x += 2;
-				game1.player2.y += 2;
-				break;
-			case RIGHT:
-				game1.player2.st = DOWN;
-				game1.player2.y += 2;
-				game1.player2.x -= 2;
-				break;
-			case DOWN:
-				game1.player2.st = LEFT;
-				game1.player2.x -= 2;
-				game1.player2.y -= 2;
-				break;
-			case LEFT:
-				game1.player2.st = UP;
-				game1.player2.y -= 2;
-				game1.player2.x += 2;
-				break;
-			default:
-				break;
-			}
-		} else if (data == LARROW_MAKE) {
-			switch (game1.player2.st) {
-			case UP:
-				game1.player2.st = LEFT;
-				game1.player2.x -= 2;
-				game1.player2.y += 2;
-				break;
-			case RIGHT:
-				game1.player2.st = UP;
-				game1.player2.y -= 2;
-				game1.player2.x -= 2;
-				break;
-			case DOWN:
-				game1.player2.st = RIGHT;
-				game1.player2.x += 2;
-				game1.player2.y -= 2;
-				break;
-			case LEFT:
-				game1.player2.st = DOWN;
-				game1.player2.y += 2;
-				game1.player2.x += 2;
-				break;
-			default:
-				break;
-			}
+	} else if (data == p->left) {
+		switch (p->st) {
+		case UP:
+			p->st = LEFT;
+			p->x -= 2;
+			p->y += 2;
+			break;
+		case RIGHT:
+			p->st = UP;
+			p->y -= 2;
+			p->x -= 2;
+			break;
+		case DOWN:
+			p->st = RIGHT;
+			p->x += 2;
+			p->y -= 2;
+			break;
+		case LEFT:
+			p->st = DOWN;
+			p->y += 2;
+			p->x += 2;
+			break;
+		default:
+			break;
 		}
 	}
+
 }
 
 void update_player(unsigned int num_players) {
 	switch (num_players) {
 	case 4:
+		if (game1.player4.st == LEFT)
+			game1.player4.x--;
+		else if (game1.player4.st == RIGHT)
+			game1.player4.x++;
+		else if (game1.player4.st == UP)
+			game1.player4.y--;
+		else if (game1.player4.st == DOWN)
+			game1.player4.y++;
 	case 3:
+		if (game1.player3.st == LEFT)
+			game1.player3.x--;
+		else if (game1.player3.st == RIGHT)
+			game1.player3.x++;
+		else if (game1.player3.st == UP)
+			game1.player3.y--;
+		else if (game1.player3.st == DOWN)
+			game1.player3.y++;
 	case 2:
 		if (game1.player2.st == LEFT)
 			game1.player2.x--;
@@ -314,12 +249,16 @@ int draw_handler(unsigned int num_players) {
 		update_player(num_players);
 		switch (num_players) {
 		case 4:
+			if (draw_player(&game1.player4, game1.player4.st) == 1)
+				return 4;
 		case 3:
+			if (draw_player(&game1.player3, game1.player3.st) == 1)
+				return 3;
 		case 2:
-			if (draw_player(2, game1.player2.st) == 2)
+			if (draw_player(&game1.player2, game1.player2.st) == 1)
 				return 2;
 		case 1:
-			if (draw_player(1, game1.player1.st) == 1)
+			if (draw_player(&game1.player1, game1.player1.st) == 1)
 				return 1;
 		default:
 			break;
@@ -329,21 +268,17 @@ int draw_handler(unsigned int num_players) {
 	return 0;
 }
 
-void state_handler(unsigned long data) {
+void state_handler(unsigned int num_players, unsigned long data) {
 	if (data == ESC_BREAK) {
-		//printf(",,,,,,,,,,,\n");
 		switch (game1.gamest) {
 		case PLAYING:
-			//printf("Playing -> PAUSE\n");
 			game1.gamest = PAUSE;
 			break;
 		case PAUSE:
 		case FINISHED:
-			//printf("QUIT\n");
 			game1.gamest = QUIT;
 			break;
 		case INIT:
-			//printf("Init -> Playing\n");
 			drawBitmap(game1.board, 0, 0);
 			game1.gamest = PLAYING;
 			break;
@@ -351,21 +286,23 @@ void state_handler(unsigned long data) {
 			break;
 		}
 	} else if (data == SPACE_BREAK) {
-		//printf("-----\n");
 		switch (game1.gamest) {
 		case PLAYING:
-			//printf("Playing -> Pause\n");
 			game1.gamest = PAUSE;
 			break;
 		case INIT:
-			//printf("Init -> Playing\n");
 			drawBitmap(game1.board, 0, 0);
 			//paint_buff();
 			game1.gamest = PLAYING;
 			break;
 		case PAUSE:
-			//printf("Pause -> Playing\n");
 			game1.gamest = PLAYING;
+			break;
+		case FINISHED:
+			init_players(num_players);
+			game1.gamest = INIT;
+			drawBitmap(game1.board, 0, 0);
+			drawBitmap(game1.start , 255, 460);
 			break;
 		default:
 			break;
@@ -408,7 +345,7 @@ int playgame(unsigned int num_players) {
 					//printf("9999999999\n");
 					if (game1.gamest == PLAYING) {
 						win = draw_handler(num_players);
-						if (win == 1 || win == 2) {
+						if (win == 1 || win == 2 || win == 3 || win == 4) {
 							game1.gamest = FINISHED;
 							continue;
 						}
@@ -426,10 +363,9 @@ int playgame(unsigned int num_players) {
 						int i;
 
 						if (game1.gamest == PLAYING) {
-							for (i = 0; i < num_players; i++)
-								change_player_state(i, data);
+							change_plst_handler(num_players, data);
 						}
-						state_handler(data);
+						state_handler(num_players, data);
 					}
 
 				}
