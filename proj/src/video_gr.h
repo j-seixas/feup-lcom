@@ -28,10 +28,11 @@ void *vg_init(unsigned short mode);
 int vg_exit(void);
 
  /** @} end of video_gr */
-
+void paint_buff();
 int paint_pixel(unsigned short x, unsigned short y, unsigned long color);
 int paint_pixelver(unsigned short x, unsigned short y, unsigned long color);
 
 void* vg_vd_get_vmem();
+void* vg_vd_get_vbuff();
  
 #endif /* __VIDEO_GR_H */

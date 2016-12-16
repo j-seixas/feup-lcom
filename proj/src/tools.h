@@ -74,6 +74,8 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define ORANGE2		rgb(255,230,77);
 #define BLUE1		rgb(111,195,223);
 #define BLUE2		rgb(230,255,255);
+#define GREEN1		rgb(8,254,20);
+#define PINK1		rgb(255,54,155);
 #define WHITE		rgb(255,255,255);
 #define BLACK		rgb(0,0,0);
 
@@ -97,6 +99,10 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define DARROW_BREAK		0xE0D0
 #define RARROW_MAKE			0xE04D
 #define RARROW_BREAK		0xE0CD
+#define V_MAKE				0x2F
+#define N_MAKE				0x31
+#define I_MAKE				0x17
+#define P_MAKE				0x19
 
 typedef enum {
 	LEFT, RIGHT, UP, DOWN, STOP
@@ -115,14 +121,14 @@ typedef struct{
 	unsigned int x, y;
 	state st;
 	unsigned int wins;
-	unsigned long color1, color2, color3;
+	unsigned long color1, color2, color3, left, right;
 
 } player;
 
 
 typedef struct {
 	game_state gamest;
-	player player1, player2;
+	player player1, player2, player3, player4;
 	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd;
 	Bitmap* start, * board;
 
