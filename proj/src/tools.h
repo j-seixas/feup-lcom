@@ -49,6 +49,9 @@
 #define MOUSE_SEND			0xD4
 #define MOUSE_ENB			0xF4
 #define MOUSE_CONF			0xE9
+#define KB_ACK              0xFA
+#define KBC_CMD_REG			0x64
+#define KBD_DATA_BUF        0x60
 
 
 #define KB_IRQ 			 	1
@@ -64,6 +67,22 @@
 #define XRLIMIT		1250
 #define YULIMIT		200
 #define YDLIMIT		1000
+#define MENU1U		347
+#define MENU1D		435
+#define MENU1L		221
+#define MENU1R		578
+#define MENU2U		347
+#define MENU2D		435
+#define MENU2L		715
+#define MENU2R		1071
+#define MENU3U		526
+#define MENU3D		614
+#define MENU3L		221
+#define MENU3R		578
+#define MENU4U		526
+#define MENU4D		614
+#define MENU4L		715
+#define MENU4R		1071
 
 
 /*!
@@ -80,6 +99,10 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define BLACK		rgb(0,0,0);
 
 
+
+/*!
+ *  SCANCODES
+ */
 #define ESC_BREAK			0x81
 #define ESC_MAKE			0x01
 #define SPACE_BREAK			0xB9
@@ -104,6 +127,8 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define I_MAKE				0x17
 #define P_MAKE				0x19
 
+
+
 typedef enum {
 	LEFT, RIGHT, UP, DOWN, STOP
 } state;
@@ -114,7 +139,7 @@ typedef enum {
 
 
 typedef enum {
-	INIT, DRAW, COMP
+	DRAW, COMP
 } mouse_state_t;
 
 typedef enum {
@@ -131,7 +156,7 @@ typedef struct{
 
 typedef struct{
 	unsigned int x, y;
-	mouse_state_st st;
+	mouse_state_t st;
 	ev_type_t type;
 } mouse_t;
 

@@ -18,8 +18,8 @@ int main(int argc, char *argv[]) {
 	 */
 	vg_init(GR_MODE);
 
-	start_multigame(1);
 
+	playgame();
 
 	//kbd_test_scan();
 

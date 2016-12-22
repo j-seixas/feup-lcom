@@ -58,8 +58,18 @@ void *vg_init(unsigned short mode) {
 	return video_mem;
 }
 
+
+void* vg_vd_get_vmem() {
+	return video_mem;
+}
+
+void* vg_vd_get_vbuff() {
+	return video_dbuff;
+}
+
 void paint_buff(){
-	 memcpy(video_mem, video_dbuff, v_res * h_res * bits_per_pixel);
+	 memcpy(vg_vd_get_vmem(), vg_vd_get_vbuff(), v_res * h_res * bits_per_pixel);
+	 printf("BUFFFFFFFFFFFFER\n");
 }
 
 int vg_exit() {
@@ -110,10 +120,4 @@ int paint_pixelver(unsigned short x, unsigned short y, unsigned long color) {
 	return -1;
 }
 
-void* vg_vd_get_vmem() {
-	return video_mem;
-}
 
-void* vg_vd_get_vbuff() {
-	return video_dbuff;
-}

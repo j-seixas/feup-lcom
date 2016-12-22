@@ -10,8 +10,8 @@
 
 int kbd_subscribe_int(void) {
 	game1.hook_id_kbd = KB_IRQ;
-	if (sys_irqsetpolicy(KEYBOARD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &game1.hook_id_kbd)
-			!= OK) {
+	if (sys_irqsetpolicy(KEYBOARD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE,
+			&game1.hook_id_kbd) != OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
@@ -38,7 +38,8 @@ int kbd_unsubscribe_int() {
 
 int timer_subscribe_int(void) {
 	game1.hook_id_timer = TM0_IRQSET;
-	if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &game1.hook_id_timer) != OK) {
+	if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &game1.hook_id_timer)
+			!= OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
@@ -65,13 +66,13 @@ int timer_unsubscribe_int() {
 }
 
 int mouse_subscribe_int(void) {
-	hook_id_mouse = MOUSE_IRQ;
+	game1.hook_id_mouse = MOUSE_IRQ;
 	if (sys_irqsetpolicy(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE,
-			&hook_id_mouse) != OK) {
+			&game1.hook_id_mouse) != OK) {
 		printf("Error in sys_irqsetpolicy()\n");
 		return -1;
 	}
-	if (sys_irqenable(&hook_id_mouse) != OK) {
+	if (sys_irqenable(&game1.hook_id_mouse) != OK) {
 		printf("Error in sys_irqenable()\n");
 		return -1;
 	}
@@ -80,11 +81,11 @@ int mouse_subscribe_int(void) {
 }
 
 int mouse_unsubscribe_int() {
-	if (sys_irqdisable(&hook_id_mouse) != OK) {
+	if (sys_irqdisable(&game1.hook_id_mouse) != OK) {
 		printf("Error in sys_irqdisable()\n");
 		return 1;
 	}
-	if (sys_irqrmpolicy(&hook_id_mouse) != OK) {
+	if (sys_irqrmpolicy(&game1.hook_id_mouse) != OK) {
 		printf("Error in sys_irqrmpolicy()\n");
 		return 1;
 	}
@@ -92,7 +93,6 @@ int mouse_unsubscribe_int() {
 	return 0;
 
 }
-
 
 int sub_game() {
 	game1.irq_set_timer = timer_subscribe_int();
@@ -118,9 +118,14 @@ int unsub_game() {
 		printf("Error in timer_unsubscribe_int()\n");
 		return 1;
 	}
+	game1.irq_set_mouse = mouse_unsubscribe_int();
+	if (game1.irq_set_mouse == -1) {
+		printf("Error in timer_unsubscribe_int()\n");
+		return 1;
+	}
+
 	return 0;
 }
-
 
 unsigned long kbd_handler() {
 	unsigned long stat, data;
@@ -141,6 +146,61 @@ unsigned long kbd_handler() {
 		var--;
 	}
 	return -1;
+}
+
+int kbd_send_command(unsigned long cmd) {
+	unsigned long stat, data;
+	int var = 6;
+
+	while (var > 0) {
+		sys_inb(STATUS_PORT, &stat);
+		//assuming it returns OK
+		//loop while 8042 input buffer is not empty
+		if ((stat & IBF) == 0) {
+			sys_outb(KBC_CMD_REG, cmd);
+			return 0;
+		}
+		tickdelay(micros_to_ticks(DELAY_US));
+		var--;
+	}
+	return -1;
+}
+
+int kbd_send(unsigned long cmd) {
+	unsigned long stat, data;
+	int var = 6;
+
+	while (var > 0) {
+		sys_inb(STATUS_PORT, &stat);
+		//assuming it returns OK
+		//loop while 8042 input buffer is not empty
+		if ((stat & IBF) == 0) {
+			sys_outb(KBD_DATA_BUF, cmd);
+			return 0;
+		}
+		tickdelay(micros_to_ticks(DELAY_US));
+		var--;
+	}
+	return -1;
+}
+
+int mouse_send(unsigned long cmd) {
+	int count = 5;
+	while (count > 0) {
+		unsigned long data1, data2;
+		if (kbd_send_command(MOUSE_SEND) == 0) {
+			data1 = kbd_handler();
+			if (kbd_send(cmd) == 0) {
+				data2 = kbd_handler();
+				if (data2 == KB_ACK)
+					return 0;
+			}
+		}
+		count--;
+	}
+
+	return 1;
+
 }
 //
 //int kbd_test_scan() {
