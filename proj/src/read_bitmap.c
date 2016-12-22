@@ -89,7 +89,7 @@ Bitmap* loadBitmap(const char* filename) {
     return bmp;
 }
 
-void drawBitmap(Bitmap* bmp, int x, int y) {
+void drawBitmap(Bitmap* bmp, int x, int y, int doublebf) {
     if (bmp == NULL)
         return;
 
@@ -97,11 +97,6 @@ void drawBitmap(Bitmap* bmp, int x, int y) {
     int drawWidth = width;
     int height = bmp->bitmapInfoHeader.height;
 
-/*
-    if (alignment == ALIGN_CENTER)
-        x -= width / 2;
-    else if (alignment == ALIGN_RIGHT)
-        x -= width;*/
 
     if (x + width < 0 || x > HRES || y + height < 0
             || y > VRES)
@@ -129,8 +124,11 @@ void drawBitmap(Bitmap* bmp, int x, int y) {
         if (pos < 0 || pos >= VRES)
             continue;
 
-        bufferStartPos = vg_vd_get_vmem();
-        //bufferStartPos = vg_vd_get_vbuff();
+        if(doublebf)
+        	bufferStartPos = vg_vd_get_vbuff();
+        else
+        	bufferStartPos = vg_vd_get_vmem();
+
         bufferStartPos += x * 2 + pos * HRES * 2;
 
         imgStartPos = bmp->bitmapData + xCorrection * 2 + i * width * 2;

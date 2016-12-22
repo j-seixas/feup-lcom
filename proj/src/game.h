@@ -14,7 +14,7 @@ void change_player_state(player *p, unsigned long data);
 void update_player(unsigned int num_players);
 int draw_handler(unsigned int num_players);
 void state_handler(unsigned int num_players, unsigned long data);
-int playgame(unsigned int num_players);
+int playgame();
 int start_multigame(unsigned int num_players);
 int test_square(unsigned short x, unsigned short y, unsigned short size,
 		unsigned long color) ;
