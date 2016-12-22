@@ -64,6 +64,35 @@ int timer_unsubscribe_int() {
 	return 0;
 }
 
+int mouse_subscribe_int(void) {
+	hook_id_mouse = MOUSE_IRQ;
+	if (sys_irqsetpolicy(MOUSE_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE,
+			&hook_id_mouse) != OK) {
+		printf("Error in sys_irqsetpolicy()\n");
+		return -1;
+	}
+	if (sys_irqenable(&hook_id_mouse) != OK) {
+		printf("Error in sys_irqenable()\n");
+		return -1;
+	}
+	return BIT(MOUSE_IRQ);
+
+}
+
+int mouse_unsubscribe_int() {
+	if (sys_irqdisable(&hook_id_mouse) != OK) {
+		printf("Error in sys_irqdisable()\n");
+		return 1;
+	}
+	if (sys_irqrmpolicy(&hook_id_mouse) != OK) {
+		printf("Error in sys_irqrmpolicy()\n");
+		return 1;
+	}
+
+	return 0;
+
+}
+
 
 int sub_game() {
 	game1.irq_set_timer = timer_subscribe_int();

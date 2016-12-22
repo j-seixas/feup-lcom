@@ -112,10 +112,14 @@ typedef enum {
 	MENU, INIT, PLAYING, PAUSED, FINISHED, QUIT
 } game_state;
 
-typedef enum {
-	PRESSED, RELEASED
-} keys;
 
+typedef enum {
+	INIT, DRAW, COMP
+} mouse_state_t;
+
+typedef enum {
+	LDOWN, LUP
+} ev_type_t;
 
 typedef struct{
 	unsigned int x, y;
@@ -125,16 +129,24 @@ typedef struct{
 
 } player;
 
+typedef struct{
+	unsigned int x, y;
+	mouse_state_st st;
+	ev_type_t type;
+} mouse_t;
+
 
 typedef struct {
 	game_state gamest;
 	player player1, player2, player3, player4;
-	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd;
-	Bitmap* start, * board;
+	mouse_t mouse1;
+	unsigned int num_players;
+	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse;
+	Bitmap* start, * board, *mouse, *menu;
 
-}game;
+}game_t;
 
-static game game1;
+static game_t game1;
 
 
 
