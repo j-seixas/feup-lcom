@@ -139,24 +139,19 @@ typedef enum {
 
 
 typedef enum {
-	DRAW, COMP
-} mouse_state_t;
-
-typedef enum {
 	LDOWN, LUP
 } ev_type_t;
 
 typedef struct{
 	unsigned int x, y;
 	state st;
-	unsigned int wins;
+	unsigned int wins, lost;
 	unsigned long color1, color2, color3, left, right;
 
 } player;
 
 typedef struct{
 	unsigned int x, y;
-	mouse_state_t st;
 	ev_type_t type;
 } mouse_t;
 
@@ -165,7 +160,7 @@ typedef struct {
 	game_state gamest;
 	player player1, player2, player3, player4;
 	mouse_t mouse1;
-	unsigned int num_players;
+	unsigned int num_players, lost;
 	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse;
 	Bitmap* start, * board, *mouse, *menu;
 
