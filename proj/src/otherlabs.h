@@ -7,7 +7,7 @@ unsigned long kbd_handler();
 //int kbd_test_scan();
 
 
-int sub_game();
+//int sub_game();
 int unsub_game();
 
 
@@ -46,5 +46,19 @@ int timer_unsubscribe_int();
  */
 //int timer_test_int(unsigned long time);
 
+
+int mouse_subscribe_int(void);
+
+int mouse_unsubscribe_int();
+
+
+int unsub_game();
+
+
+int kbd_send_command(unsigned long cmd);
+
+int kbd_send(unsigned long cmd);
+
+int mouse_send(unsigned long cmd);
 
 #endif /* __TIMER_H */

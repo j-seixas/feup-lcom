@@ -69,7 +69,6 @@ void* vg_vd_get_vbuff() {
 
 void paint_buff(){
 	 memcpy(vg_vd_get_vmem(), vg_vd_get_vbuff(), v_res * h_res * bits_per_pixel);
-	 printf("BUFFFFFFFFFFFFER\n");
 }
 
 int vg_exit() {
@@ -88,7 +87,6 @@ int vg_exit() {
 }
 
 int paint_pixel(unsigned short x, unsigned short y, unsigned long color) {
-	char white = WHITE;
 	char * add_it = video_mem;
 	add_it += (x + h_res * y) * bits_per_pixel / 8;
 	if (x < h_res && y < v_res && x >= 0 && y >= 0) {
@@ -110,10 +108,6 @@ int paint_pixelver(unsigned short x, unsigned short y, unsigned long color) {
 		}
 		*add_it = color;
 		add_it++;
-		white = white >> 8;
-		if (white == *add_it) {
-			return 1;
-		}
 		*add_it = color >> 8;
 		return 0;
 	}
