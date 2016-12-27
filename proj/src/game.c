@@ -28,6 +28,7 @@ void loadBit() {
 	game1.player3.win = loadBitmap(getImagePath("win3"));
 	game1.player4.win = loadBitmap(getImagePath("win4"));
 	game1.pause = loadBitmap(getImagePath("Pause1"));
+	game1.draw = loadBitmap(getImagePath("draw"));
 }
 
 int draw_board(unsigned int num_players) {
@@ -101,8 +102,6 @@ int init_players(unsigned int num_players) {
 		game1.player4.color1 = PINK1;
 		game1.player4.color2 = PINK1;
 		game1.player4.color3 = WHITE;
-		game1.player4.left = I_MAKE;
-		game1.player4.right = P_MAKE;
 		game1.player4.lost = 0;
 	}
 	case 3: {
@@ -112,8 +111,8 @@ int init_players(unsigned int num_players) {
 		game1.player3.color1 = GREEN1;
 		game1.player3.color2 = GREEN1;
 		game1.player3.color3 = WHITE;
-		game1.player3.left = V_MAKE;
-		game1.player3.right = N_MAKE;
+		game1.player3.left = B_MAKE;
+		game1.player3.right = M_MAKE;
 		game1.player3.lost = 0;
 	}
 	case 2: {
@@ -147,29 +146,31 @@ int init_players(unsigned int num_players) {
 }
 
 int draw_player(player_t *p, state_t st) {
+	int lost = 0;
 	if (st == UP || st == DOWN) {
 		if (paint_pixelver(p->x, p->y, p->color1) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x + 1, p->y, p->color1) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x - 1, p->y, p->color2) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x - 2, p->y, p->color3) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x + 2, p->y, p->color3) == 1)
-			return 1;
+			lost = 1;
 	} else if (st == RIGHT || st == LEFT) {
 		if (paint_pixelver(p->x, p->y, p->color1) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x, p->y + 1, p->color1) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x, p->y - 1, p->color2) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x, p->y - 2, p->color3) == 1)
-			return 1;
+			lost = 1;
 		if (paint_pixelver(p->x, p->y + 2, p->color3) == 1)
-			return 1;
+			lost = 1;
 	}
+	return lost;
 }
 
 void change_plst_handler(unsigned int num_players, unsigned long data) {
@@ -352,10 +353,6 @@ void state_handler(unsigned int num_players, unsigned long data) {
 			drawBitmap(game1.pause, 0, 0, 0);
 			game1.gamest = PAUSE;
 			break;
-		case MENU:
-			game1.num_players = 4;
-			start_multigame(4);
-			break;
 		case INIT:
 			draw_board(num_players);
 			draw_borders();
@@ -367,13 +364,27 @@ void state_handler(unsigned int num_players, unsigned long data) {
 			break;
 		case FINISHED:
 			init_players(num_players);
-			game1.gamest = INIT;
+			game1.gamest = PLAYING;
 			game1.lost = 0;
 			draw_board(num_players);
-			drawBitmap(game1.start, 255, 460, 0);
 			break;
 		default:
 			break;
+		}
+	} else if (data == NUM2_BREAK) {
+		if (game1.gamest == MENU) {
+			game1.num_players = 2;
+			start_multigame(2);
+		}
+	} else if (data == NUM3_BREAK) {
+		if (game1.gamest == MENU) {
+			game1.num_players = 3;
+			start_multigame(3);
+		}
+	} else if (data == NUM4_BREAK) {
+		if (game1.gamest == MENU) {
+			game1.num_players = 4;
+			start_multigame(4);
 		}
 	}
 }
@@ -560,12 +571,56 @@ void mouse_st_handler(player_t *p, unsigned long mouse_packet[3]) {
 
 }
 
+void check_winner() {
+
+	switch (game1.num_players) {
+	case 4:
+		if (game1.player1.lost) {
+			if (game1.player2.lost) {
+				if (game1.player4.lost) {
+					if (game1.player3.lost) {
+						drawBitmap(game1.draw, 255, 360, 0);
+					} else
+						drawBitmap(game1.player3.win, 255, 360, 0);
+				} else
+					drawBitmap(game1.player4.win, 255, 360, 0);
+			} else
+				drawBitmap(game1.player2.win, 255, 360, 0);
+		} else
+			drawBitmap(game1.player1.win, 255, 360, 0);
+		break;
+	case 3:
+		if (game1.player1.lost) {
+			if (game1.player2.lost) {
+				if (game1.player3.lost) {
+					drawBitmap(game1.draw, 255, 360, 0);
+				} else
+					drawBitmap(game1.player3.win, 255, 360, 0);
+			} else
+				drawBitmap(game1.player2.win, 255, 360, 0);
+		} else
+			drawBitmap(game1.player1.win, 255, 360, 0);
+		break;
+	case 2:
+		if (game1.player1.lost) {
+			if (game1.player2.lost) {
+				drawBitmap(game1.draw, 255, 360, 0);
+			} else
+				drawBitmap(game1.player2.win, 255, 360, 0);
+		} else
+			drawBitmap(game1.player1.win, 255, 360, 0);
+		break;
+	default:
+		break;
+	}
+}
+
 void timer_intrhandler() {
 	if (game1.gamest == PLAYING) {
 		draw_handler(game1.num_players);
-		if (game1.lost + 1 == game1.num_players) {
+		if (game1.lost + 1 >= game1.num_players) {
 			game1.gamest = FINISHED;
-			//continue;
+			check_winner();
 		}
 	} else if (game1.gamest == MENU) {
 		if (game1.mouse1.paint) {

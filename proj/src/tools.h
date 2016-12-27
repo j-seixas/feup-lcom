@@ -122,10 +122,13 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define DARROW_BREAK		0xE0D0
 #define RARROW_MAKE			0xE04D
 #define RARROW_BREAK		0xE0CD
-#define V_MAKE				0x2F
-#define N_MAKE				0x31
+#define B_MAKE				0x30
+#define M_MAKE				0x32
 #define I_MAKE				0x17
 #define P_MAKE				0x19
+#define NUM2_BREAK			0x83
+#define NUM3_BREAK			0x84
+#define NUM4_BREAK			0x85
 
 
 
@@ -167,7 +170,7 @@ typedef struct {
 	unsigned int num_players, lost;
 	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse;
 	board_t board2, board3, board4;
-	Bitmap *start, *mouse, *menu, *pause;
+	Bitmap *start, *mouse, *menu, *pause, *draw;
 
 }game_t;
 
