@@ -131,11 +131,11 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 
 typedef enum {
 	LEFT, RIGHT, UP, DOWN, STOP
-} state;
+} state_t;
 
 typedef enum {
 	MENU, INIT, PLAYING, PAUSED, FINISHED, QUIT
-} game_state;
+} game_state_t;
 
 
 typedef enum {
@@ -144,25 +144,30 @@ typedef enum {
 
 typedef struct{
 	unsigned int x, y;
-	state st;
+	state_t st;
 	unsigned int wins, lost;
 	unsigned long color1, color2, color3, left, right;
-
-} player;
+	Bitmap* win;
+} player_t;
 
 typedef struct{
-	unsigned int x, y;
+	unsigned int x, y, paint;
 	ev_type_t left, right;
 } mouse_t;
 
 
+typedef struct{
+	Bitmap *board, *boardp;
+} board_t;
+
 typedef struct {
-	game_state gamest;
-	player player1, player2, player3, player4;
+	game_state_t gamest;
+	player_t player1, player2, player3, player4;
 	mouse_t mouse1;
 	unsigned int num_players, lost;
 	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse;
-	Bitmap* start, * board2, *board3, *board4, *mouse, *menu;
+	board_t board2, board3, board4;
+	Bitmap *start, *mouse, *menu, *pause;
 
 }game_t;
 

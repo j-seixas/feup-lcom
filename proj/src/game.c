@@ -14,29 +14,52 @@
 #define GR_MODE		0x11A
 
 void loadBit() {
-	game1.board2 = loadBitmap(getImagePath("Game2p"));
-	game1.board3 = loadBitmap(getImagePath("Game3p"));
-	game1.board4 = loadBitmap(getImagePath("Game4p"));
+	game1.board2.board = loadBitmap(getImagePath("Game2p"));
+	game1.board2.boardp = loadBitmap(getImagePath("Game2p_1"));
+	game1.board3.board = loadBitmap(getImagePath("Game3p"));
+	game1.board3.boardp = loadBitmap(getImagePath("Game3p_1"));
+	game1.board4.board = loadBitmap(getImagePath("Game4p"));
+	game1.board4.boardp = loadBitmap(getImagePath("Game4p_1"));
 	game1.menu = loadBitmap(getImagePath("Menu"));
 	game1.mouse = loadBitmap(getImagePath("mouse"));
 	game1.start = loadBitmap(getImagePath("Start"));
+	game1.player1.win = loadBitmap(getImagePath("win1"));
+	game1.player2.win = loadBitmap(getImagePath("win2"));
+	game1.player3.win = loadBitmap(getImagePath("win3"));
+	game1.player4.win = loadBitmap(getImagePath("win4"));
+	game1.pause = loadBitmap(getImagePath("Pause1"));
 }
 
 int draw_board(unsigned int num_players) {
-	switch (num_players) {
-	case 4:
-		drawBitmap(game1.board4, 0, 0, 0);
-		break;
-	case 3:
-		drawBitmap(game1.board3, 0, 0, 0);
-		break;
-	case 2:
-		drawBitmap(game1.board2, 0, 0, 0);
-		break;
-	default:
-		break;
+	if (game1.gamest == PAUSE) {
+		switch (num_players) {
+		case 4:
+			drawBitmap(game1.board4.boardp, 0, 0, 0);
+			break;
+		case 3:
+			drawBitmap(game1.board3.boardp, 0, 0, 0);
+			break;
+		case 2:
+			drawBitmap(game1.board2.boardp, 0, 0, 0);
+			break;
+		default:
+			break;
+		}
+	} else {
+		switch (num_players) {
+		case 4:
+			drawBitmap(game1.board4.board, 0, 0, 0);
+			break;
+		case 3:
+			drawBitmap(game1.board3.board, 0, 0, 0);
+			break;
+		case 2:
+			drawBitmap(game1.board2.board, 0, 0, 0);
+			break;
+		default:
+			break;
+		}
 	}
-
 	return 0;
 }
 
@@ -123,7 +146,7 @@ int init_players(unsigned int num_players) {
 	return 1;
 }
 
-int draw_player(player *p, state st) {
+int draw_player(player_t *p, state_t st) {
 	if (st == UP || st == DOWN) {
 		if (paint_pixelver(p->x, p->y, p->color1) == 1)
 			return 1;
@@ -166,7 +189,7 @@ void change_plst_handler(unsigned int num_players, unsigned long data) {
 	}
 }
 
-void change_player_state(player *p, unsigned long data) {
+void change_player_state(player_t *p, unsigned long data) {
 	if (data == p->right) {
 		switch (p->st) {
 		case UP:
@@ -309,20 +332,14 @@ int draw_handler(unsigned int num_players) {
 void state_handler(unsigned int num_players, unsigned long data) {
 	if (data == ESC_BREAK) {
 		switch (game1.gamest) {
+		case INIT:
 		case PLAYING:
-			game1.gamest = PAUSE;
-			break;
 		case PAUSE:
 		case FINISHED:
 			game1.gamest = MENU;
 			init_mouse();
 			drawBitmap(game1.menu, 0, 0, 0);
 			drawBitmap(game1.mouse, game1.mouse1.x, game1.mouse1.y, 0);
-			break;
-		case INIT:
-			draw_board(num_players);
-			draw_borders();
-			game1.gamest = PLAYING;
 			break;
 		case MENU:
 			game1.gamest = QUIT;
@@ -332,6 +349,7 @@ void state_handler(unsigned int num_players, unsigned long data) {
 	} else if (data == SPACE_BREAK) {
 		switch (game1.gamest) {
 		case PLAYING:
+			drawBitmap(game1.pause, 0, 0, 0);
 			game1.gamest = PAUSE;
 			break;
 		case MENU:
@@ -344,6 +362,7 @@ void state_handler(unsigned int num_players, unsigned long data) {
 			game1.gamest = PLAYING;
 			break;
 		case PAUSE:
+			draw_board(num_players);
 			game1.gamest = PLAYING;
 			break;
 		case FINISHED:
@@ -468,7 +487,7 @@ int mouse_mov_handler(unsigned long mouse_packet[3]) {
 
 }
 
-void mouse_st_handler(player *p, unsigned long mouse_packet[3]) {
+void mouse_st_handler(player_t *p, unsigned long mouse_packet[3]) {
 	unsigned int check = 0;
 	if ((mouse_packet[0] & BIT(6)) == 0 && (mouse_packet[0] & BIT(7)) == 0) {
 		if ((mouse_packet[0] & BIT(0)) != 0) {
@@ -541,7 +560,7 @@ void mouse_st_handler(player *p, unsigned long mouse_packet[3]) {
 
 }
 
-void timer_handler(unsigned int *boolpaintmouse) {
+void timer_intrhandler() {
 	if (game1.gamest == PLAYING) {
 		draw_handler(game1.num_players);
 		if (game1.lost + 1 == game1.num_players) {
@@ -549,11 +568,27 @@ void timer_handler(unsigned int *boolpaintmouse) {
 			//continue;
 		}
 	} else if (game1.gamest == MENU) {
-		if (boolpaintmouse) {
+		if (game1.mouse1.paint) {
 			drawBitmap(game1.menu, 0, 0, 0);
 			drawBitmap(game1.mouse, game1.mouse1.x, game1.mouse1.y, 0);
-			boolpaintmouse = 0;
+			game1.mouse1.paint = 0;
 		}
+	}
+}
+
+void kbd_intrhandler(unsigned long datakbd) {
+	if (game1.gamest == PLAYING) {
+		change_plst_handler(game1.num_players, datakbd);
+	}
+	state_handler(game1.num_players, datakbd);
+}
+
+void mouse_intrhandler(unsigned long mouse_packet[3]) {
+	if (game1.gamest == MENU) {
+		game1.mouse1.paint = mouse_mov_handler(mouse_packet);
+	} else if (game1.gamest == PLAYING && game1.num_players == 4) {
+		mouse_st_handler(&game1.player4, mouse_packet);
+
 	}
 }
 
@@ -562,8 +597,7 @@ int playgame() {
 	game1.gamest = MENU;
 	int r, ipc_status, menu;
 	message msg;
-	unsigned int win, twobyteslong = 0, packet = 0, counter = 0,
-			boolpaintmouse = 0;
+	unsigned int win, twobyteslong = 0, packet = 0, counter = 0;
 	unsigned long datakbd, datamouse, mouse_packet[3];
 
 	init_mouse();
@@ -580,22 +614,16 @@ int playgame() {
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE:
 				if (msg.NOTIFY_ARG & game1.irq_set_timer) {
-					timer_handler(&boolpaintmouse);
+					timer_intrhandler();
 				}
 				if (msg.NOTIFY_ARG & game1.irq_set_kbd) {
 					datakbd |= kbd_handler();
 					if (datakbd == TWO_BYTES) {
 						datakbd = datakbd << 8;
 						twobyteslong = 1;
-						//continue;
 					} else {
 						twobyteslong = 0;
-						//int i;
-
-						if (game1.gamest == PLAYING) {
-							change_plst_handler(game1.num_players, datakbd);
-						}
-						state_handler(game1.num_players, datakbd);
+						kbd_intrhandler(datakbd);
 					}
 
 				}
@@ -612,13 +640,7 @@ int playgame() {
 					packet++;
 					if (packet == 3) {
 						packet = 0;
-						if (game1.gamest == MENU) {
-							boolpaintmouse = mouse_mov_handler(mouse_packet);
-						} else if (game1.gamest == PLAYING
-								&& game1.num_players == 4) {
-							mouse_st_handler(&game1.player4, mouse_packet);
-
-						}
+						mouse_intrhandler(mouse_packet);
 					}
 				}
 				break;
@@ -648,16 +670,3 @@ int start_multigame(unsigned int num_players) {
 	return 0;
 }
 
-int test_square(unsigned short x, unsigned short y, unsigned short size,
-		unsigned long color) {
-
-	unsigned short xline, yline;
-	for (xline = x; xline < size + x; xline++) {
-		for (yline = y; yline < size + y; yline++) {
-			paint_pixel(xline, yline, color);
-		}
-
-	}
-	return 0;
-
-}
