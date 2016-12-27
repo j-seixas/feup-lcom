@@ -14,22 +14,37 @@
 #define GR_MODE		0x11A
 
 void loadBit() {
-	game1.board = loadBitmap(getImagePath("Game4p"));
+	game1.board2 = loadBitmap(getImagePath("Game2p"));
+	game1.board3 = loadBitmap(getImagePath("Game3p"));
+	game1.board4 = loadBitmap(getImagePath("Game4p"));
 	game1.menu = loadBitmap(getImagePath("Menu"));
 	game1.mouse = loadBitmap(getImagePath("mouse"));
 	game1.start = loadBitmap(getImagePath("Start"));
 }
 
-int draw_board() {
-	drawBitmap(game1.board, 0, 0, 0);
-	drawBitmap(game1.start, 255, 460, 0);
+int draw_board(unsigned int num_players) {
+	switch (num_players) {
+	case 4:
+		drawBitmap(game1.board4, 0, 0, 0);
+		break;
+	case 3:
+		drawBitmap(game1.board3, 0, 0, 0);
+		break;
+	case 2:
+		drawBitmap(game1.board2, 0, 0, 0);
+		break;
+	default:
+		break;
+	}
+
 	return 0;
 }
 
 void init_mouse() {
 	game1.mouse1.x = 640;
 	game1.mouse1.y = 512;
-	game1.mouse1.type = LUP;
+	game1.mouse1.left = KUP;
+	game1.mouse1.right = KUP;
 	drawBitmap(game1.menu, 0, 0, 0);
 	drawBitmap(game1.mouse, game1.mouse1.x, game1.mouse1.y, 0);
 }
@@ -137,8 +152,6 @@ int draw_player(player *p, state st) {
 void change_plst_handler(unsigned int num_players, unsigned long data) {
 	switch (num_players) {
 	case 4:
-		if (game1.player4.lost == 0)
-			change_player_state(&game1.player4, data);
 	case 3:
 		if (game1.player3.lost == 0)
 			change_player_state(&game1.player3, data);
@@ -307,7 +320,7 @@ void state_handler(unsigned int num_players, unsigned long data) {
 			drawBitmap(game1.mouse, game1.mouse1.x, game1.mouse1.y, 0);
 			break;
 		case INIT:
-			drawBitmap(game1.board, 0, 0, 0);
+			draw_board(num_players);
 			draw_borders();
 			game1.gamest = PLAYING;
 			break;
@@ -326,7 +339,7 @@ void state_handler(unsigned int num_players, unsigned long data) {
 			start_multigame(4);
 			break;
 		case INIT:
-			drawBitmap(game1.board, 0, 0, 0);
+			draw_board(num_players);
 			draw_borders();
 			game1.gamest = PLAYING;
 			break;
@@ -337,7 +350,7 @@ void state_handler(unsigned int num_players, unsigned long data) {
 			init_players(num_players);
 			game1.gamest = INIT;
 			game1.lost = 0;
-			drawBitmap(game1.board, 0, 0, 0);
+			draw_board(num_players);
 			drawBitmap(game1.start, 255, 460, 0);
 			break;
 		default:
@@ -375,7 +388,7 @@ int sub_game() {
 		printf("Error in kbd_subscribe_int()\n");
 		return 1;
 	}
-	//sub_game();
+
 	kbd_handler();
 	game1.irq_set_mouse = mouse_subscribe_int();
 	if (game1.irq_set_mouse == -1) {
@@ -397,10 +410,10 @@ int mouse_mov_handler(unsigned long mouse_packet[3]) {
 	int menu, testx, testy;
 	if ((mouse_packet[0] & BIT(6)) == 0 && (mouse_packet[0] & BIT(7)) == 0) {
 		if ((mouse_packet[0] & BIT(0)) != 0)
-			game1.mouse1.type = LDOWN;
+			game1.mouse1.left = KDOWN;
 		else {
-			if (game1.mouse1.type == LDOWN) {
-				game1.mouse1.type = LUP;
+			if (game1.mouse1.left == KDOWN) {
+				game1.mouse1.left = KUP;
 				check = 1;
 			}
 		}
@@ -451,9 +464,97 @@ int mouse_mov_handler(unsigned long mouse_packet[3]) {
 
 		return 1;
 	}
-	printf("OVERFLOW\n");
 	return 0;
 
+}
+
+void mouse_st_handler(player *p, unsigned long mouse_packet[3]) {
+	unsigned int check = 0;
+	if ((mouse_packet[0] & BIT(6)) == 0 && (mouse_packet[0] & BIT(7)) == 0) {
+		if ((mouse_packet[0] & BIT(0)) != 0) {
+			if (game1.mouse1.left != KDOWN)
+				check = 1;
+			game1.mouse1.left = KDOWN;
+		} else
+			game1.mouse1.left = KUP;
+
+		if ((mouse_packet[0] & BIT(1)) != 0) {
+			if (game1.mouse1.right != KDOWN)
+				check = 2;
+			game1.mouse1.right = KDOWN;
+		} else
+			game1.mouse1.right = KUP;
+
+	}
+
+	if (check == 1) {
+		switch (p->st) {
+		case UP:
+			p->st = LEFT;
+			p->x -= 2;
+			p->y += 2;
+			break;
+		case RIGHT:
+			p->st = UP;
+			p->y -= 2;
+			p->x -= 2;
+			break;
+		case DOWN:
+			p->st = RIGHT;
+			p->x += 2;
+			p->y -= 2;
+			break;
+		case LEFT:
+			p->st = DOWN;
+			p->y += 2;
+			p->x += 2;
+			break;
+		default:
+			break;
+		}
+	} else if (check == 2) {
+		switch (p->st) {
+		case UP:
+			p->st = RIGHT;
+			p->x += 2;
+			p->y += 2;
+			break;
+		case RIGHT:
+			p->st = DOWN;
+			p->y += 2;
+			p->x -= 2;
+			break;
+		case DOWN:
+			p->st = LEFT;
+			p->x -= 2;
+			p->y -= 2;
+			break;
+		case LEFT:
+			p->st = UP;
+			p->y -= 2;
+			p->x += 2;
+			break;
+		default:
+			break;
+		}
+	}
+
+}
+
+void timer_handler(unsigned int *boolpaintmouse) {
+	if (game1.gamest == PLAYING) {
+		draw_handler(game1.num_players);
+		if (game1.lost + 1 == game1.num_players) {
+			game1.gamest = FINISHED;
+			//continue;
+		}
+	} else if (game1.gamest == MENU) {
+		if (boolpaintmouse) {
+			drawBitmap(game1.menu, 0, 0, 0);
+			drawBitmap(game1.mouse, game1.mouse1.x, game1.mouse1.y, 0);
+			boolpaintmouse = 0;
+		}
+	}
 }
 
 int playgame() {
@@ -467,7 +568,6 @@ int playgame() {
 
 	init_mouse();
 
-	printf("IN\n");
 	while (game1.gamest != QUIT) {
 		if (twobyteslong == 0) {
 			datakbd = 0;
@@ -480,30 +580,14 @@ int playgame() {
 			switch (_ENDPOINT_P(msg.m_source)) {
 			case HARDWARE:
 				if (msg.NOTIFY_ARG & game1.irq_set_timer) {
-					printf("...TIMER----------\n");
-					if (game1.gamest == PLAYING) {
-						draw_handler(game1.num_players);
-						printf("%d -- %d\n", game1.lost, game1.num_players);
-						if (game1.lost + 1 == game1.num_players) {
-							game1.gamest = FINISHED;
-							continue;
-						}
-					} else if (game1.gamest == MENU) {
-						if (boolpaintmouse) {
-							drawBitmap(game1.menu, 0, 0, 0);
-							drawBitmap(game1.mouse, game1.mouse1.x,
-									game1.mouse1.y, 0);
-							boolpaintmouse = 0;
-						}
-					}
+					timer_handler(&boolpaintmouse);
 				}
 				if (msg.NOTIFY_ARG & game1.irq_set_kbd) {
-					printf("---- KBD ----\n");
 					datakbd |= kbd_handler();
 					if (datakbd == TWO_BYTES) {
 						datakbd = datakbd << 8;
 						twobyteslong = 1;
-						continue;
+						//continue;
 					} else {
 						twobyteslong = 0;
 						//int i;
@@ -516,15 +600,13 @@ int playgame() {
 
 				}
 				if (msg.NOTIFY_ARG & game1.irq_set_mouse) {
-					printf("----->> MOUSE\n");
 					datamouse = kbd_handler();
-					if (datamouse == -1) {
+					if (datamouse == -1)
 						break;
-					}
 					if (packet == 0) {
-						if ((datamouse & BIT(3)) == OK) {
+						if ((datamouse & BIT(3)) == OK)
 							break;
-						}
+
 					}
 					mouse_packet[packet] = datamouse;
 					packet++;
@@ -532,6 +614,10 @@ int playgame() {
 						packet = 0;
 						if (game1.gamest == MENU) {
 							boolpaintmouse = mouse_mov_handler(mouse_packet);
+						} else if (game1.gamest == PLAYING
+								&& game1.num_players == 4) {
+							mouse_st_handler(&game1.player4, mouse_packet);
+
 						}
 					}
 				}
@@ -545,14 +631,14 @@ int playgame() {
 		}
 
 	}
-	printf("OUT\n");
 	return 0;
 }
 
 int start_multigame(unsigned int num_players) {
 	game1.gamest = INIT;
 	game1.lost = 0;
-	draw_board();
+	draw_board(num_players);
+	drawBitmap(game1.start, 255, 460, 0);
 	if (init_players(num_players) != OK) {
 		printf("Error in num of players\n");
 		return 1;

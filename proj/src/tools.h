@@ -139,7 +139,7 @@ typedef enum {
 
 
 typedef enum {
-	LDOWN, LUP
+	KDOWN, KUP
 } ev_type_t;
 
 typedef struct{
@@ -152,7 +152,7 @@ typedef struct{
 
 typedef struct{
 	unsigned int x, y;
-	ev_type_t type;
+	ev_type_t left, right;
 } mouse_t;
 
 
@@ -162,7 +162,7 @@ typedef struct {
 	mouse_t mouse1;
 	unsigned int num_players, lost;
 	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse;
-	Bitmap* start, * board, *mouse, *menu;
+	Bitmap* start, * board2, *board3, *board4, *mouse, *menu;
 
 }game_t;
 
