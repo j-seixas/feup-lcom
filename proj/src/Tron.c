@@ -17,12 +17,14 @@ int main(int argc, char *argv[]) {
 	 * Video mode 0x11A -> 1280x1024 16bit 5:6:5
 	 */
 	vg_init(GR_MODE);
-	sub_game();
-	playgame();
+	game_t game1;
+	sub_game(&game1);
+
+	playgame(&game1);
 
 	//kbd_test_scan();
 
-	unsub_game();
+	unsub_game(&game1);
 	vg_exit();
 	printf("\n");
 
