@@ -174,7 +174,7 @@ typedef struct {
 
 }game_t;
 
-static game_t game1;
+//static game_t game1;
 
 
 

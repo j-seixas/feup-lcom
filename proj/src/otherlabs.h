@@ -1,14 +1,14 @@
 #ifndef __TIMER_H
 #define __TIMER_H
 
-int kbd_subscribe_int(void);
-int kbd_unsubscribe_int();
+int kbd_subscribe_int(game_t *game1);
+int kbd_unsubscribe_int(game_t *game1);
 unsigned long kbd_handler();
 //int kbd_test_scan();
 
 
 //int sub_game();
-int unsub_game();
+int unsub_game(game_t *game1);
 
 
 /** @defgroup timer timer
@@ -24,14 +24,14 @@ int unsub_game();
  *
  * @return Returns bit order in interrupt mask; negative value on failure
  */
-int timer_subscribe_int(void);
+int timer_subscribe_int(game_t *game1);
 
 /**
  * @brief Unsubscribes Timer 0 interrupts
  *
  * @return Return 0 upon success and non-zero otherwise
  */
-int timer_unsubscribe_int();
+int timer_unsubscribe_int(game_t *game1);
 
 
 
@@ -47,12 +47,12 @@ int timer_unsubscribe_int();
 //int timer_test_int(unsigned long time);
 
 
-int mouse_subscribe_int(void);
+int mouse_subscribe_int(game_t *game1);
 
-int mouse_unsubscribe_int();
+int mouse_unsubscribe_int(game_t *game1);
 
 
-int unsub_game();
+int unsub_game(game_t *game1);
 
 
 int kbd_send_command(unsigned long cmd);
