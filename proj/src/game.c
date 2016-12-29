@@ -9,9 +9,6 @@
 #include "read_bitmap.h"
 #include "tools.h"
 
-#define HRES_1024	1280
-#define VRES_768	1024
-#define GR_MODE		0x11A
 
 void load_Bmps(game_t* game1) {
 	game1->board2.board = loadBitmap(getImagePath("Game2p"));
@@ -30,7 +27,6 @@ void load_Bmps(game_t* game1) {
 	game1->pause = loadBitmap(getImagePath("Pause1"));
 	game1->draw = loadBitmap(getImagePath("draw"));
 }
-
 
 void change_plst_handler(unsigned int num_players, unsigned long data, game_t *game1) {
 	switch (num_players) {
@@ -148,7 +144,7 @@ void update_player(unsigned int num_players, game_t *game1) {
 
 }
 
-int draw_handler(unsigned int num_players, game_t *game1) {
+void draw_handler(unsigned int num_players, game_t *game1) {
 	unsigned int loop = 3;
 	while (loop) {
 		update_player(num_players, &(*game1));
@@ -186,7 +182,7 @@ int draw_handler(unsigned int num_players, game_t *game1) {
 		}
 		loop--;
 	}
-	return 0;
+
 }
 
 void state_handler(unsigned int num_players, unsigned long data, game_t *game1) {
@@ -249,17 +245,17 @@ void state_handler(unsigned int num_players, unsigned long data, game_t *game1) 
 }
 
 int check_mouse(game_t *game1) {
-	if (game1->mouse1.x >= MENU1L && game1->mouse1.x <= MENU1R
-			&& game1->mouse1.y >= MENU1U && game1->mouse1.y <= MENU1D) {
+	if (game1->mouse1.x + 8 >= MENU1L && game1->mouse1.x + 8 <= MENU1R
+			&& game1->mouse1.y + 2 >= MENU1U && game1->mouse1.y + 2 <= MENU1D) {
 		return 1;
-	} else if (game1->mouse1.x >= MENU2L && game1->mouse1.x <= MENU2R
-			&& game1->mouse1.y >= MENU2U && game1->mouse1.y <= MENU2D) {
+	} else if (game1->mouse1.x + 8 >= MENU2L && game1->mouse1.x + 8 <= MENU2R
+			&& game1->mouse1.y + 2 >= MENU2U && game1->mouse1.y + 2 <= MENU2D) {
 		return 2;
-	} else if (game1->mouse1.x >= MENU3L && game1->mouse1.x <= MENU3R
-			&& game1->mouse1.y >= MENU3U && game1->mouse1.y <= MENU3D) {
+	} else if (game1->mouse1.x + 8 >= MENU3L && game1->mouse1.x + 8 <= MENU3R
+			&& game1->mouse1.y + 2 >= MENU3U && game1->mouse1.y + 2 <= MENU3D) {
 		return 3;
-	} else if (game1->mouse1.x >= MENU4L && game1->mouse1.x <= MENU4R
-			&& game1->mouse1.y >= MENU4U && game1->mouse1.y <= MENU4D) {
+	} else if (game1->mouse1.x + 8 >= MENU4L && game1->mouse1.x + 8 <= MENU4R
+			&& game1->mouse1.y + 2 >= MENU4U && game1->mouse1.y + 2 <= MENU4D) {
 		return 4;
 	}
 	return 0;

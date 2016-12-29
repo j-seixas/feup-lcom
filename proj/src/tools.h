@@ -26,6 +26,7 @@
 #define TIMER_RB_CMD		(BIT(7)|BIT(6))  /**< @brief Read Back Command */
 
 #define TM0_IRQSET		0 /**< @brief Timer 0 irq_set for bitmask */
+#define DELAY_US    20000
 
 /**@}*/
 
@@ -34,7 +35,8 @@
  *
  * Constants for programming the i8042 KBC.
  */
-
+#define KB_IRQ 			 	1
+#define KEYBOARD_IRQ 	 	1
 #define STATUS_PORT         0x64	/**< @brief Status Port register */
 #define KBD_OUT_BUF         0x60	/**< @brief Output Buffer register */
 #define KBD_INPT_BUF        0x64	/**< @brief Input Buffer register */
@@ -63,8 +65,6 @@
 #define KBD_DATA_BUF        0x60
 
 
-#define KB_IRQ 			 	1
-#define KEYBOARD_IRQ 	 	1
 #define MOUSE_IRQ 		  	12
 
 /**@}*/
@@ -166,47 +166,52 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 
 /**@}*/
 
+/** @defgroup Game Game
+ * @{
+ *
+ * Structs and States for the game
+ */
 typedef enum {
 	LEFT, RIGHT, UP, DOWN, STOP
-} state_t;
+} state_t;  //States for the movement of a Player
 
 typedef enum {
 	MENU, INIT, PLAYING, PAUSED, FINISHED, QUIT
-} game_state_t;
+} game_state_t; //States for All the Game System
 
 
 typedef enum {
 	KDOWN, KUP
-} ev_type_t;
+} ev_type_t;  //States for the mouse buttons
 
 typedef struct{
-	unsigned int x, y;
-	state_t st;
-	unsigned int wins, lost;
-	unsigned long color1, color2, color3, left, right;
-	Bitmap* win;
-} player_t;
+	unsigned int x, y; //Coordinates x and y
+	state_t st; //Movement state
+	unsigned int lost; //Flag to check if a player has lost or not
+	unsigned long color1, color2, color3, left, right; //Colors of the player & Scancodes for changing their movement (left or right)
+	Bitmap* win; //Bitmap with the specific win image
+} player_t; //Strutc of a Player
 
 typedef struct{
-	unsigned int x, y, paint;
-	ev_type_t left, right;
-} mouse_t;
+	unsigned int x, y, paint; //Coordinates x and y & Flag to paint the mouse or not
+	ev_type_t left, right; //States of the left and right mouse buttons
+} mouse_t; //Struct of the Mouse
 
 
 typedef struct{
-	Bitmap *board, *boardp;
-} board_t;
+	Bitmap *board, *boardp; //Bitmaps of the game board and the top of the game board for pausing the game
+} board_t; //Struct with Bitmaps for pausing
 
 typedef struct {
-	game_state_t gamest;
-	player_t player1, player2, player3, player4;
-	mouse_t mouse1;
-	unsigned int num_players, lost;
-	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse;
-	board_t board2, board3, board4;
-	Bitmap *start, *mouse, *menu, *pause, *draw;
+	game_state_t gamest; //State of the game
+	player_t player1, player2, player3, player4; //Players
+	mouse_t mouse1; //Mouse
+	unsigned int num_players, lost; //Number of players and Number of players that lost the current game
+	int hook_id_timer, irq_set_timer, hook_id_kbd, irq_set_kbd, hook_id_mouse, irq_set_mouse; //Hook IDs and IRQ sets for hardware interrupts
+	board_t board2, board3, board4; //Bitmaps for the 3 different games (2Players, 3 or 4)
+	Bitmap *start, *mouse, *menu, *pause, *draw; //Bitmaps
 
-}game_t;
+} game_t; //Struct for the Game
 
 /**
  * @brief Initiates the mouse

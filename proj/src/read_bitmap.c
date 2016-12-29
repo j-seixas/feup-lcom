@@ -3,10 +3,6 @@
 #include "video_gr.h"
 #include "tools.h"
 
-/*!
- *  getImagePath , loadBitmap, drawBitmap, deleteBitmap and read_bitmap.h were made by Henrique Ferrolho
- *  link: http://difusal.blogspot.pt/2014/09/minixtutorial-8-loading-bmp-images.html
- */
 
 const char* getImagePath(const char *image){
 	char num[256];

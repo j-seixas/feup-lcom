@@ -5,8 +5,6 @@
 #include "tools.h"
 #include "otherlabs.h"
 
-#define DELAY_US    20000
-
 
 int kbd_subscribe_int(game_t *game1) {
 	game1->hook_id_kbd = KB_IRQ;
@@ -94,6 +92,33 @@ int mouse_unsubscribe_int(game_t *game1) {
 
 }
 
+int sub_game(game_t *game1) {
+	game1->irq_set_timer = timer_subscribe_int(&(*game1));
+	if (game1->irq_set_timer == -1) {
+		printf("Error in timer_subscribe_int()\n");
+		return 1;
+	}
+
+	game1->irq_set_kbd = kbd_subscribe_int(&(*game1));
+	if (game1->irq_set_kbd == -1) {
+		printf("Error in kbd_subscribe_int()\n");
+		return 1;
+	}
+
+	kbd_handler();
+	game1->irq_set_mouse = mouse_subscribe_int(&(*game1));
+	if (game1->irq_set_mouse == -1) {
+		printf("Error in mouse_subscribe_int()\n");
+		return 1;
+	}
+
+	if (mouse_send(MOUSE_ENB) != 0) {
+		printf("Error in mouse sending command\n");
+		return 1;
+
+	}
+	return 0;
+}
 
 int unsub_game(game_t *game1) {
 	game1->irq_set_kbd = kbd_unsubscribe_int(&(*game1));
@@ -189,34 +214,5 @@ int mouse_send(unsigned long cmd) {
 
 	return 1;
 
-}
-
-
-int sub_game(game_t *game1) {
-	game1->irq_set_timer = timer_subscribe_int(&(*game1));
-	if (game1->irq_set_timer == -1) {
-		printf("Error in timer_subscribe_int()\n");
-		return 1;
-	}
-
-	game1->irq_set_kbd = kbd_subscribe_int(&(*game1));
-	if (game1->irq_set_kbd == -1) {
-		printf("Error in kbd_subscribe_int()\n");
-		return 1;
-	}
-
-	kbd_handler();
-	game1->irq_set_mouse = mouse_subscribe_int(&(*game1));
-	if (game1->irq_set_mouse == -1) {
-		printf("Error in mouse_subscribe_int()\n");
-		return 1;
-	}
-
-	if (mouse_send(MOUSE_ENB) != 0) {
-		printf("Error in mouse sending command\n");
-		return 1;
-
-	}
-	return 0;
 }
 
