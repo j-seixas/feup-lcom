@@ -3,20 +3,34 @@
 
 #include "tools.h"
 
-int draw_board(unsigned int num_players, game_t *game1);
-//int unsub_game();
-int init_players(unsigned int num_players, game_t *game1);
-//int draw_player(unsigned int n, state st);
-int draw_player(player_t *p, unsigned int num_players);
-//void change_player_state(unsigned int i, unsigned long data);
+void load_Bmps(game_t* game1);
+
 void change_plst_handler(unsigned int num_players, unsigned long data, game_t *game1);
+
 void change_player_state(player_t *p, unsigned long data);
+
 void update_player(unsigned int num_players, game_t *game1);
+
 int draw_handler(unsigned int num_players, game_t *game1);
+
 void state_handler(unsigned int num_players, unsigned long data, game_t *game1);
+
+int check_mouse(game_t *game1);
+
+int mouse_mov_handler(unsigned long mouse_packet[3], game_t *game1);
+
+void mouse_st_handler(player_t *p, unsigned long mouse_packet[3], game_t *game1);
+
+void check_winner(game_t *game1);
+
+void timer_intrhandler(game_t *game1);
+
+void kbd_intrhandler(unsigned long datakbd, game_t *game1);
+
+void mouse_intrhandler(unsigned long mouse_packet[3], game_t *game1);
+
 int playgame(game_t *game1);
+
 int start_multigame(unsigned int num_players, game_t *game1);
-int test_square(unsigned short x, unsigned short y, unsigned short size,
-		unsigned long color) ;
 
 #endif /* GAME_H */

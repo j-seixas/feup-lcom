@@ -4,7 +4,7 @@
 #include "tools.h"
 
 /*!
- *  read_bitmap.c and read_bitmap.h were both made by Henrique Ferrolho
+ *  getImagePath , loadBitmap, drawBitmap, deleteBitmap and read_bitmap.h were made by Henrique Ferrolho
  *  link: http://difusal.blogspot.pt/2014/09/minixtutorial-8-loading-bmp-images.html
  */
 
@@ -146,4 +146,5 @@ void deleteBitmap(Bitmap* bmp) {
     free(bmp->bitmapData);
     free(bmp);
 }
+
 

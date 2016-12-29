@@ -1,5 +1,6 @@
 #pragma once
 
+
 /** @defgroup Bitmap Bitmap
  * @{
  * Functions for manipulating bitmaps
@@ -64,5 +65,7 @@ void drawBitmap(Bitmap* bitmap, int x, int y, int doublebf);
  * @param bitmap bitmap to be destroyed
  */
 void deleteBitmap(Bitmap* bmp);
+
+
 
 /**@}*/

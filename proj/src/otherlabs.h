@@ -7,7 +7,7 @@ unsigned long kbd_handler();
 //int kbd_test_scan();
 
 
-//int sub_game();
+int sub_game(game_t *game1);
 int unsub_game(game_t *game1);
 
 

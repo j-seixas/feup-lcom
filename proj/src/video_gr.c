@@ -114,4 +114,50 @@ int paint_pixelver(unsigned short x, unsigned short y, unsigned long color) {
 	return -1;
 }
 
+void draw_borders() {
+	unsigned long color = WHITE;
+	unsigned int x, y = YULIMIT;
+	for (x = XLLIMIT; x < XRLIMIT; x++) {
+		paint_pixel(x, y, color);
+	}
+	y = YDLIMIT;
+	for (x = XLLIMIT; x < XRLIMIT; x++) {
+		paint_pixel(x, y, color);
+	}
+	x = XLLIMIT;
+	for (y = YULIMIT; y < YDLIMIT; y++) {
+		paint_pixel(x, y, color);
+	}
+	x = XRLIMIT;
+	for (y = YULIMIT; y < YDLIMIT; y++) {
+		paint_pixel(x, y, color);
+	}
+}
 
+int draw_player(player_t *p, state_t st) {
+	int lost = 0;
+	if (st == UP || st == DOWN) {
+		if (paint_pixelver(p->x, p->y, p->color1) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x + 1, p->y, p->color1) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x - 1, p->y, p->color2) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x - 2, p->y, p->color3) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x + 2, p->y, p->color3) == 1)
+			lost = 1;
+	} else if (st == RIGHT || st == LEFT) {
+		if (paint_pixelver(p->x, p->y, p->color1) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x, p->y + 1, p->color1) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x, p->y - 1, p->color2) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x, p->y - 2, p->color3) == 1)
+			lost = 1;
+		if (paint_pixelver(p->x, p->y + 2, p->color3) == 1)
+			lost = 1;
+	}
+	return lost;
+}

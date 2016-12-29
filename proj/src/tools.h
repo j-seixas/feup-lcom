@@ -13,6 +13,7 @@
  */
 
 #define TIMER0_IRQ	        0    /**< @brief Timer 0 IRQ line */
+
 /* I/O port addresses */
 #define TIMER_0			0x40 /**< @brief Timer 0 count register */
 #define TIMER_CTRL		0x43 /**< @brief Control register */
@@ -24,7 +25,9 @@
 #define TIMER_SEL0		0x00     /**< @brief Control Word for Timer 0 */
 #define TIMER_RB_CMD		(BIT(7)|BIT(6))  /**< @brief Read Back Command */
 
-#define TM0_IRQSET		0 // Timer 0 irq_set for bitmask
+#define TM0_IRQSET		0 /**< @brief Timer 0 irq_set for bitmask */
+
+/**@}*/
 
 /** @defgroup i8042 i8042
  * @{
@@ -32,20 +35,26 @@
  * Constants for programming the i8042 KBC.
  */
 
-#define STATUS_PORT         0x64
-#define KBD_OUT_BUF         0x60
-#define KBD_INPT_BUF        0x64
-#define OBF   				BIT(0)
-#define IBF					BIT(1)
+#define STATUS_PORT         0x64	/**< @brief Status Port register */
+#define KBD_OUT_BUF         0x60	/**< @brief Output Buffer register */
+#define KBD_INPT_BUF        0x64	/**< @brief Input Buffer register */
+#define OBF   				BIT(0)	/**< @brief Control Word for Output Buffer Full */
+#define IBF					BIT(1)	/**< @brief Control Word for Input Buffer Full */
 
-#define TWO_BYTES			0xE0
+#define TWO_BYTES			0xE0	/**< @brief Control Word for 2 bytes scancodes */
 
 
 #define PAR_ERR				BIT(7)
 #define TO_ERR				BIT(6)
 
+/**@}*/
 
-//MOUSE COMMANDS
+/** @defgroup mouse mouse
+ * @{
+ *
+ * Constants for programming the mouse.
+ */
+
 #define MOUSE_SEND			0xD4
 #define MOUSE_ENB			0xF4
 #define MOUSE_CONF			0xE9
@@ -57,6 +66,14 @@
 #define KB_IRQ 			 	1
 #define KEYBOARD_IRQ 	 	1
 #define MOUSE_IRQ 		  	12
+
+/**@}*/
+
+/** @defgroup mouse mouse
+ * @{
+ *
+ * Constants for programming the mouse.
+ */
 
 #define GR_MODE		0x11A
 
@@ -84,9 +101,24 @@
 #define MENU4L		715
 #define MENU4R		1071
 
+/**@}*/
 
-/*!
- * Colors
+/** @defgroup colors colors
+ * @{
+ *
+ * Colors for painting.
+ */
+
+/**
+ * @brief Calculates a color in RBG 5:6:5
+ *
+ * RGB function from http://stackoverflow.com/questions/27194568/rgb-color-converting-into-565-format
+ * author: PiotrK
+ *
+ * @param r	Red color value
+ * @param g Green color value
+ * @param b	Blue color value
+ * @return Returns the color in RGB 5:6:5
  */
 int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define ORANGE1		rgb(223,116,12);
@@ -98,11 +130,13 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define WHITE		rgb(255,255,255);
 #define BLACK		rgb(0,0,0);
 
+ /**@}*/
 
-
-/*!
- *  SCANCODES
- */
+ /** @defgroup scancodes scancodes
+  * @{
+  *
+  * Constants of scancodes for keyboard.
+  */
 #define ESC_BREAK			0x81
 #define ESC_MAKE			0x01
 #define SPACE_BREAK			0xB9
@@ -130,7 +164,7 @@ int rgb(unsigned char r, unsigned char g, unsigned char b);
 #define NUM3_BREAK			0x84
 #define NUM4_BREAK			0x85
 
-
+/**@}*/
 
 typedef enum {
 	LEFT, RIGHT, UP, DOWN, STOP
@@ -174,7 +208,30 @@ typedef struct {
 
 }game_t;
 
-//static game_t game1;
+/**
+ * @brief Initiates the mouse
+ *
+ * @param *game1 All needed values for the game
+ *
+ */
+void init_mouse(game_t *game1);
+
+/**
+ * @brief Initiates the players
+ *
+ * @param num_players Number of players of the game mode
+ * @param game1 All needed values for the game
+ * @return Return 0 on success and 1 otherwise
+ */
+int init_players(unsigned int num_players, game_t *game1);
+
+/**
+ * @brief Draws the background
+ *
+ * @param num_players Number of players of the game mode to draw the corresponding background
+ * @param game1 All needed values for the game
+ */
+void draw_board(unsigned int num_players, game_t *game1);
 
 
 
