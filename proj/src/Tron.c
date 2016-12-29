@@ -9,7 +9,6 @@
 #include <string.h>
 #include <errno.h>
 
-
 int main(int argc, char *argv[]) {
 
 	sef_startup();
@@ -18,17 +17,22 @@ int main(int argc, char *argv[]) {
 	 */
 	vg_init(GR_MODE);
 	game_t game1;
-	sub_game(&game1);
 
+	if (sub_game(&game1) == 1) {
+		vg_exit();
+		printf("\n");
+		return 1;
+	}
 	playgame(&game1);
 
-	//kbd_test_scan();
-
-	unsub_game(&game1);
+	if (unsub_game(&game1) == 1) {
+		vg_exit();
+		printf("\n");
+		return 1;
+	}
 	vg_exit();
 	printf("\n");
 
-	//test_bmp(0, 0, tron);
 	return 0;
 }
 

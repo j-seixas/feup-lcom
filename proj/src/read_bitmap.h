@@ -3,12 +3,9 @@
 
 /** @defgroup Bitmap Bitmap
  * @{
- * Functions for manipulating bitmaps
+ * Functions for manipulating bitmaps made by Henrique Ferrolho
+ * source: http://difusal.blogspot.pt/2014/09/minixtutorial-8-loading-bmp-images.html
  */
-
-typedef enum {
-    ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT
-} Alignment;
 
 typedef struct {
     unsigned short type; // specifies the file type
@@ -55,7 +52,7 @@ Bitmap* loadBitmap(const char* filename);
  * @param bitmap bitmap to be drawn
  * @param x destiny x coord
  * @param y destiny y coord
- * @param alignment image alignment
+ * @param doublebf 0 to draw directly or 1 to draw in doublebuffer
  */
 void drawBitmap(Bitmap* bitmap, int x, int y, int doublebf);
 

@@ -11,7 +11,7 @@
 /* Private global variables */
 
 static char *video_mem; /* Process address to which VRAM is mapped */
-static char *video_dbuff;
+static char *video_dbuff; /* Process address to double buffer */
 
 static unsigned h_res; /* Horizontal screen resolution in pixels */
 static unsigned v_res; /* Vertical screen resolution in pixels */
@@ -39,8 +39,8 @@ void *vg_init(unsigned short mode) {
 	int ans;
 	struct mem_range mr;
 
-	unsigned int vram_base = vmi_p.PhysBasePtr; /*VRAM’s physical addresss*/
-	unsigned int vram_size = v_res * h_res * bits_per_pixel; /*VRAM’s size, but you can use the frame-buffer size, instead*/
+	unsigned int vram_base = vmi_p.PhysBasePtr; /*VRAMs physical addresss*/
+	unsigned int vram_size = v_res * h_res * bits_per_pixel; /*VRAMs size, but you can use the frame-buffer size, instead*/
 
 	/*Allow memory mapping*/
 	mr.mr_base = (phys_bytes) vram_base;
@@ -54,7 +54,7 @@ void *vg_init(unsigned short mode) {
 	if (video_mem == MAP_FAILED)
 		panic("couldn’t map video memory");
 
-	video_dbuff = (unsigned char *) malloc(vram_size);
+	video_dbuff = (unsigned char *) malloc(vram_size); /*initiates double buffer*/
 	return video_mem;
 }
 
@@ -159,5 +159,7 @@ int draw_player(player_t *p, state_t st) {
 		if (paint_pixelver(p->x, p->y + 2, p->color3) == 1)
 			lost = 1;
 	}
+	if(lost)
+		p->st=STOP;
 	return lost;
 }
