@@ -1,6 +1,7 @@
 #ifndef __VIDEO_GR_H
 #define __VIDEO_GR_H
 
+#include "tools.h"
 /** @defgroup video_gr video_gr
  * @{
  *
@@ -35,4 +36,7 @@ int paint_pixelver(unsigned short x, unsigned short y, unsigned long color);
 void* vg_vd_get_vmem();
 void* vg_vd_get_vbuff();
  
+void draw_borders();
+int draw_player(player_t *p, unsigned int num_players);
+
 #endif /* __VIDEO_GR_H */
