@@ -1,0 +1,406 @@
+\hypertarget{game_8h}{}\section{C\+:/\+Users/jnuno/\+Desktop/src/game.h File Reference}
+\label{game_8h}\index{C\+:/\+Users/jnuno/\+Desktop/src/game.\+h@{C\+:/\+Users/jnuno/\+Desktop/src/game.\+h}}
+{\ttfamily \#include \char`\"{}tools.\+h\char`\"{}}\newline
+Include dependency graph for game.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=200pt]{game_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=338pt]{game_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{game_8h_a2d7ae67897b06ba4d723f059b8055c3d}{load\+\_\+\+Bmps} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Loads all Bitmaps needed in the Game. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_a21785a858236fb7d375400e0e338336d}{change\+\_\+plst\+\_\+handler} (unsigned int num\+\_\+players, unsigned long data, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Handler for Player States. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_af630a71e15386edfe50f4f8a303d9c39}{change\+\_\+player\+\_\+state} (\hyperlink{structplayer__t}{player\+\_\+t} $\ast$p, unsigned long data)
+\begin{DoxyCompactList}\small\item\em Changes the movement state accordingly with the Data. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_ab3383bfc12cb6695ede9ecd5f6573676}{update\+\_\+player} (unsigned int num\+\_\+players, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Updates the position of a Player based on its movement. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_a89d72a2401cc9faf9102dbe393dee79a}{draw\+\_\+handler} (unsigned int num\+\_\+players, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Handler for Painting the Players. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_a505eb2e66f358efafd4f23bca70cfa14}{state\+\_\+handler} (unsigned int num\+\_\+players, unsigned long data, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Handler for Game States. \end{DoxyCompactList}\item 
+int \hyperlink{game_8h_a01f0539de201b53e0e5adb9d985327ff}{check\+\_\+mouse} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Checks if Mouse is inside a Button in Menu. \end{DoxyCompactList}\item 
+int \hyperlink{game_8h_acde10310f33cafd602e547fdcc87e5f7}{mouse\+\_\+mov\+\_\+handler} (unsigned long mouse\+\_\+packet\mbox{[}3\mbox{]}, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Mouse Handler for Menu. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_a5745594a9d371072ebddb008b3b08699}{mouse\+\_\+st\+\_\+handler} (\hyperlink{structplayer__t}{player\+\_\+t} $\ast$p, unsigned long mouse\+\_\+packet\mbox{[}3\mbox{]}, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Mouse State Handler for Player 4. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_ad1f78202a4ea7e8e68ba069a82484592}{check\+\_\+winner} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Checks who wins and displays the winner bitmap. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_a86358e01f0d51114bc31ea1b623ee024}{timer\+\_\+intrhandler} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Handler for Timer Interrupts. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_ac1990a9d59c2e1b744129d6990733f65}{kbd\+\_\+intrhandler} (unsigned long datakbd, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Handler for Keyboard Interrupts. \end{DoxyCompactList}\item 
+void \hyperlink{game_8h_a7485cadb508c6cbe1efe9d01643b34e0}{mouse\+\_\+intrhandler} (unsigned long mouse\+\_\+packet\mbox{[}3\mbox{]}, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Handler for Mouse Interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{game_8h_afdeb92b797c5bbc22fa9cea605f6644b}{playgame} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em The Game Function. \end{DoxyCompactList}\item 
+int \hyperlink{game_8h_a59430d80f49694010887ac3ab116e696}{start\+\_\+multigame} (unsigned int num\+\_\+players, \hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Starts a Multiplayer Game accorgingly to the Number of Players. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{game_8h_af630a71e15386edfe50f4f8a303d9c39}{}\label{game_8h_af630a71e15386edfe50f4f8a303d9c39} 
+\index{game.\+h@{game.\+h}!change\+\_\+player\+\_\+state@{change\+\_\+player\+\_\+state}}
+\index{change\+\_\+player\+\_\+state@{change\+\_\+player\+\_\+state}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{change\+\_\+player\+\_\+state()}{change\_player\_state()}}
+{\footnotesize\ttfamily void change\+\_\+player\+\_\+state (\begin{DoxyParamCaption}\item[{\hyperlink{structplayer__t}{player\+\_\+t} $\ast$}]{p,  }\item[{unsigned long}]{data }\end{DoxyParamCaption})}
+
+
+
+Changes the movement state accordingly with the Data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$p} & Player \\
+\hline
+{\em data} & Keyboard data \\
+\hline
+\end{DoxyParams}
+\hypertarget{game_8h_a21785a858236fb7d375400e0e338336d}{}\label{game_8h_a21785a858236fb7d375400e0e338336d} 
+\index{game.\+h@{game.\+h}!change\+\_\+plst\+\_\+handler@{change\+\_\+plst\+\_\+handler}}
+\index{change\+\_\+plst\+\_\+handler@{change\+\_\+plst\+\_\+handler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{change\+\_\+plst\+\_\+handler()}{change\_plst\_handler()}}
+{\footnotesize\ttfamily void change\+\_\+plst\+\_\+handler (\begin{DoxyParamCaption}\item[{unsigned int}]{num\+\_\+players,  }\item[{unsigned long}]{data,  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Handler for Player States. 
+
+Calls the other function accordingly to the Number of Players
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+\_\+players} & Number of Players in the current Game Mode \\
+\hline
+{\em data} & Keyboard data \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=329pt]{game_8h_a21785a858236fb7d375400e0e338336d_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a01f0539de201b53e0e5adb9d985327ff}{}\label{game_8h_a01f0539de201b53e0e5adb9d985327ff} 
+\index{game.\+h@{game.\+h}!check\+\_\+mouse@{check\+\_\+mouse}}
+\index{check\+\_\+mouse@{check\+\_\+mouse}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{check\+\_\+mouse()}{check\_mouse()}}
+{\footnotesize\ttfamily int check\+\_\+mouse (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Checks if Mouse is inside a Button in Menu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 if not in a buttton and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{game_8h_ad1f78202a4ea7e8e68ba069a82484592}{}\label{game_8h_ad1f78202a4ea7e8e68ba069a82484592} 
+\index{game.\+h@{game.\+h}!check\+\_\+winner@{check\+\_\+winner}}
+\index{check\+\_\+winner@{check\+\_\+winner}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{check\+\_\+winner()}{check\_winner()}}
+{\footnotesize\ttfamily void check\+\_\+winner (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Checks who wins and displays the winner bitmap. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_ad1f78202a4ea7e8e68ba069a82484592_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a89d72a2401cc9faf9102dbe393dee79a}{}\label{game_8h_a89d72a2401cc9faf9102dbe393dee79a} 
+\index{game.\+h@{game.\+h}!draw\+\_\+handler@{draw\+\_\+handler}}
+\index{draw\+\_\+handler@{draw\+\_\+handler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{draw\+\_\+handler()}{draw\_handler()}}
+{\footnotesize\ttfamily void draw\+\_\+handler (\begin{DoxyParamCaption}\item[{unsigned int}]{num\+\_\+players,  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Handler for Painting the Players. 
+
+Calls the other function accordingly to the Number of Players and if they didn\textquotesingle{}t already lost
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+\_\+players} & Number of Players in the current Game Mode \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_a89d72a2401cc9faf9102dbe393dee79a_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_ac1990a9d59c2e1b744129d6990733f65}{}\label{game_8h_ac1990a9d59c2e1b744129d6990733f65} 
+\index{game.\+h@{game.\+h}!kbd\+\_\+intrhandler@{kbd\+\_\+intrhandler}}
+\index{kbd\+\_\+intrhandler@{kbd\+\_\+intrhandler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{kbd\+\_\+intrhandler()}{kbd\_intrhandler()}}
+{\footnotesize\ttfamily void kbd\+\_\+intrhandler (\begin{DoxyParamCaption}\item[{unsigned long}]{datakbd,  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Handler for Keyboard Interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em datakbd} & Keyboard Data \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_ac1990a9d59c2e1b744129d6990733f65_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a2d7ae67897b06ba4d723f059b8055c3d}{}\label{game_8h_a2d7ae67897b06ba4d723f059b8055c3d} 
+\index{game.\+h@{game.\+h}!load\+\_\+\+Bmps@{load\+\_\+\+Bmps}}
+\index{load\+\_\+\+Bmps@{load\+\_\+\+Bmps}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{load\+\_\+\+Bmps()}{load\_Bmps()}}
+{\footnotesize\ttfamily void load\+\_\+\+Bmps (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Loads all Bitmaps needed in the Game. 
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{game_8h_a2d7ae67897b06ba4d723f059b8055c3d_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a7485cadb508c6cbe1efe9d01643b34e0}{}\label{game_8h_a7485cadb508c6cbe1efe9d01643b34e0} 
+\index{game.\+h@{game.\+h}!mouse\+\_\+intrhandler@{mouse\+\_\+intrhandler}}
+\index{mouse\+\_\+intrhandler@{mouse\+\_\+intrhandler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{mouse\+\_\+intrhandler()}{mouse\_intrhandler()}}
+{\footnotesize\ttfamily void mouse\+\_\+intrhandler (\begin{DoxyParamCaption}\item[{unsigned long}]{mouse\+\_\+packet\mbox{[}3\mbox{]},  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Handler for Mouse Interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mouse\+\_\+packet\mbox{[}3\mbox{]}} & Data packets of the Mouse \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_a7485cadb508c6cbe1efe9d01643b34e0_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_acde10310f33cafd602e547fdcc87e5f7}{}\label{game_8h_acde10310f33cafd602e547fdcc87e5f7} 
+\index{game.\+h@{game.\+h}!mouse\+\_\+mov\+\_\+handler@{mouse\+\_\+mov\+\_\+handler}}
+\index{mouse\+\_\+mov\+\_\+handler@{mouse\+\_\+mov\+\_\+handler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{mouse\+\_\+mov\+\_\+handler()}{mouse\_mov\_handler()}}
+{\footnotesize\ttfamily int mouse\+\_\+mov\+\_\+handler (\begin{DoxyParamCaption}\item[{unsigned long}]{mouse\+\_\+packet\mbox{[}3\mbox{]},  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Mouse Handler for Menu. 
+
+Handles the buttons and movement of the mouse in the Menu
+
+
+\begin{DoxyParams}{Parameters}
+{\em mouse\+\_\+packet\mbox{[}3\mbox{]}} & Data packets of the Mouse \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 1 on acceptable data and 0 if overflow 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_acde10310f33cafd602e547fdcc87e5f7_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a5745594a9d371072ebddb008b3b08699}{}\label{game_8h_a5745594a9d371072ebddb008b3b08699} 
+\index{game.\+h@{game.\+h}!mouse\+\_\+st\+\_\+handler@{mouse\+\_\+st\+\_\+handler}}
+\index{mouse\+\_\+st\+\_\+handler@{mouse\+\_\+st\+\_\+handler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{mouse\+\_\+st\+\_\+handler()}{mouse\_st\_handler()}}
+{\footnotesize\ttfamily void mouse\+\_\+st\+\_\+handler (\begin{DoxyParamCaption}\item[{\hyperlink{structplayer__t}{player\+\_\+t} $\ast$}]{p,  }\item[{unsigned long}]{mouse\+\_\+packet\mbox{[}3\mbox{]},  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Mouse State Handler for Player 4. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$p} & Player \\
+\hline
+{\em mouse\+\_\+packet\mbox{[}3\mbox{]}} & Data packets of the Mouse \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+\hypertarget{game_8h_afdeb92b797c5bbc22fa9cea605f6644b}{}\label{game_8h_afdeb92b797c5bbc22fa9cea605f6644b} 
+\index{game.\+h@{game.\+h}!playgame@{playgame}}
+\index{playgame@{playgame}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{playgame()}{playgame()}}
+{\footnotesize\ttfamily int playgame (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+The Game Function. 
+
+Interrupts cycle
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_afdeb92b797c5bbc22fa9cea605f6644b_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a59430d80f49694010887ac3ab116e696}{}\label{game_8h_a59430d80f49694010887ac3ab116e696} 
+\index{game.\+h@{game.\+h}!start\+\_\+multigame@{start\+\_\+multigame}}
+\index{start\+\_\+multigame@{start\+\_\+multigame}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{start\+\_\+multigame()}{start\_multigame()}}
+{\footnotesize\ttfamily int start\+\_\+multigame (\begin{DoxyParamCaption}\item[{unsigned int}]{num\+\_\+players,  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Starts a Multiplayer Game accorgingly to the Number of Players. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+\_\+players} & Number of Players on the Game Mode \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 0 on success and 1 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_a59430d80f49694010887ac3ab116e696_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a505eb2e66f358efafd4f23bca70cfa14}{}\label{game_8h_a505eb2e66f358efafd4f23bca70cfa14} 
+\index{game.\+h@{game.\+h}!state\+\_\+handler@{state\+\_\+handler}}
+\index{state\+\_\+handler@{state\+\_\+handler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{state\+\_\+handler()}{state\_handler()}}
+{\footnotesize\ttfamily void state\+\_\+handler (\begin{DoxyParamCaption}\item[{unsigned int}]{num\+\_\+players,  }\item[{unsigned long}]{data,  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Handler for Game States. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+\_\+players} & Number of Players in the current Game Mode \\
+\hline
+{\em data} & Keyboard data \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_a505eb2e66f358efafd4f23bca70cfa14_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_a86358e01f0d51114bc31ea1b623ee024}{}\label{game_8h_a86358e01f0d51114bc31ea1b623ee024} 
+\index{game.\+h@{game.\+h}!timer\+\_\+intrhandler@{timer\+\_\+intrhandler}}
+\index{timer\+\_\+intrhandler@{timer\+\_\+intrhandler}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{timer\+\_\+intrhandler()}{timer\_intrhandler()}}
+{\footnotesize\ttfamily void timer\+\_\+intrhandler (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Handler for Timer Interrupts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game_8h_a86358e01f0d51114bc31ea1b623ee024_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{game_8h_ab3383bfc12cb6695ede9ecd5f6573676}{}\label{game_8h_ab3383bfc12cb6695ede9ecd5f6573676} 
+\index{game.\+h@{game.\+h}!update\+\_\+player@{update\+\_\+player}}
+\index{update\+\_\+player@{update\+\_\+player}!game.\+h@{game.\+h}}
+\subsubsection{\texorpdfstring{update\+\_\+player()}{update\_player()}}
+{\footnotesize\ttfamily void update\+\_\+player (\begin{DoxyParamCaption}\item[{unsigned int}]{num\+\_\+players,  }\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Updates the position of a Player based on its movement. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em num\+\_\+players} & Number of Players in the current Game Mode \\
+\hline
+{\em $\ast$game1} & The game itself \\
+\hline
+\end{DoxyParams}

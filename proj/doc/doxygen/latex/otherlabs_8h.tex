@@ -1,0 +1,241 @@
+\hypertarget{otherlabs_8h}{}\section{C\+:/\+Users/jnuno/\+Desktop/src/otherlabs.h File Reference}
+\label{otherlabs_8h}\index{C\+:/\+Users/jnuno/\+Desktop/src/otherlabs.\+h@{C\+:/\+Users/jnuno/\+Desktop/src/otherlabs.\+h}}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{otherlabs_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{otherlabs_8h_adb4846c9edc4417fbc70ec754f4c1682}{kbd\+\_\+subscribe\+\_\+int} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Keyboard interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_a2841bbbccfe026c4df7f6a98a5359d67}{kbd\+\_\+unsubscribe\+\_\+int} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Unsubscribes Keyboard interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_ab6fadc501bcb3a2a8d22f32c53a7e2bb}{timer\+\_\+subscribe\+\_\+int} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Timer 0 interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_ae0888c4f8f20af35339447b3f228b884}{timer\+\_\+unsubscribe\+\_\+int} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Unsubscribes Timer 0 interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_a37eae8196ee38ff2a9d9d431e91dac91}{mouse\+\_\+subscribe\+\_\+int} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Subscribes and enables Mouse interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_a04fb2b0c0c20492e9e94277c84b37cd9}{mouse\+\_\+unsubscribe\+\_\+int} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Unsubscribes Mouse interrupts. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_a13393ae743886637e81723f6177e0ad1}{sub\+\_\+game} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Subscribe Handler. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_aeda1f986abc84e2fffa1c47aff4c4ad7}{unsub\+\_\+game} (\hyperlink{structgame__t}{game\+\_\+t} $\ast$game1)
+\begin{DoxyCompactList}\small\item\em Unsubscribe Handler. \end{DoxyCompactList}\item 
+unsigned long \hyperlink{otherlabs_8h_a148728381af10708c1d48f6f892fd9dd}{kbd\+\_\+handler} ()
+\begin{DoxyCompactList}\small\item\em Keyboard Interrupt Reader. \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_a00b569b833191afad3a893b774cfd546}{kbd\+\_\+send\+\_\+command} (unsigned long cmd)
+\begin{DoxyCompactList}\small\item\em Send Command to Keyboard Command Register(port 0x64) \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_a816e7f217f9a42aa198789bae26fbf95}{kbd\+\_\+send} (unsigned long cmd)
+\begin{DoxyCompactList}\small\item\em Send Command to Keyboard Data Buffer(port 0x60) \end{DoxyCompactList}\item 
+int \hyperlink{otherlabs_8h_abb4d7e40999509e678e49d16c58b93c2}{mouse\+\_\+send} (unsigned long cmd)
+\begin{DoxyCompactList}\small\item\em Handler to send commands to keyboard register. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{otherlabs_8h_a148728381af10708c1d48f6f892fd9dd}{}\label{otherlabs_8h_a148728381af10708c1d48f6f892fd9dd} 
+\index{otherlabs.\+h@{otherlabs.\+h}!kbd\+\_\+handler@{kbd\+\_\+handler}}
+\index{kbd\+\_\+handler@{kbd\+\_\+handler}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{kbd\+\_\+handler()}{kbd\_handler()}}
+{\footnotesize\ttfamily unsigned long kbd\+\_\+handler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Keyboard Interrupt Reader. 
+
+Reads from the Keyboard Output Buffer
+
+\begin{DoxyReturn}{Returns}
+Return -\/1 upon failure and the data read otherwise 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_a816e7f217f9a42aa198789bae26fbf95}{}\label{otherlabs_8h_a816e7f217f9a42aa198789bae26fbf95} 
+\index{otherlabs.\+h@{otherlabs.\+h}!kbd\+\_\+send@{kbd\+\_\+send}}
+\index{kbd\+\_\+send@{kbd\+\_\+send}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{kbd\+\_\+send()}{kbd\_send()}}
+{\footnotesize\ttfamily int kbd\+\_\+send (\begin{DoxyParamCaption}\item[{unsigned long}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Send Command to Keyboard Data Buffer(port 0x60) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & Command to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return -\/1 upon failure and 0 otherwise 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_a00b569b833191afad3a893b774cfd546}{}\label{otherlabs_8h_a00b569b833191afad3a893b774cfd546} 
+\index{otherlabs.\+h@{otherlabs.\+h}!kbd\+\_\+send\+\_\+command@{kbd\+\_\+send\+\_\+command}}
+\index{kbd\+\_\+send\+\_\+command@{kbd\+\_\+send\+\_\+command}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{kbd\+\_\+send\+\_\+command()}{kbd\_send\_command()}}
+{\footnotesize\ttfamily int kbd\+\_\+send\+\_\+command (\begin{DoxyParamCaption}\item[{unsigned long}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Send Command to Keyboard Command Register(port 0x64) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & Command to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return -\/1 upon failure and 0 otherwise 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_adb4846c9edc4417fbc70ec754f4c1682}{}\label{otherlabs_8h_adb4846c9edc4417fbc70ec754f4c1682} 
+\index{otherlabs.\+h@{otherlabs.\+h}!kbd\+\_\+subscribe\+\_\+int@{kbd\+\_\+subscribe\+\_\+int}}
+\index{kbd\+\_\+subscribe\+\_\+int@{kbd\+\_\+subscribe\+\_\+int}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{kbd\+\_\+subscribe\+\_\+int()}{kbd\_subscribe\_int()}}
+{\footnotesize\ttfamily int kbd\+\_\+subscribe\+\_\+int (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Keyboard interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Returns bit order in interrupt mask; negative value on failure 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_a2841bbbccfe026c4df7f6a98a5359d67}{}\label{otherlabs_8h_a2841bbbccfe026c4df7f6a98a5359d67} 
+\index{otherlabs.\+h@{otherlabs.\+h}!kbd\+\_\+unsubscribe\+\_\+int@{kbd\+\_\+unsubscribe\+\_\+int}}
+\index{kbd\+\_\+unsubscribe\+\_\+int@{kbd\+\_\+unsubscribe\+\_\+int}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{kbd\+\_\+unsubscribe\+\_\+int()}{kbd\_unsubscribe\_int()}}
+{\footnotesize\ttfamily int kbd\+\_\+unsubscribe\+\_\+int (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Keyboard interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_abb4d7e40999509e678e49d16c58b93c2}{}\label{otherlabs_8h_abb4d7e40999509e678e49d16c58b93c2} 
+\index{otherlabs.\+h@{otherlabs.\+h}!mouse\+\_\+send@{mouse\+\_\+send}}
+\index{mouse\+\_\+send@{mouse\+\_\+send}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{mouse\+\_\+send()}{mouse\_send()}}
+{\footnotesize\ttfamily int mouse\+\_\+send (\begin{DoxyParamCaption}\item[{unsigned long}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Handler to send commands to keyboard register. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & Command to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return 1 upon failure and 0 otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=295pt]{otherlabs_8h_abb4d7e40999509e678e49d16c58b93c2_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{otherlabs_8h_a37eae8196ee38ff2a9d9d431e91dac91}{}\label{otherlabs_8h_a37eae8196ee38ff2a9d9d431e91dac91} 
+\index{otherlabs.\+h@{otherlabs.\+h}!mouse\+\_\+subscribe\+\_\+int@{mouse\+\_\+subscribe\+\_\+int}}
+\index{mouse\+\_\+subscribe\+\_\+int@{mouse\+\_\+subscribe\+\_\+int}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{mouse\+\_\+subscribe\+\_\+int()}{mouse\_subscribe\_int()}}
+{\footnotesize\ttfamily int mouse\+\_\+subscribe\+\_\+int (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Mouse interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Returns bit order in interrupt mask; negative value on failure 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_a04fb2b0c0c20492e9e94277c84b37cd9}{}\label{otherlabs_8h_a04fb2b0c0c20492e9e94277c84b37cd9} 
+\index{otherlabs.\+h@{otherlabs.\+h}!mouse\+\_\+unsubscribe\+\_\+int@{mouse\+\_\+unsubscribe\+\_\+int}}
+\index{mouse\+\_\+unsubscribe\+\_\+int@{mouse\+\_\+unsubscribe\+\_\+int}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{mouse\+\_\+unsubscribe\+\_\+int()}{mouse\_unsubscribe\_int()}}
+{\footnotesize\ttfamily int mouse\+\_\+unsubscribe\+\_\+int (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Mouse interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_a13393ae743886637e81723f6177e0ad1}{}\label{otherlabs_8h_a13393ae743886637e81723f6177e0ad1} 
+\index{otherlabs.\+h@{otherlabs.\+h}!sub\+\_\+game@{sub\+\_\+game}}
+\index{sub\+\_\+game@{sub\+\_\+game}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{sub\+\_\+game()}{sub\_game()}}
+{\footnotesize\ttfamily int sub\+\_\+game (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Subscribe Handler. 
+
+Calls the Timer 0, Keyboard and Mouse interrupts subscription functions
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{otherlabs_8h_a13393ae743886637e81723f6177e0ad1_cgraph}
+\end{center}
+\end{figure}
+\hypertarget{otherlabs_8h_ab6fadc501bcb3a2a8d22f32c53a7e2bb}{}\label{otherlabs_8h_ab6fadc501bcb3a2a8d22f32c53a7e2bb} 
+\index{otherlabs.\+h@{otherlabs.\+h}!timer\+\_\+subscribe\+\_\+int@{timer\+\_\+subscribe\+\_\+int}}
+\index{timer\+\_\+subscribe\+\_\+int@{timer\+\_\+subscribe\+\_\+int}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{timer\+\_\+subscribe\+\_\+int()}{timer\_subscribe\_int()}}
+{\footnotesize\ttfamily int timer\+\_\+subscribe\+\_\+int (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Subscribes and enables Timer 0 interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Returns bit order in interrupt mask; negative value on failure 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_ae0888c4f8f20af35339447b3f228b884}{}\label{otherlabs_8h_ae0888c4f8f20af35339447b3f228b884} 
+\index{otherlabs.\+h@{otherlabs.\+h}!timer\+\_\+unsubscribe\+\_\+int@{timer\+\_\+unsubscribe\+\_\+int}}
+\index{timer\+\_\+unsubscribe\+\_\+int@{timer\+\_\+unsubscribe\+\_\+int}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{timer\+\_\+unsubscribe\+\_\+int()}{timer\_unsubscribe\_int()}}
+{\footnotesize\ttfamily int timer\+\_\+unsubscribe\+\_\+int (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes Timer 0 interrupts. 
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+\hypertarget{otherlabs_8h_aeda1f986abc84e2fffa1c47aff4c4ad7}{}\label{otherlabs_8h_aeda1f986abc84e2fffa1c47aff4c4ad7} 
+\index{otherlabs.\+h@{otherlabs.\+h}!unsub\+\_\+game@{unsub\+\_\+game}}
+\index{unsub\+\_\+game@{unsub\+\_\+game}!otherlabs.\+h@{otherlabs.\+h}}
+\subsubsection{\texorpdfstring{unsub\+\_\+game()}{unsub\_game()}}
+{\footnotesize\ttfamily int unsub\+\_\+game (\begin{DoxyParamCaption}\item[{\hyperlink{structgame__t}{game\+\_\+t} $\ast$}]{game1 }\end{DoxyParamCaption})}
+
+
+
+Unsubscribe Handler. 
+
+Calls the Timer 0, Keyboard and Mouse interrupts unsubscription functions
+
+\begin{DoxyReturn}{Returns}
+Return 0 upon success and non-\/zero otherwise 
+\end{DoxyReturn}
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=307pt]{otherlabs_8h_aeda1f986abc84e2fffa1c47aff4c4ad7_cgraph}
+\end{center}
+\end{figure}

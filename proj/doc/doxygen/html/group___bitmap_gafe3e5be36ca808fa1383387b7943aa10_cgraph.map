@@ -1,0 +1,4 @@
+<map id="drawBitmap" name="drawBitmap">
+<area shape="rect" id="node2" href="$group__video__gr.html#ga3a176fda764c03218b5c20797f8b255e" title="Returns the Address of the double buffer. " alt="" coords="148,5,259,32"/>
+<area shape="rect" id="node3" href="$group__video__gr.html#ga5ad1cc85a8dce3ce1a7d3e90e6ff88d3" title="Returns the Address of video_mem. " alt="" coords="144,56,263,83"/>
+</map>

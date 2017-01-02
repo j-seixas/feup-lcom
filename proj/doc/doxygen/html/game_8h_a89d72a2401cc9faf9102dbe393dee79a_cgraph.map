@@ -1,0 +1,5 @@
+<map id="draw_handler" name="draw_handler">
+<area shape="rect" id="node2" href="$game_8c.html#ab3383bfc12cb6695ede9ecd5f6573676" title="Updates the position of a Player based on its movement. " alt="" coords="152,5,255,32"/>
+<area shape="rect" id="node3" href="$group__video__gr.html#gadbed0dad936e62c19d93bc8791e31527" title="Draws the current position of a Player. " alt="" coords="158,56,249,83"/>
+<area shape="rect" id="node4" href="$group__video__gr.html#ga3e0752b64422778fd26c0559763943b8" title="Paints a pixel. " alt="" coords="303,56,403,83"/>
+</map>
