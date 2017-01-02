@@ -1,0 +1,14 @@
+<map id="kbd_intrhandler" name="kbd_intrhandler">
+<area shape="rect" id="node2" href="$game_8c.html#a21785a858236fb7d375400e0e338336d" title="Handler for Player States. " alt="" coords="164,56,305,83"/>
+<area shape="rect" id="node4" href="$game_8c.html#a505eb2e66f358efafd4f23bca70cfa14" title="Handler for Game States. " alt="" coords="185,157,285,184"/>
+<area shape="rect" id="node3" href="$game_8c.html#af630a71e15386edfe50f4f8a303d9c39" title="Changes the movement state accordingly with the Data. " alt="" coords="353,5,496,32"/>
+<area shape="rect" id="node5" href="$group___game.html#ga97a9584ff1d8b78ede18e32bf5a7bd50" title="Initiates the mouse. " alt="" coords="382,56,467,83"/>
+<area shape="rect" id="node6" href="$group___bitmap.html#gafe3e5be36ca808fa1383387b7943aa10" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="691,132,781,159"/>
+<area shape="rect" id="node9" href="$group___game.html#ga1904435b0a61ef11d90bec5376eb6398" title="Draws the background. " alt="" coords="549,157,637,184"/>
+<area shape="rect" id="node10" href="$group__video__gr.html#ga4e3a822db37d5376e0c410d46bc13f95" title="Paints borders for the board. " alt="" coords="544,309,643,336"/>
+<area shape="rect" id="node12" href="$group___game.html#ga1ebb9b5b5ce215ca81c1ca22526d935a" title="Initiates the players. " alt="" coords="549,259,637,285"/>
+<area shape="rect" id="node13" href="$game_8c.html#a59430d80f49694010887ac3ab116e696" title="Starts a Multiplayer Game accorgingly to the Number of Players. " alt="" coords="367,208,482,235"/>
+<area shape="rect" id="node7" href="$group__video__gr.html#ga3a176fda764c03218b5c20797f8b255e" title="Returns the Address of the double buffer. " alt="" coords="833,107,944,133"/>
+<area shape="rect" id="node8" href="$group__video__gr.html#ga5ad1cc85a8dce3ce1a7d3e90e6ff88d3" title="Returns the Address of video_mem. " alt="" coords="829,157,948,184"/>
+<area shape="rect" id="node11" href="$group__video__gr.html#gad194f7c3fabb1d2d981014ca7df5831f" title="Paints a pixel. " alt="" coords="694,309,778,336"/>
+</map>
