@@ -1,5 +1,0 @@
-<map id="mouse_send" name="mouse_send">
-<area shape="rect" id="node2" href="$otherlabs_8c.html#a00b569b833191afad3a893b774cfd546" title="Send Command to Keyboard Command Register(port 0x64) " alt="" coords="149,5,292,32"/>
-<area shape="rect" id="node3" href="$otherlabs_8c.html#a148728381af10708c1d48f6f892fd9dd" title="Keyboard Interrupt Reader. " alt="" coords="175,56,267,83"/>
-<area shape="rect" id="node4" href="$otherlabs_8c.html#a816e7f217f9a42aa198789bae26fbf95" title="Send Command to Keyboard Data Buffer(port 0x60) " alt="" coords="181,107,260,133"/>
-</map>

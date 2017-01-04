@@ -1,5 +1,0 @@
-<map id="init_mouse" name="init_mouse">
-<area shape="rect" id="node2" href="$group___bitmap.html#gafe3e5be36ca808fa1383387b7943aa10" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="139,31,229,57"/>
-<area shape="rect" id="node3" href="$group__video__gr.html#ga3a176fda764c03218b5c20797f8b255e" title="Returns the Address of the double buffer. " alt="" coords="281,5,392,32"/>
-<area shape="rect" id="node4" href="$group__video__gr.html#ga5ad1cc85a8dce3ce1a7d3e90e6ff88d3" title="Returns the Address of video_mem. " alt="" coords="277,56,396,83"/>
-</map>

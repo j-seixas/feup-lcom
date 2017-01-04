@@ -1,9 +1,0 @@
-<map id="sub_game" name="sub_game">
-<area shape="rect" id="node2" href="$otherlabs_8c.html#ab6fadc501bcb3a2a8d22f32c53a7e2bb" title="Subscribes and enables Timer 0 interrupts. " alt="" coords="141,5,276,32"/>
-<area shape="rect" id="node3" href="$otherlabs_8c.html#adb4846c9edc4417fbc70ec754f4c1682" title="Subscribes and enables Keyboard interrupts. " alt="" coords="145,56,272,83"/>
-<area shape="rect" id="node4" href="$otherlabs_8c.html#a148728381af10708c1d48f6f892fd9dd" title="Keyboard Interrupt Reader. " alt="" coords="355,120,447,147"/>
-<area shape="rect" id="node5" href="$otherlabs_8c.html#a37eae8196ee38ff2a9d9d431e91dac91" title="Subscribes and enables Mouse interrupts. " alt="" coords="136,157,281,184"/>
-<area shape="rect" id="node6" href="$otherlabs_8c.html#abb4d7e40999509e678e49d16c58b93c2" title="Handler to send commands to keyboard register. " alt="" coords="161,208,257,235"/>
-<area shape="rect" id="node7" href="$otherlabs_8c.html#a00b569b833191afad3a893b774cfd546" title="Send Command to Keyboard Command Register(port 0x64) " alt="" coords="329,183,472,209"/>
-<area shape="rect" id="node8" href="$otherlabs_8c.html#a816e7f217f9a42aa198789bae26fbf95" title="Send Command to Keyboard Data Buffer(port 0x60) " alt="" coords="361,233,440,260"/>
-</map>

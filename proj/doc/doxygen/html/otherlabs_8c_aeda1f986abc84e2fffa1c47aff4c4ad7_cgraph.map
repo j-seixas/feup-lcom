@@ -1,5 +1,0 @@
-<map id="unsub_game" name="unsub_game">
-<area shape="rect" id="node2" href="$otherlabs_8c.html#a2841bbbccfe026c4df7f6a98a5359d67" title="Unsubscribes Keyboard interrupts. " alt="" coords="158,5,299,32"/>
-<area shape="rect" id="node3" href="$otherlabs_8c.html#ae0888c4f8f20af35339447b3f228b884" title="Unsubscribes Timer 0 interrupts. " alt="" coords="154,56,303,83"/>
-<area shape="rect" id="node4" href="$otherlabs_8c.html#a04fb2b0c0c20492e9e94277c84b37cd9" title="Unsubscribes Mouse interrupts. " alt="" coords="149,107,308,133"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="start_multigame" name="start_multigame">
-<area shape="rect" id="node2" href="$group___game.html#ga1904435b0a61ef11d90bec5376eb6398" title="Draws the background. " alt="" coords="173,5,261,32"/>
-<area shape="rect" id="node3" href="$group___bitmap.html#gafe3e5be36ca808fa1383387b7943aa10" title="Draws an unscaled, unrotated bitmap at the given position. " alt="" coords="315,31,405,57"/>
-<area shape="rect" id="node6" href="$group___game.html#ga1ebb9b5b5ce215ca81c1ca22526d935a" title="Initiates the players. " alt="" coords="173,107,261,133"/>
-<area shape="rect" id="node7" href="$group__video__gr.html#ga4e3a822db37d5376e0c410d46bc13f95" title="Paints borders for the board. " alt="" coords="168,157,267,184"/>
-<area shape="rect" id="node4" href="$group__video__gr.html#ga3a176fda764c03218b5c20797f8b255e" title="Returns the Address of the double buffer. " alt="" coords="457,5,568,32"/>
-<area shape="rect" id="node5" href="$group__video__gr.html#ga5ad1cc85a8dce3ce1a7d3e90e6ff88d3" title="Returns the Address of video_mem. " alt="" coords="453,56,572,83"/>
-<area shape="rect" id="node8" href="$group__video__gr.html#gad194f7c3fabb1d2d981014ca7df5831f" title="Paints a pixel. " alt="" coords="318,157,402,184"/>
-</map>

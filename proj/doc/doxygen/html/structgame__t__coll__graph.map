@@ -1,7 +1,0 @@
-<map id="game_t" name="game_t">
-<area shape="rect" id="node2" href="$structboard__t.html" title="board_t" alt="" coords="67,222,132,249"/>
-<area shape="rect" id="node3" href="$struct_bitmap.html" title="Represents a Bitmap. " alt="" coords="68,95,131,121"/>
-<area shape="rect" id="node5" href="$structplayer__t.html" title="player_t" alt="" coords="156,222,224,249"/>
-<area shape="rect" id="node4" href="$struct_bitmap_info_header.html" title="BitmapInfoHeader" alt="" coords="38,5,162,32"/>
-<area shape="rect" id="node6" href="$structmouse__t.html" title="mouse_t" alt="" coords="249,222,321,249"/>
-</map>
